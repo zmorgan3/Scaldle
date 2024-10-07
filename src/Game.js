@@ -60,13 +60,13 @@ const Game = ({ goBack }) => {
         position: guessedPlayer.position,
         number: guessedPlayer.number,
         height: guessedPlayer.height,
-        yearsPlayed: guessedPlayer.yearsPlayed,
-        allStar: guessedPlayer.allStar,
+        debut: guessedPlayer.debut,
+        allStarAppearances: guessedPlayer.allStarAppearances,
         positionCorrect: guessedPlayer.position === currentPlayer.position,
         numberCorrect: guessedPlayer.number === currentPlayer.number,
         heightCorrect: guessedPlayer.height === currentPlayer.height,
-        yearsPlayedCorrect: guessedPlayer.yearsPlayed === currentPlayer.yearsPlayed,
-        allStarCorrect: guessedPlayer.allStar === currentPlayer.allStar,
+        debutCorrect: guessedPlayer.debut === currentPlayer.debut,
+        allStarCorrect: guessedPlayer.allStarAppearances === currentPlayer.allStarAppearances,
         nameCorrect: guessedPlayer.name.toLowerCase() === currentPlayer.name.toLowerCase(),
         overallCorrect: guessedPlayer.name.toLowerCase() === currentPlayer.name.toLowerCase(),
         numberHint: getArrow(guessedPlayer.number, currentPlayer.number), // Hint for number
@@ -75,7 +75,7 @@ const Game = ({ goBack }) => {
 
       setGuesses([...guesses, feedback]);
 
-      feedback.keys = ['name', 'position', 'number', 'height', 'yearsPlayed', 'allStar'];
+      feedback.keys = ['name', 'position', 'number', 'height', 'debut', 'allStarAppearances'];
       feedback.keys.forEach((_, index) => {
         setTimeout(() => {
           setFlipped((prev) => [...prev, guesses.length * 6 + index]);
@@ -134,8 +134,8 @@ const Game = ({ goBack }) => {
             <div>Position</div>
             <div>#</div>
             <div>HT</div>
-            <div>Years Played</div>
-            <div>All-Star</div>
+            <div>Debut</div> {/* Updated header */}
+            <div>All-Star Appearances</div> {/* Updated header */}
           </div>
 
           {[...Array(MAX_GUESSES)].map((_, rowIndex) => (
@@ -155,6 +155,8 @@ const Game = ({ goBack }) => {
                     <div className={`flip-back ${guesses[rowIndex][`${key}Correct`] ? 'correct' : 'incorrect'}`}>
                       {key === 'number' ? `${guesses[rowIndex][key]} ${guesses[rowIndex].numberHint}` : null}
                       {key === 'height' ? `${guesses[rowIndex][key]} ${guesses[rowIndex].heightHint}` : guesses[rowIndex][key]}
+                      {key === 'debut' ? `${guesses[rowIndex][key]}` : null} {/* Display debut year */}
+                      {key === 'allStarAppearances' ? `${guesses[rowIndex][key]}` : null} {/* Display all-star appearances */}
                     </div>
                   </div>
                 ))
@@ -178,6 +180,7 @@ const Game = ({ goBack }) => {
           <div className="modal">
             <h2>Congratulations!</h2>
             <p>You correctly guessed the player: {currentPlayer.name}</p>
+            <p style={{ fontSize: '2rem', color: '#007A33' }}>{currentPlayer.number}</p> {/* Big green font for number */}
             <button onClick={() => window.location.reload()}>Play Again</button>
           </div>
         </div>

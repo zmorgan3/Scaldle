@@ -4,23 +4,23 @@
     "position": "Center",
     "number": 6,
     "height": "6'10\"",
-    "yearsPlayed": "1956-1969",
-    "allStar": true
+    "debut": "1956",
+    "allStarAppearances": 12
   },
   {
     "name": "Paul Pierce",
     "position": "Forward",
     "number": 34,
     "height": "6'7\"",
-    "yearsPlayed": "1998-2013",
-    "allStar": true
+    "debut": "1998",
+    "allStarAppearances": 10
   },
   {
     "name": "Kevin Garnett",
     "position": "Forward",
     "number": 5,
     "height": "6'11\"",
-    "yearsPlayed": "2007-2013",
-    "allStar": true
+    "debut": "2007",
+    "allStarAppearances": 15
   }
 ]
