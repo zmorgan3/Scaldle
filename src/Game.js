@@ -60,7 +60,7 @@ const Game = ({ goBack }) => {
         position: guessedPlayer.position,
         number: guessedPlayer.number,
         height: guessedPlayer.height,
-        debut: guessedPlayer.debut,
+        debut: guessedPlayer.debut, // Make sure this matches your players.json field
         allStarAppearances: guessedPlayer.allStarAppearances,
         positionCorrect: guessedPlayer.position === currentPlayer.position,
         numberCorrect: guessedPlayer.number === currentPlayer.number,
@@ -71,6 +71,8 @@ const Game = ({ goBack }) => {
         overallCorrect: guessedPlayer.name.toLowerCase() === currentPlayer.name.toLowerCase(),
         numberHint: getArrow(guessedPlayer.number, currentPlayer.number), // Hint for number
         heightHint: getArrow(guessedPlayer.height, currentPlayer.height), // Hint for height
+        debutHint: getArrow(guessedPlayer.debut, currentPlayer.debut), // Hint for debut
+        allStarHint: getArrow(guessedPlayer.allStarAppearances, currentPlayer.allStarAppearances) // Hint for all-star appearances
       };
 
       setGuesses([...guesses, feedback]);
@@ -155,8 +157,8 @@ const Game = ({ goBack }) => {
                     <div className={`flip-back ${guesses[rowIndex][`${key}Correct`] ? 'correct' : 'incorrect'}`}>
                       {key === 'number' ? `${guesses[rowIndex][key]} ${guesses[rowIndex].numberHint}` : null}
                       {key === 'height' ? `${guesses[rowIndex][key]} ${guesses[rowIndex].heightHint}` : guesses[rowIndex][key]}
-                      {key === 'debut' ? `${guesses[rowIndex][key]}` : null} {/* Display debut year */}
-                      {key === 'allStarAppearances' ? `${guesses[rowIndex][key]}` : null} {/* Display all-star appearances */}
+                      {key === 'debut' ? `${guesses[rowIndex][key]} ${guesses[rowIndex].debutHint}` : null} {/* Display debut year */}
+                      {key === 'allStarAppearances' ? `${guesses[rowIndex][key]} ${guesses[rowIndex].allStarHint}` : null} {/* Display all-star appearances */}
                     </div>
                   </div>
                 ))
