@@ -50,18 +50,24 @@ html, body {
   }
 }
 
-/* Make text more readable against the background */
-.app h1, .app p, .app button {
-  color: white;
-  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5); /* Add a slight shadow for readability */
-}
-
 /* Input styling */
 input {
   padding: 10px;
   margin: 10px;
-  width: 100%; /* Full width for mobile devices */
-  max-width: 300px; /* Adjust input size for larger screens */
+  width: 100%;
+  max-width: 300px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+  font-size: 16px;
+  box-sizing: border-box;
+}
+
+/* Responsive input for small screens */
+@media only screen and (max-width: 767px) {
+  input {
+    width: 90%; /* Adjust input size for smaller screens */
+    font-size: 14px; /* Smaller font for small devices */
+  }
 }
 
 button {
@@ -81,11 +87,21 @@ button:hover {
   list-style-type: none;
   padding: 0;
   margin: 10px auto;
-  width: 200px;
+  width: 100%;
+  max-width: 300px;
   border: 1px solid #ddd;
   border-radius: 5px;
   max-height: 160px;
   overflow-y: auto;
+  background-color: white; /* White background for suggestions */
+  box-sizing: border-box;
+}
+
+/* Responsive suggestions list for small screens */
+@media only screen and (max-width: 767px) {
+  .suggestions {
+    width: 90%; /* Adjust width for small screens */
+  }
 }
 
 .suggestions li {
