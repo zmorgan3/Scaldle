@@ -91,7 +91,7 @@ const Game = ({ goBack }) => {
         allStarHint: getArrow(guessedPlayer.allStarAppearances, currentPlayer.allStarAppearances)
       };
 
-      setGuesses([...guesses, feedback]);
+      setGuesses((prevGuesses) => [...prevGuesses, feedback]);
 
       feedback.keys = ['name', 'position', 'number', 'height', 'debut', 'allStarAppearances'];
       feedback.keys.forEach((_, index) => {
@@ -120,12 +120,44 @@ const Game = ({ goBack }) => {
     setInputDisabled(false); // Re-enable input when modal is closed
   };
 
+  const getPosition = (position) => {
+    if (isSmallScreen) {
+      switch (position) {
+        case 'Point Guard':
+          return 'PG';
+        case 'Shooting Guard':
+          return 'SG';
+        case 'Small Forward':
+          return 'SF';
+        case 'Power Forward':
+          return 'PF';
+        case 'Center':
+          return 'C';
+        case 'Guard':
+            return 'G';
+        case 'Forward':
+            return 'F';
+        case 'Forward/Center':
+            return "F/C";
+        case 'Center/Forward':
+            return "C/F";
+        case 'Guard/Forward':
+            return "G/F";
+        case 'Forward/Guard':
+            return "F/G";
+        default:
+          return position; // Return the full position if it doesn't match any case
+      }
+    }
+    return position; // Return the full position if the screen is not small
+  };
+
   return (
     <div className="app">
       <h1 className={isSmallScreen ? 'hidden-title' : ''}>SCALDLE</h1>
       {/* Jerseys Animation under the scoreboard */}
       <JerseysAnimation />
-  
+
       <p>Guess the player: </p>
       {!inputDisabled && (
         <input
@@ -136,7 +168,6 @@ const Game = ({ goBack }) => {
           disabled={guesses.length >= MAX_GUESSES}
         />
       )}
-  
 
       {filteredPlayers.length > 0 && (
         <ul className="suggestions">
@@ -156,7 +187,7 @@ const Game = ({ goBack }) => {
             <div>{isSmallScreen ? 'POS' : 'Position'}</div>
             <div>{isSmallScreen ? '#' : 'Number'}</div>
             <div>{isSmallScreen ? 'HT' : 'Height'}</div>
-            <div>{isSmallScreen ? "C's Debut" : 'Celtic Debut'}</div>
+            <div>{isSmallScreen ? "DBT" : 'Celtic Debut'}</div>
             <div>{isSmallScreen ? "ASG's" : 'All Star Games'}</div>
           </div>
 
@@ -175,8 +206,10 @@ const Game = ({ goBack }) => {
                   >
                     <div className="flip-front"></div>
                     <div className={`flip-back ${guesses[rowIndex][`${key}Correct`] ? 'correct' : 'incorrect'}`}>
+                      {key === 'name' ? guesses[rowIndex][key] : null}
+                      {key === 'position' ? getPosition(guesses[rowIndex][key]) : null}
                       {key === 'number' ? `${guesses[rowIndex][key]} ${guesses[rowIndex].numberHint}` : null}
-                      {key === 'height' ? `${guesses[rowIndex][key]} ${guesses[rowIndex].heightHint}` : guesses[rowIndex][key]}
+                      {key === 'height' ? `${guesses[rowIndex][key]} ${guesses[rowIndex].heightHint}` : null}
                       {key === 'debut' ? `${guesses[rowIndex][key]} ${guesses[rowIndex].debutHint}` : null}
                       {key === 'allStarAppearances' ? `${guesses[rowIndex][key]} ${guesses[rowIndex].allStarHint}` : null}
                     </div>
@@ -201,7 +234,7 @@ const Game = ({ goBack }) => {
         <div className="modal-overlay">
           <div className="modal">
             <h2>Congratulations!</h2>
-            <p>You correctly guessed the player:</p>
+            <p>You correctly guessed today's Celtic:</p>
             <p style={{ fontSize: '4rem', color: '#007A33' }}>{currentPlayer.name}</p>
             <p style={{ fontSize: '7rem', color: '#007A33' }}>{currentPlayer.number}</p>
             <button onClick={handleCloseModal} style={{ marginTop: '20px', cursor: 'pointer' }}>X</button>

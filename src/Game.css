@@ -4,4 +4,38 @@
       display: none; /* Hide the title */
     }
   }
+  /* Add this to your Game.css file */
+
+/* Font size for guess row cells on smaller screens */
+@media only screen and (max-width: 767px) {
+    .guess-item {
+      font-size: 0px; /* Adjust the font size for smaller screens */
+    }
+  
+    .guess-header div {
+      font-size: 14px; /* Adjust the font size for headers on smaller screens */
+    }
+  }
+
+/* Game.css */
+
+/* For small screens (less than 768px) */
+@media only screen and (max-width: 767px) {
+    .flip-back {
+      font-size: 10px; /* Smaller font size for small screens */
+    }
+  }
+  
+  /* For larger screens */
+  @media only screen and (min-width: 768px) {
+    .flip-back {
+      font-size: 18px; /* Default font size for larger screens */
+    }
+  }
+  
+  .yellow {
+    background-color: #FFD700; /* Gold color */
+    color: black; /* Adjust text color if needed */
+  }
+  
   
