@@ -171,7 +171,7 @@ const Game = ({ goBack }) => {
 
   return (
     <div className="app">
-      <h1>Celtics Player Guessing Game</h1>
+      <h1>SCALDLE</h1>
 
       <p>Guess the player: </p>
 
