@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import './App.css';
-import players from './players.json'; // Assuming player data is here
+import './App.css'; // Ensure your main CSS file is imported
+import players from './players.json'; // Assuming player data is stored here
+import JerseysAnimation from './JerseysAnimation'; // Import the JerseysAnimation component
 
 const MAX_GUESSES = 8;
 const FLIP_DURATION = 800;
@@ -14,70 +15,7 @@ const Game = ({ goBack }) => {
   const [currentPlayer, setCurrentPlayer] = useState(
     players[Math.floor(Math.random() * players.length)]
   );
-  const [showModal, setShowModal] = useState(false);
   const [showSuccessModal, setShowSuccessModal] = useState(false);
-  const [isSmallScreen, setIsSmallScreen] = useState(false);
-
-  // Check if the screen size is small (e.g., smartphone)
-  useEffect(() => {
-    const checkScreenSize = () => {
-      setIsSmallScreen(window.innerWidth < 768); // Adjust for screens smaller than 768px
-    };
-
-    // Set the initial screen size
-    checkScreenSize();
-
-    // Add a listener to detect window resizing
-    window.addEventListener('resize', checkScreenSize);
-
-    // Clean up the listener when the component is unmounted
-    return () => window.removeEventListener('resize', checkScreenSize);
-  }, []);
-
-  // Function to compare number, height, or years and add arrows
-  const compareNumberOrHeight = (guessedValue, targetValue) => {
-    if (guessedValue < targetValue) {
-      return `↑`; // Arrow pointing up if the target is higher
-    } else if (guessedValue > targetValue) {
-      return `↓`; // Arrow pointing down if the target is lower
-    }
-    return ''; // No arrow if the values are the same
-  };
-
-  // Function to compare the latest year in the player's range
-  const compareYearsPlayed = (guessedYears, targetYears) => {
-    const guessedLatestYear = Math.max(...guessedYears); // Get the latest year from the guessed range
-    const targetLatestYear = Math.max(...targetYears); // Get the latest year from the target range
-    return compareNumberOrHeight(guessedLatestYear, targetLatestYear);
-  };
-
-  // Function to convert the All-Star status based on screen size
-  const getAllStarDisplay = (allStar) => {
-    return isSmallScreen ? (allStar ? 'Y' : 'N') : (allStar ? 'All-Star' : 'Not All-Star');
-  };
-
-  // Function to convert the position based on screen size
-  const getPositionDisplay = (position) => {
-    if (isSmallScreen) {
-      switch (position) {
-        case 'Guard':
-          return 'G';
-        case 'Center':
-          return 'C';
-        case 'Forward':
-          return 'F';
-        default:
-          return position;
-      }
-    } else {
-      return position;
-    }
-  };
-
-  // Function to get the column header based on screen size
-  const getColumnHeader = (fullText, shortText) => {
-    return isSmallScreen ? shortText : fullText;
-  };
 
   const handleInputChange = (e) => {
     const value = e.target.value;
@@ -98,6 +36,15 @@ const Game = ({ goBack }) => {
     setFilteredPlayers([]);
   };
 
+  const getArrow = (guessedValue, targetValue) => {
+    if (guessedValue < targetValue) {
+      return '↑'; // Up arrow
+    } else if (guessedValue > targetValue) {
+      return '↓'; // Down arrow
+    }
+    return ''; // No arrow if they are equal
+  };
+
   const handleGuess = () => {
     if (guesses.length >= MAX_GUESSES) {
       return;
@@ -108,30 +55,22 @@ const Game = ({ goBack }) => {
     );
 
     if (guessedPlayer) {
-      const guessedYears = Array.isArray(guessedPlayer.yearsPlayed)
-        ? guessedPlayer.yearsPlayed
-        : [guessedPlayer.yearsPlayed]; // Ensure guessedPlayer.yearsPlayed is an array
-
-      const targetYears = Array.isArray(currentPlayer.yearsPlayed)
-        ? currentPlayer.yearsPlayed
-        : [currentPlayer.yearsPlayed]; // Ensure currentPlayer.yearsPlayed is an array
-
       const feedback = {
         name: guessedPlayer.name,
         position: guessedPlayer.position,
         number: guessedPlayer.number,
         height: guessedPlayer.height,
-        yearsPlayed: guessedYears,
+        yearsPlayed: guessedPlayer.yearsPlayed,
         allStar: guessedPlayer.allStar,
-        numberComparison: compareNumberOrHeight(guessedPlayer.number, currentPlayer.number), // Compare numbers
-        heightComparison: compareNumberOrHeight(guessedPlayer.height, currentPlayer.height), // Compare heights
-        yearsPlayedComparison: compareYearsPlayed(guessedYears, targetYears), // Compare years played
         positionCorrect: guessedPlayer.position === currentPlayer.position,
         numberCorrect: guessedPlayer.number === currentPlayer.number,
         heightCorrect: guessedPlayer.height === currentPlayer.height,
-        yearsPlayedCorrect: guessedYears.join(',') === targetYears.join(','), // Check if years are exactly the same
+        yearsPlayedCorrect: guessedPlayer.yearsPlayed === currentPlayer.yearsPlayed,
         allStarCorrect: guessedPlayer.allStar === currentPlayer.allStar,
+        nameCorrect: guessedPlayer.name.toLowerCase() === currentPlayer.name.toLowerCase(),
         overallCorrect: guessedPlayer.name.toLowerCase() === currentPlayer.name.toLowerCase(),
+        numberHint: getArrow(guessedPlayer.number, currentPlayer.number), // Hint for number
+        heightHint: getArrow(guessedPlayer.height, currentPlayer.height), // Hint for height
       };
 
       setGuesses([...guesses, feedback]);
@@ -149,10 +88,6 @@ const Game = ({ goBack }) => {
         setTimeout(() => {
           setShowSuccessModal(true);
         }, totalFlipTime);
-      } else if (guesses.length + 1 >= MAX_GUESSES) {
-        setTimeout(() => {
-          setShowModal(true);
-        }, totalFlipTime);
       }
     } else {
       alert('Player not found. Try again!');
@@ -161,17 +96,11 @@ const Game = ({ goBack }) => {
     setGuess('');
   };
 
-  const handleCloseModal = () => {
-    setShowModal(false);
-    setShowSuccessModal(false);
-    setGuesses([]);
-    setFlipped([]);
-    setCurrentPlayer(players[Math.floor(Math.random() * players.length)]);
-  };
-
   return (
     <div className="app">
       <h1>SCALDLE</h1>
+      {/* Jerseys Animation under the scoreboard */}
+      <JerseysAnimation />
 
       <p>Guess the player: </p>
 
@@ -203,8 +132,8 @@ const Game = ({ goBack }) => {
           <div className="guess-header">
             <div>Name</div>
             <div>Position</div>
-            <div>{getColumnHeader("Number", "#")}</div> {/* Update Number header */}
-            <div>{getColumnHeader("Height", "HT")}</div> {/* Update Height header */}
+            <div>#</div>
+            <div>HT</div>
             <div>Years Played</div>
             <div>All-Star</div>
           </div>
@@ -224,17 +153,8 @@ const Game = ({ goBack }) => {
                   >
                     <div className="flip-front"></div>
                     <div className={`flip-back ${guesses[rowIndex][`${key}Correct`] ? 'correct' : 'incorrect'}`}>
-                      {key === 'position'
-                        ? getPositionDisplay(guesses[rowIndex][key])
-                        : key === 'allStar'
-                        ? getAllStarDisplay(guesses[rowIndex][key])
-                        : key === 'number'
-                        ? `${guesses[rowIndex][key]} ${guesses[rowIndex].numberComparison}` // Add arrow for number comparison
-                        : key === 'height'
-                        ? `${guesses[rowIndex][key]} ${guesses[rowIndex].heightComparison}` // Add arrow for height comparison
-                        : key === 'yearsPlayed'
-                        ? `${guesses[rowIndex][key].join('-')} ${guesses[rowIndex].yearsPlayedComparison}` // Ensure yearsPlayed is joined and show arrow
-                        : guesses[rowIndex][key]}
+                      {key === 'number' ? `${guesses[rowIndex][key]} ${guesses[rowIndex].numberHint}` : null}
+                      {key === 'height' ? `${guesses[rowIndex][key]} ${guesses[rowIndex].heightHint}` : guesses[rowIndex][key]}
                     </div>
                   </div>
                 ))
@@ -253,22 +173,12 @@ const Game = ({ goBack }) => {
         </div>
       </div>
 
-      {showModal && (
-        <div className="modal-overlay">
-          <div className="modal">
-            <h2>Game Over!</h2>
-            <p>The correct player was: {currentPlayer.name}</p>
-            <button onClick={handleCloseModal}>Play Again</button>
-          </div>
-        </div>
-      )}
-
       {showSuccessModal && (
         <div className="modal-overlay">
           <div className="modal">
             <h2>Congratulations!</h2>
             <p>You correctly guessed the player: {currentPlayer.name}</p>
-            <button onClick={handleCloseModal}>Play Again</button>
+            <button onClick={() => window.location.reload()}>Play Again</button>
           </div>
         </div>
       )}

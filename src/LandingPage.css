@@ -1,3 +1,4 @@
+/* Fade-in effect for the landing page */
 .landing-page {
     display: flex;
     flex-direction: column;
@@ -8,27 +9,67 @@
     color: white;
     text-align: center;
     padding: 20px;
+    opacity: 0;
+    animation: fadeInPage 1.5s forwards; /* 1.5s fade-in for the page */
   }
   
+  @keyframes fadeInPage {
+    100% {
+      opacity: 1;
+    }
+  }
+  
+  /* Slide-in animation for the title */
   .game-title {
     font-size: 4rem;
     margin-bottom: 20px;
     font-family: 'NBACeltics', sans-serif;
     text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7); /* Make the title pop */
+    transform: translateY(-50px); /* Slide in from above */
+    opacity: 0;
+    animation: slideInTitle 1.5s forwards 0.5s; /* Slide-in with delay */
   }
   
+  @keyframes slideInTitle {
+    100% {
+      transform: translateY(0);
+      opacity: 1;
+    }
+  }
+  
+  /* Slide-in for the image */
   .scalabrine-image {
     width: 300px; /* Adjust size based on preference */
     height: auto;
     margin-bottom: 20px;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5); /* Add a shadow to the image */
+    transform: translateY(50px); /* Slide in from below */
+    opacity: 0;
+    animation: slideInImage 1.5s forwards 0.7s; /* Slide-in with delay */
   }
   
+  @keyframes slideInImage {
+    100% {
+      transform: translateY(0);
+      opacity: 1;
+    }
+  }
+  
+  /* Fade-in for the game description */
   .game-description {
     font-size: 1.5rem;
     margin-bottom: 20px;
+    opacity: 0;
+    animation: fadeInDescription 1.5s forwards 1s; /* Fade-in with delay */
   }
   
+  @keyframes fadeInDescription {
+    100% {
+      opacity: 1;
+    }
+  }
+  
+  /* Button animation */
   .start-button {
     padding: 10px 30px;
     font-size: 1.2rem;
@@ -37,9 +78,19 @@
     border: none;
     cursor: pointer;
     border-radius: 5px;
+    opacity: 0;
+    animation: fadeInButton 1.5s forwards 1.2s; /* Fade-in with delay */
+  }
+  
+  @keyframes fadeInButton {
+    100% {
+      opacity: 1;
+    }
   }
   
   .start-button:hover {
     background-color: #003d20;
+    transform: scale(1.1); /* Scale effect on hover */
+    transition: transform 0.2s ease;
   }
   

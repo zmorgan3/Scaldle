@@ -7,18 +7,47 @@
 /* Apply the font globally */
 body, .app {
   font-family: 'NBACeltics', sans-serif;
+  margin: 0;
+  padding: 0;
+  height: 100vh; /* Full viewport height */
+  background-color: #007A33; /* Celtics green background */
 }
 
-/* Apply the Celtics-themed green and black background */
+/* Ensure the background stays green at all times */
+html, body {
+  height: 100%;
+  background-color: #007A33; /* Celtics green */
+}
+
+/* Container for the entire app */
 .app {
-  background: linear-gradient(135deg, #007A33 100%, #000000 50%);
-  background-size: cover; /* Ensure the background covers the whole area */
-  min-height: 100vh; /* Ensure the background covers the full viewport height */
-  padding: 20px;
   display: flex;
   flex-direction: column;
-  justify-content: center; /* Center content vertically */
-  align-items: center; /* Center content horizontally */
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh; /* Ensure the app covers the full viewport height */
+}
+
+/* Ensure the grid container is centered and stays centered */
+.grid-container {
+  background-color: rgba(255, 255, 255, 0.8); /* Light background with slight transparency */
+  border-radius: 15px;
+  padding: 20px;
+  margin: 20px;
+  width: 100%;
+  max-width: 90%; /* Set the max-width to 90% of the viewport */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Expand grid container when the screen is wider than 1240px */
+@media only screen and (min-width: 1240px) {
+  .grid-container {
+    max-width: 1400px; /* Expand the max-width beyond 1240px */
+  }
 }
 
 /* Make text more readable against the background */
@@ -59,27 +88,16 @@ button:hover {
   overflow-y: auto;
 }
 
-/* Centered text on smaller screens */
 .suggestions li {
   padding: 10px;
   cursor: pointer;
   background-color: white;
   border-bottom: 1px solid #ddd;
-  text-align: center; /* Center the text inside the suggestions */
+  text-align: center;
 }
 
 .suggestions li:hover {
   background-color: #f0f0f0;
-}
-
-/* Container for the entire grid */
-.grid-container {
-  background-color: rgba(255, 255, 255, 0.8); /* Light background with slight transparency */
-  border-radius: 15px;
-  padding: 20px;
-  max-width: 900px;
-  margin: 20px auto;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
 /* Grid for the guesses */
@@ -87,19 +105,19 @@ button:hover {
   display: grid;
   gap: 10px;
   margin-top: 20px;
+  width: 100%;
 }
 
 /* Define consistent column widths for the header and rows */
 .guess-header,
 .guess-row {
   display: grid;
-  grid-template-columns: 2fr 1fr 1fr 1fr 2fr 1fr;
+  grid-template-columns: 2fr 1fr 1fr 1fr 2fr 1fr; /* Adjust the column width as needed */
   align-items: center;
   justify-items: center;
   font-weight: bold;
   border-collapse: collapse;
   height: 60px;
-  font-size: 16px;
 }
 
 .guess-header {
@@ -116,33 +134,16 @@ button:hover {
   height: 100%;
 }
 
-/* Skeleton grid styling */
-.skeleton {
-  background-color: #e0e0e0;
-  border-top: 1px solid black;
-  border-bottom: 1px solid black;
-}
-
-.skeleton-item {
+/* Individual guess items */
+.guess-item {
   background-color: #cccccc;
+  border-right: 1px solid black;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   height: 100%;
   width: 100%;
-  border-right: 1px solid black;
-}
-
-.skeleton-item:first-child {
-  border-left: 1px solid black;
-}
-
-.skeleton-item:last-child {
-  border-right: 1px solid black;
-}
-
-/* Horizontal lines for guess rows */
-.guess-row {
-  margin-top: 5px;
-  border-top: 1px solid black;
-  border-bottom: 1px solid black;
+  font-size: 18px;
 }
 
 /* Flip card container */
@@ -188,12 +189,33 @@ button:hover {
 .correct {
   background-color: #6AAA64;
   color: white;
+  border: 2px solid #007A33; /* Add the green Celtics border */
 }
 
 /* Incorrect guesses are shaded red */
 .incorrect {
   background-color: #D32F2F;
   color: white;
+  border: 2px solid transparent; /* No border for incorrect guesses */
+}
+
+/* Winning cards (Celtics banner style) */
+.winning-card {
+  background-color: white;
+  border: 2px solid #007A33; /* Celtics green trim */
+  color: #007A33; /* Celtics green text */
+  font-weight: bold;
+  transition: transform 0.6s ease-in-out;
+}
+
+/* You can add additional animations or effects */
+.winning-card.flip-active {
+  transform: rotateY(180deg); /* Example flip animation */
+}
+
+/* Optional shadow for emphasis */
+.winning-card {
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
 }
 
 /* Modal styles */
@@ -234,7 +256,7 @@ button:hover {
   background-color: #00522C;
 }
 
-/* Fade-in effect for game */
+/* Fade-in effect for the game */
 .fade-in {
   opacity: 0;
   animation: fadeIn 2s forwards;
@@ -283,39 +305,9 @@ button:hover {
   }
 }
 
-/* For medium devices like iPads (min-width: 768px, max-width: 1024px) */
-@media only screen and (min-width: 768px) and (max-width: 1024px) {
-  .app {
-    padding: 15px;
-  }
-
-  h1 {
-    font-size: 1.8rem;
-  }
-
-  .grid-container {
-    padding: 15px;
-    width: 100%;
-  }
-
-  .guess-header,
-  .guess-row {
-    font-size: 16px;
-  }
-
-  .modal {
-    width: 70%;
-  }
-
-  input {
-    max-width: 400px;
-  }
-}
-
 /* For laptops and larger devices (min-width: 1025px) */
 @media only screen and (min-width: 1025px) {
   .app {
-    max-width: 1200px;
     padding: 20px;
   }
 
@@ -327,11 +319,7 @@ button:hover {
     padding: 20px;
     width: 100%;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  }
-
-  .guess-header,
-  .guess-row {
-    font-size: 18px;
+    max-width: 1400px; /* Expand the max-width for larger screens */
   }
 
   .modal {
@@ -341,29 +329,5 @@ button:hover {
   input {
     max-width: 500px; /* Center input and restrict width for laptops */
     margin: 0 auto; /* Center the input */
-  }
-}
-
-/* Landscape orientation for all devices */
-@media only screen and (orientation: landscape) {
-  body {
-    font-size: 18px;
-  }
-
-  h1 {
-    font-size: 2rem;
-  }
-}
-@media only screen and (max-width: 767px) {
-  .guess-row {
-    font-size: 12px; /* Smaller font size for small screens */
-  }
-  
-  .guess-header div {
-    font-size: 12px; /* Adjust the header font size */
-  }
-
-  .flip-back, .flip-front {
-    font-size: 12px; /* Adjust the flip card text size */
   }
 }
