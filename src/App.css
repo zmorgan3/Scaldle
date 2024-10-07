@@ -25,7 +25,9 @@ html, body {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  min-height: 100vh; /* Ensure the app covers the full viewport height */
+  min-height: 150vh; /* Ensure the app covers the full viewport height */
+  padding: 20px; /* Added padding to prevent content from being cut off */
+
 }
 
 /* Ensure the grid container is centered and stays centered */
@@ -98,11 +100,25 @@ button:hover {
 }
 
 /* Responsive suggestions list for small screens */
+/* For screens less than 768px */
 @media only screen and (max-width: 767px) {
   .suggestions {
-    width: 90%; /* Adjust width for small screens */
+    width: 90%; /* Use a percentage width to fit the screen better */
+    max-width: none; /* Remove the max-width restriction */
+    margin: 0 auto; /* Center the suggestions */
+    position: absolute; /* Position absolutely for better visibility */
+    z-index: 1000; /* Ensure it appears above other elements */
+    border: 1px solid #ddd; /* Add a border to the suggestions for visibility */
+    border-radius: 5px; /* Optional: round the corners */
+    background-color: white; /* Background color to ensure text is visible */
+  }
+
+  .suggestions li {
+    padding: 10px; /* Adjust padding for list items */
+    font-size: 14px; /* Ensure text is readable */
   }
 }
+
 
 .suggestions li {
   padding: 10px;
@@ -210,7 +226,7 @@ button:hover {
 
 /* Incorrect guesses are shaded red */
 .incorrect {
-  background-color: #D32F2F;
+  background-color: #a0a0a0;
   color: white;
   border: 2px solid transparent; /* No border for incorrect guesses */
 }
@@ -342,3 +358,48 @@ button:hover {
     margin: 0 auto; /* Center the input */
   }
 }
+
+.app h1 {
+  font-size: 5rem; /* Change this to the desired size */
+  color: white; /* Ensure the color matches your design */
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5); /* Keep the shadow for readability */
+  overflow: hidden;
+}
+
+.app p{
+  font-size: 2rem;
+}
+
+/* For small devices (max-width: 767px) */
+@media only screen and (max-width: 767px) {
+  .guess-item {
+    font-size: 12px; /* Adjust font size for smaller screens */
+  }
+
+  .guess-header {
+    font-size: 14px; /* Optional: Adjust header font size for smaller screens */
+  }
+}
+
+@media only screen and (max-width: 767px) {
+  .guess-item {
+    font-size: 12px; /* Smaller font size for mobile screens */
+  }
+}
+
+/* For screens less than 768px */
+@media only screen and (max-width: 767px) {
+  .grid-container {
+    min-width: 130%; /* Minimal padding for smaller screens */
+  }
+
+  .guess-header,
+  .guess-row {
+    font-size: 12px; /* Smaller font size for mobile devices */
+  }
+
+  .guess-item {
+    font-size: 14px; /* Adjust the font size for guess items */
+  }
+}
+

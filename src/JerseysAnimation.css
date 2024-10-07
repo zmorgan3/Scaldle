@@ -2,13 +2,13 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    margin-top: 20px; /* Adjust for spacing below the scoreboard */
+    margin-top: -50px; /* Adjust for spacing below the scoreboard */
     overflow: hidden;
   }
   
   .jersey {
-    width: 100px; /* Adjust based on jersey size */
-    margin: 0 10px;
+    width: 200px; /* Adjust based on jersey size */
+    margin: 0 0px;
     transform: translateY(100%); /* Start off-screen (bottom) */
     opacity: 0;
     transition: transform 1s ease-in, opacity 1s ease-in;
@@ -18,4 +18,9 @@
     transform: translateY(0); /* Slide into view */
     opacity: 1; /* Fade in */
   }
-  
+  @media only screen and (max-width: 375px) {
+    .jerseys-container {
+      max-width: 0%; /* Minimal padding for smaller screens */
+    }
+  }
+

@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import './App.css'; // Ensure your main CSS file is imported
+import './Game.css';
 import players from './players.json'; // Assuming player data is stored here
 import JerseysAnimation from './JerseysAnimation'; // Import the JerseysAnimation component
 
@@ -16,6 +17,20 @@ const Game = ({ goBack }) => {
     players[Math.floor(Math.random() * players.length)]
   );
   const [showSuccessModal, setShowSuccessModal] = useState(false);
+  const [isSmallScreen, setIsSmallScreen] = useState(window.innerWidth < 768);
+  const [inputDisabled, setInputDisabled] = useState(false); // New state to control input box visibility
+
+  // Check for screen size
+  useEffect(() => {
+    const handleResize = () => {
+      setIsSmallScreen(window.innerWidth < 768);
+    };
+
+    window.addEventListener('resize', handleResize);
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
+  }, []);
 
   const handleInputChange = (e) => {
     const value = e.target.value;
@@ -33,6 +48,7 @@ const Game = ({ goBack }) => {
 
   const handleSuggestionClick = (name) => {
     setGuess(name);
+    handleGuess(name); // Automatically call handleGuess with the player's name
     setFilteredPlayers([]);
   };
 
@@ -45,13 +61,13 @@ const Game = ({ goBack }) => {
     return ''; // No arrow if they are equal
   };
 
-  const handleGuess = () => {
+  const handleGuess = (guessedName) => {
     if (guesses.length >= MAX_GUESSES) {
       return;
     }
 
     const guessedPlayer = players.find(
-      (player) => player.name.toLowerCase() === guess.toLowerCase()
+      (player) => player.name.toLowerCase() === guessedName.toLowerCase()
     );
 
     if (guessedPlayer) {
@@ -60,7 +76,7 @@ const Game = ({ goBack }) => {
         position: guessedPlayer.position,
         number: guessedPlayer.number,
         height: guessedPlayer.height,
-        debut: guessedPlayer.debut, // Make sure this matches your players.json field
+        debut: guessedPlayer.debut,
         allStarAppearances: guessedPlayer.allStarAppearances,
         positionCorrect: guessedPlayer.position === currentPlayer.position,
         numberCorrect: guessedPlayer.number === currentPlayer.number,
@@ -69,10 +85,10 @@ const Game = ({ goBack }) => {
         allStarCorrect: guessedPlayer.allStarAppearances === currentPlayer.allStarAppearances,
         nameCorrect: guessedPlayer.name.toLowerCase() === currentPlayer.name.toLowerCase(),
         overallCorrect: guessedPlayer.name.toLowerCase() === currentPlayer.name.toLowerCase(),
-        numberHint: getArrow(guessedPlayer.number, currentPlayer.number), // Hint for number
-        heightHint: getArrow(guessedPlayer.height, currentPlayer.height), // Hint for height
-        debutHint: getArrow(guessedPlayer.debut, currentPlayer.debut), // Hint for debut
-        allStarHint: getArrow(guessedPlayer.allStarAppearances, currentPlayer.allStarAppearances) // Hint for all-star appearances
+        numberHint: getArrow(guessedPlayer.number, currentPlayer.number),
+        heightHint: getArrow(guessedPlayer.height, currentPlayer.height),
+        debutHint: getArrow(guessedPlayer.debut, currentPlayer.debut),
+        allStarHint: getArrow(guessedPlayer.allStarAppearances, currentPlayer.allStarAppearances)
       };
 
       setGuesses([...guesses, feedback]);
@@ -87,6 +103,7 @@ const Game = ({ goBack }) => {
       const totalFlipTime = feedback.keys.length * FLIP_DELAY + FLIP_DURATION;
 
       if (feedback.overallCorrect) {
+        setInputDisabled(true); // Disable the input box
         setTimeout(() => {
           setShowSuccessModal(true);
         }, totalFlipTime);
@@ -98,21 +115,28 @@ const Game = ({ goBack }) => {
     setGuess('');
   };
 
+  const handleCloseModal = () => {
+    setShowSuccessModal(false);
+    setInputDisabled(false); // Re-enable input when modal is closed
+  };
+
   return (
     <div className="app">
-      <h1>SCALDLE</h1>
+      <h1 className={isSmallScreen ? 'hidden-title' : ''}>SCALDLE</h1>
       {/* Jerseys Animation under the scoreboard */}
       <JerseysAnimation />
-
+  
       <p>Guess the player: </p>
-
-      <input
-        type="text"
-        value={guess}
-        onChange={handleInputChange}
-        placeholder="Enter player name"
-        disabled={guesses.length >= MAX_GUESSES}
-      />
+      {!inputDisabled && (
+        <input
+          type="text"
+          value={guess}
+          onChange={handleInputChange}
+          placeholder="Enter player name"
+          disabled={guesses.length >= MAX_GUESSES}
+        />
+      )}
+  
 
       {filteredPlayers.length > 0 && (
         <ul className="suggestions">
@@ -124,20 +148,16 @@ const Game = ({ goBack }) => {
         </ul>
       )}
 
-      <button onClick={handleGuess} disabled={guesses.length >= MAX_GUESSES}>
-        Submit
-      </button>
-
       <div className="grid-container">
         <h2>Guesses:</h2>
         <div className="guess-grid">
           <div className="guess-header">
             <div>Name</div>
-            <div>Position</div>
-            <div>#</div>
-            <div>HT</div>
-            <div>Debut</div> {/* Updated header */}
-            <div>All-Star Appearances</div> {/* Updated header */}
+            <div>{isSmallScreen ? 'POS' : 'Position'}</div>
+            <div>{isSmallScreen ? '#' : 'Number'}</div>
+            <div>{isSmallScreen ? 'HT' : 'Height'}</div>
+            <div>{isSmallScreen ? "C's Debut" : 'Celtic Debut'}</div>
+            <div>{isSmallScreen ? "ASG's" : 'All Star Games'}</div>
           </div>
 
           {[...Array(MAX_GUESSES)].map((_, rowIndex) => (
@@ -157,8 +177,8 @@ const Game = ({ goBack }) => {
                     <div className={`flip-back ${guesses[rowIndex][`${key}Correct`] ? 'correct' : 'incorrect'}`}>
                       {key === 'number' ? `${guesses[rowIndex][key]} ${guesses[rowIndex].numberHint}` : null}
                       {key === 'height' ? `${guesses[rowIndex][key]} ${guesses[rowIndex].heightHint}` : guesses[rowIndex][key]}
-                      {key === 'debut' ? `${guesses[rowIndex][key]} ${guesses[rowIndex].debutHint}` : null} {/* Display debut year */}
-                      {key === 'allStarAppearances' ? `${guesses[rowIndex][key]} ${guesses[rowIndex].allStarHint}` : null} {/* Display all-star appearances */}
+                      {key === 'debut' ? `${guesses[rowIndex][key]} ${guesses[rowIndex].debutHint}` : null}
+                      {key === 'allStarAppearances' ? `${guesses[rowIndex][key]} ${guesses[rowIndex].allStarHint}` : null}
                     </div>
                   </div>
                 ))
@@ -181,9 +201,10 @@ const Game = ({ goBack }) => {
         <div className="modal-overlay">
           <div className="modal">
             <h2>Congratulations!</h2>
-            <p>You correctly guessed the player: {currentPlayer.name}</p>
-            <p style={{ fontSize: '2rem', color: '#007A33' }}>{currentPlayer.number}</p> {/* Big green font for number */}
-            <button onClick={() => window.location.reload()}>Play Again</button>
+            <p>You correctly guessed the player:</p>
+            <p style={{ fontSize: '4rem', color: '#007A33' }}>{currentPlayer.name}</p>
+            <p style={{ fontSize: '7rem', color: '#007A33' }}>{currentPlayer.number}</p>
+            <button onClick={handleCloseModal} style={{ marginTop: '20px', cursor: 'pointer' }}>X</button>
           </div>
         </div>
       )}

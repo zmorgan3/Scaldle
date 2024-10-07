@@ -1,0 +1,7 @@
+/* Hide the title when screen width is less than 768 pixels */
+@media (max-width: 375px) {
+    .hidden-title {
+      display: none; /* Hide the title */
+    }
+  }
+  
