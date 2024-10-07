@@ -1,0 +1,242 @@
+[
+  {
+    "name": "Bill Russell",
+    "position": "Center",
+    "number": 6,
+    "height": "6'10\"",
+    "yearsPlayed": "1956-1969",
+    "allStar": true
+  },
+  {
+    "name": "Larry Bird",
+    "position": "Forward",
+    "number": 33,
+    "height": "6'9\"",
+    "yearsPlayed": "1979-1992",
+    "allStar": true
+  },
+  {
+    "name": "Paul Pierce",
+    "position": "Forward",
+    "number": 34,
+    "height": "6'7\"",
+    "yearsPlayed": "1998-2013",
+    "allStar": true
+  },
+  {
+    "name": "John Havlicek",
+    "position": "Forward",
+    "number": 17,
+    "height": "6'5\"",
+    "yearsPlayed": "1962-1978",
+    "allStar": true
+  },
+  {
+    "name": "Kevin McHale",
+    "position": "Forward",
+    "number": 32,
+    "height": "6'10\"",
+    "yearsPlayed": "1980-1993",
+    "allStar": true
+  },
+  {
+    "name": "Bob Cousy",
+    "position": "Guard",
+    "number": 14,
+    "height": "6'1\"",
+    "yearsPlayed": "1950-1963",
+    "allStar": true
+  },
+  {
+    "name": "Tommy Heinsohn",
+    "position": "Forward",
+    "number": 15,
+    "height": "6'7\"",
+    "yearsPlayed": "1956-1965",
+    "allStar": true
+  },
+  {
+    "name": "Sam Jones",
+    "position": "Guard",
+    "number": 24,
+    "height": "6'4\"",
+    "yearsPlayed": "1957-1969",
+    "allStar": true
+  },
+  {
+    "name": "Jo Jo White",
+    "position": "Guard",
+    "number": 10,
+    "height": "6'3\"",
+    "yearsPlayed": "1969-1979",
+    "allStar": true
+  },
+  {
+    "name": "Robert Parish",
+    "position": "Center",
+    "number": 0,
+    "height": "7'0\"",
+    "yearsPlayed": "1980-1994",
+    "allStar": true
+  },
+  {
+    "name": "Kevin Garnett",
+    "position": "Forward",
+    "number": 5,
+    "height": "6'11\"",
+    "yearsPlayed": "2007-2013",
+    "allStar": true
+  },
+  {
+    "name": "Dennis Johnson",
+    "position": "Guard",
+    "number": 3,
+    "height": "6'4\"",
+    "yearsPlayed": "1983-1990",
+    "allStar": true
+  },
+  {
+    "name": "Rajon Rondo",
+    "position": "Guard",
+    "number": 9,
+    "height": "6'1\"",
+    "yearsPlayed": "2006-2014",
+    "allStar": true
+  },
+  {
+    "name": "K.C. Jones",
+    "position": "Guard",
+    "number": 25,
+    "height": "6'1\"",
+    "yearsPlayed": "1958-1967",
+    "allStar": false
+  },
+  {
+    "name": "Reggie Lewis",
+    "position": "Guard",
+    "number": 35,
+    "height": "6'7\"",
+    "yearsPlayed": "1987-1993",
+    "allStar": true
+  },
+  {
+    "name": "Antoine Walker",
+    "position": "Forward",
+    "number": 8,
+    "height": "6'9\"",
+    "yearsPlayed": "1996-2003, 2005",
+    "allStar": true
+  },
+  {
+    "name": "Dave Cowens",
+    "position": "Center",
+    "number": 18,
+    "height": "6'9\"",
+    "yearsPlayed": "1970-1980",
+    "allStar": true
+  },
+  {
+    "name": "Cedric Maxwell",
+    "position": "Forward",
+    "number": 31,
+    "height": "6'8\"",
+    "yearsPlayed": "1977-1985",
+    "allStar": false
+  },
+  {
+    "name": "Jayson Tatum",
+    "position": "Forward",
+    "number": 0,
+    "height": "6'8\"",
+    "yearsPlayed": "2017-present",
+    "allStar": true
+  },
+  {
+    "name": "Jaylen Brown",
+    "position": "Guard",
+    "number": 7,
+    "height": "6'6\"",
+    "yearsPlayed": "2016-present",
+    "allStar": true
+  },
+  {
+    "name": "Marcus Smart",
+    "position": "Guard",
+    "number": 36,
+    "height": "6'4\"",
+    "yearsPlayed": "2014-present",
+    "allStar": false
+  },
+  {
+    "name": "Al Horford",
+    "position": "Center",
+    "number": 42,
+    "height": "6'9\"",
+    "yearsPlayed": "2016-2019, 2021-present",
+    "allStar": true
+  },
+  {
+    "name": "Danny Ainge",
+    "position": "Guard",
+    "number": 44,
+    "height": "6'4\"",
+    "yearsPlayed": "1981-1989",
+    "allStar": false
+  },
+  {
+    "name": "Isaiah Thomas",
+    "position": "Guard",
+    "number": 4,
+    "height": "5'9\"",
+    "yearsPlayed": "2014-2017",
+    "allStar": true
+  },
+  {
+    "name": "Rick Fox",
+    "position": "Forward",
+    "number": 44,
+    "height": "6'7\"",
+    "yearsPlayed": "1991-1997",
+    "allStar": false
+  },
+  {
+    "name": "Frank Ramsey",
+    "position": "Guard",
+    "number": 23,
+    "height": "6'3\"",
+    "yearsPlayed": "1954-1964",
+    "allStar": false
+  },
+  {
+    "name": "Don Nelson",
+    "position": "Forward",
+    "number": 19,
+    "height": "6'6\"",
+    "yearsPlayed": "1965-1976",
+    "allStar": false
+  },
+  {
+    "name": "Bill Sharman",
+    "position": "Guard",
+    "number": 21,
+    "height": "6'1\"",
+    "yearsPlayed": "1951-1961",
+    "allStar": true
+  },
+  {
+    "name": "Ed Macauley",
+    "position": "Center",
+    "number": 22,
+    "height": "6'8\"",
+    "yearsPlayed": "1950-1956",
+    "allStar": true
+  },
+  {
+    "name": "Bailey Howell",
+    "position": "Forward",
+    "number": 18,
+    "height": "6'7\"",
+    "yearsPlayed": "1966-1970",
+    "allStar": true
+  }
+]

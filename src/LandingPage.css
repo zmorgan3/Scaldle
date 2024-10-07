@@ -1,0 +1,45 @@
+.landing-page {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background-color: #007A33; /* Celtics green */
+    color: white;
+    text-align: center;
+    padding: 20px;
+  }
+  
+  .game-title {
+    font-size: 4rem;
+    margin-bottom: 20px;
+    font-family: 'NBACeltics', sans-serif;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7); /* Make the title pop */
+  }
+  
+  .scalabrine-image {
+    width: 300px; /* Adjust size based on preference */
+    height: auto;
+    margin-bottom: 20px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5); /* Add a shadow to the image */
+  }
+  
+  .game-description {
+    font-size: 1.5rem;
+    margin-bottom: 20px;
+  }
+  
+  .start-button {
+    padding: 10px 30px;
+    font-size: 1.2rem;
+    background-color: #00522C;
+    color: white;
+    border: none;
+    cursor: pointer;
+    border-radius: 5px;
+  }
+  
+  .start-button:hover {
+    background-color: #003d20;
+  }
+  

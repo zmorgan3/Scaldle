@@ -1,0 +1,369 @@
+/* Import the NBA Celtics font */
+@font-face {
+  font-family: 'NBACeltics';
+  src: url('./fonts/NBACeltics.ttf') format('truetype');
+}
+
+/* Apply the font globally */
+body, .app {
+  font-family: 'NBACeltics', sans-serif;
+}
+
+/* Apply the Celtics-themed green and black background */
+.app {
+  background: linear-gradient(135deg, #007A33 100%, #000000 50%);
+  background-size: cover; /* Ensure the background covers the whole area */
+  min-height: 100vh; /* Ensure the background covers the full viewport height */
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center; /* Center content vertically */
+  align-items: center; /* Center content horizontally */
+}
+
+/* Make text more readable against the background */
+.app h1, .app p, .app button {
+  color: white;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5); /* Add a slight shadow for readability */
+}
+
+/* Input styling */
+input {
+  padding: 10px;
+  margin: 10px;
+  width: 100%; /* Full width for mobile devices */
+  max-width: 300px; /* Adjust input size for larger screens */
+}
+
+button {
+  padding: 10px 20px;
+  background-color: #007A33;
+  color: white;
+  border: none;
+  cursor: pointer;
+}
+
+button:hover {
+  background-color: #00522C;
+}
+
+/* Suggestions dropdown */
+.suggestions {
+  list-style-type: none;
+  padding: 0;
+  margin: 10px auto;
+  width: 200px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  max-height: 160px;
+  overflow-y: auto;
+}
+
+/* Centered text on smaller screens */
+.suggestions li {
+  padding: 10px;
+  cursor: pointer;
+  background-color: white;
+  border-bottom: 1px solid #ddd;
+  text-align: center; /* Center the text inside the suggestions */
+}
+
+.suggestions li:hover {
+  background-color: #f0f0f0;
+}
+
+/* Container for the entire grid */
+.grid-container {
+  background-color: rgba(255, 255, 255, 0.8); /* Light background with slight transparency */
+  border-radius: 15px;
+  padding: 20px;
+  max-width: 900px;
+  margin: 20px auto;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Grid for the guesses */
+.guess-grid {
+  display: grid;
+  gap: 10px;
+  margin-top: 20px;
+}
+
+/* Define consistent column widths for the header and rows */
+.guess-header,
+.guess-row {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr 1fr 2fr 1fr;
+  align-items: center;
+  justify-items: center;
+  font-weight: bold;
+  border-collapse: collapse;
+  height: 60px;
+  font-size: 16px;
+}
+
+.guess-header {
+  background-color: #007A33;
+  color: white;
+  border-bottom: 2px solid black;
+  height: 60px;
+}
+
+.guess-header div {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+}
+
+/* Skeleton grid styling */
+.skeleton {
+  background-color: #e0e0e0;
+  border-top: 1px solid black;
+  border-bottom: 1px solid black;
+}
+
+.skeleton-item {
+  background-color: #cccccc;
+  height: 100%;
+  width: 100%;
+  border-right: 1px solid black;
+}
+
+.skeleton-item:first-child {
+  border-left: 1px solid black;
+}
+
+.skeleton-item:last-child {
+  border-right: 1px solid black;
+}
+
+/* Horizontal lines for guess rows */
+.guess-row {
+  margin-top: 5px;
+  border-top: 1px solid black;
+  border-bottom: 1px solid black;
+}
+
+/* Flip card container */
+.flip {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  transform-style: preserve-3d;
+  transition: transform 0.8s ease-in-out;
+}
+
+/* Flip active */
+.flip.flip-active {
+  transform: rotateX(180deg);
+}
+
+/* Flip front (grey side) */
+.flip-front,
+.flip-back {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  backface-visibility: hidden;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 18px;
+  color: black;
+}
+
+/* Front side (initial grey side) */
+.flip-front {
+  background-color: #cccccc;
+  border-right: 1px solid black;
+}
+
+/* Back side (revealed colored side) */
+.flip-back {
+  transform: rotateX(180deg);
+}
+
+/* Correct guesses are shaded lighter green (Wordle-like) */
+.correct {
+  background-color: #6AAA64;
+  color: white;
+}
+
+/* Incorrect guesses are shaded red */
+.incorrect {
+  background-color: #D32F2F;
+  color: white;
+}
+
+/* Modal styles */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.7);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.modal {
+  background-color: white;
+  padding: 20px;
+  border-radius: 10px;
+  text-align: center;
+  max-width: 300px;
+}
+
+.modal h2 {
+  margin-top: 0;
+}
+
+.modal button {
+  padding: 10px 20px;
+  background-color: #007A33;
+  color: white;
+  border: none;
+  cursor: pointer;
+  margin-top: 20px;
+}
+
+.modal button:hover {
+  background-color: #00522C;
+}
+
+/* Fade-in effect for game */
+.fade-in {
+  opacity: 0;
+  animation: fadeIn 2s forwards;
+}
+
+@keyframes fadeIn {
+  100% {
+    opacity: 1;
+  }
+}
+
+/* Mobile-first responsive design */
+
+/* For small devices like iPhones (max-width: 767px) */
+@media only screen and (max-width: 767px) {
+  .app {
+    padding: 10px;
+  }
+
+  h1 {
+    font-size: 1.2rem; /* Smaller font for mobile devices */
+  }
+
+  .grid-container {
+    width: 100%;
+    padding: 10px;
+    box-shadow: none; /* Reduce shadow effects on smaller screens */
+  }
+
+  .guess-header,
+  .guess-row {
+    font-size: 12px; /* Smaller font size for mobile devices */
+  }
+
+  .modal {
+    width: 90%;
+  }
+
+  input {
+    font-size: 1rem; /* Smaller input text */
+    max-width: 100%; /* Full width for smaller devices */
+  }
+
+  button {
+    font-size: 1rem; /* Smaller button text */
+  }
+}
+
+/* For medium devices like iPads (min-width: 768px, max-width: 1024px) */
+@media only screen and (min-width: 768px) and (max-width: 1024px) {
+  .app {
+    padding: 15px;
+  }
+
+  h1 {
+    font-size: 1.8rem;
+  }
+
+  .grid-container {
+    padding: 15px;
+    width: 100%;
+  }
+
+  .guess-header,
+  .guess-row {
+    font-size: 16px;
+  }
+
+  .modal {
+    width: 70%;
+  }
+
+  input {
+    max-width: 400px;
+  }
+}
+
+/* For laptops and larger devices (min-width: 1025px) */
+@media only screen and (min-width: 1025px) {
+  .app {
+    max-width: 1200px;
+    padding: 20px;
+  }
+
+  h1 {
+    font-size: 2.5rem;
+  }
+
+  .grid-container {
+    padding: 20px;
+    width: 100%;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
+
+  .guess-header,
+  .guess-row {
+    font-size: 18px;
+  }
+
+  .modal {
+    width: 50%;
+  }
+
+  input {
+    max-width: 500px; /* Center input and restrict width for laptops */
+    margin: 0 auto; /* Center the input */
+  }
+}
+
+/* Landscape orientation for all devices */
+@media only screen and (orientation: landscape) {
+  body {
+    font-size: 18px;
+  }
+
+  h1 {
+    font-size: 2rem;
+  }
+}
+@media only screen and (max-width: 767px) {
+  .guess-row {
+    font-size: 12px; /* Smaller font size for small screens */
+  }
+  
+  .guess-header div {
+    font-size: 12px; /* Adjust the header font size */
+  }
+
+  .flip-back, .flip-front {
+    font-size: 12px; /* Adjust the flip card text size */
+  }
+}
