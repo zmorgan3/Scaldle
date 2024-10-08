@@ -6,6 +6,7 @@ import JerseysAnimation from './JerseysAnimation';
 import GuessGrid from './GuessGrid';
 import FailureModal from './FailureModal';
 import ToastNotification from './ToastNotification';
+import StatsModal from './StatsModal'; // Import the new StatsModal component
 
 const MAX_GUESSES = 8;
 const FLIP_DURATION = 800;
@@ -16,25 +17,62 @@ const Game = ({ goBack }) => {
   const [filteredPlayers, setFilteredPlayers] = useState([]);
   const [guesses, setGuesses] = useState([]);
   const [flipped, setFlipped] = useState([]);
-  const [currentPlayer, setCurrentPlayer] = useState(
-    players[Math.floor(Math.random() * players.length)]
-  );
+  const [currentPlayer, setCurrentPlayer] = useState(null); // No initial player yet
   const [showSuccessModal, setShowSuccessModal] = useState(false);
   const [showFailureModal, setShowFailureModal] = useState(false);
   const [isSmallScreen, setIsSmallScreen] = useState(window.innerWidth < 768);
   const [inputDisabled, setInputDisabled] = useState(false);
   const [showCopyMessage, setShowCopyMessage] = useState(false);
+  const [showStatsModal, setShowStatsModal] = useState(false); // State to toggle stats modal
+  const [stats, setStats] = useState({
+    wins: 0,
+    gamesPlayed: 0,
+    guessDistribution: Array(MAX_GUESSES).fill(0),
+  });
 
   useEffect(() => {
     const handleResize = () => {
       setIsSmallScreen(window.innerWidth < 768);
     };
-
     window.addEventListener('resize', handleResize);
+
+    // Load player of the day and stats when the component mounts
+    loadPlayerOfTheDay();
+    loadStats();
+
     return () => {
       window.removeEventListener('resize', handleResize);
     };
   }, []);
+
+  const loadPlayerOfTheDay = () => {
+    const lastPlayedDate = localStorage.getItem('lastPlayedDate');
+    const today = new Date().toISOString().split('T')[0]; // Get today's date in YYYY-MM-DD format
+
+    if (lastPlayedDate !== today) {
+      // It's a new day, so set a new random player
+      const newPlayer = players[Math.floor(Math.random() * players.length)];
+      setCurrentPlayer(newPlayer);
+      localStorage.setItem('currentPlayer', JSON.stringify(newPlayer));
+      localStorage.setItem('lastPlayedDate', today);
+    } else {
+      // Load the saved player of the day
+      const savedPlayer = JSON.parse(localStorage.getItem('currentPlayer'));
+      setCurrentPlayer(savedPlayer);
+    }
+  };
+
+  const loadStats = () => {
+    const savedStats = JSON.parse(localStorage.getItem('gameStats'));
+    if (savedStats) {
+      setStats(savedStats);
+    }
+  };
+
+  const saveStats = (updatedStats) => {
+    setStats(updatedStats);
+    localStorage.setItem('gameStats', JSON.stringify(updatedStats));
+  };
 
   const handleInputChange = (e) => {
     const value = e.target.value;
@@ -87,19 +125,11 @@ const Game = ({ goBack }) => {
           return 'G';
         case 'Forward':
           return 'F';
-        case 'Fwrd/Cen':
-          return "F/C";
-        case 'Center/Fwrd':
-          return "C/F";
-        case 'Guard/Fwrd':
-          return "G/F";
-        case 'Fwrd/Guard':
-          return "F/G";
         default:
-          return position; 
+          return position;
       }
     }
-    return position; 
+    return position;
   };
 
   const handleGuess = (guessedName) => {
@@ -159,12 +189,14 @@ const Game = ({ goBack }) => {
         setInputDisabled(true);
         setTimeout(() => {
           setShowSuccessModal(true);
+          updateStatsOnWin(guesses.length + 1);
         }, totalFlipTime);
       }
 
       if (guesses.length === MAX_GUESSES - 1 && !feedback.overallCorrect) {
         setTimeout(() => {
           setShowFailureModal(true);
+          updateStatsOnLoss();
         }, totalFlipTime);
       }
     } else {
@@ -172,6 +204,24 @@ const Game = ({ goBack }) => {
     }
 
     setGuess('');
+  };
+
+  const updateStatsOnWin = (guessesTaken) => {
+    const updatedStats = {
+      ...stats,
+      wins: stats.wins + 1,
+      gamesPlayed: stats.gamesPlayed + 1,
+    };
+    updatedStats.guessDistribution[guessesTaken - 1] += 1;
+    saveStats(updatedStats);
+  };
+
+  const updateStatsOnLoss = () => {
+    const updatedStats = {
+      ...stats,
+      gamesPlayed: stats.gamesPlayed + 1,
+    };
+    saveStats(updatedStats);
   };
 
   const handleCloseModal = () => {
@@ -194,30 +244,31 @@ const Game = ({ goBack }) => {
     let results = `Daily SCALDLE:\n`;
     guesses.forEach((guess) => {
       const rowString = guess.keys.map((key, index) => {
-        // Green square for correct guesses
         if (guess[`${key}Correct`]) {
-          return '🟩'; 
+          return '🟩';
         }
-        // Yellow square for close guesses (number, debut, height)
         if (key === 'number' && guess.numberClose) {
-          return '🟨'; 
+          return '🟨';
         }
         if (key === 'debut' && guess.debutClose) {
-          return '🟨'; 
+          return '🟨';
         }
         if (key === 'height' && guess.heightClose) {
-          return '🟨'; 
+          return '🟨';
         }
-        // Green square for correct All-Star appearances
         if (key === 'allStarAppearances' && guess.allStarCorrect) {
-          return '🟩'; 
+          return '🟩';
         }
-        // Black square for incorrect guesses
-        return '⬛'; 
+        return '⬛';
       }).join('');
       results += rowString + '\n';
     });
     return results;
+  };
+
+  // Toggle stats modal visibility
+  const toggleStatsModal = () => {
+    setShowStatsModal(!showStatsModal);
   };
 
   return (
@@ -285,6 +336,14 @@ const Game = ({ goBack }) => {
       {showCopyMessage && (
         <div className="toast-notification">Results Copied!</div>
       )}
+
+      {/* Stats Button */}
+      <button onClick={toggleStatsModal} className="stats-button">
+        Stats
+      </button>
+
+      {/* Stats Modal */}
+      {showStatsModal && <StatsModal stats={stats} onClose={toggleStatsModal} />}
     </div>
   );
 };
