@@ -24,7 +24,6 @@ const Game = ({ goBack }) => {
   const [isSmallScreen, setIsSmallScreen] = useState(window.innerWidth < 768);
   const [inputDisabled, setInputDisabled] = useState(false);
   const [showCopyMessage, setShowCopyMessage] = useState(false);
-  const [gameEnded, setGameEnded] = useState(false); // New state for tracking if game has ended
 
   useEffect(() => {
     const handleResize = () => {
@@ -66,77 +65,9 @@ const Game = ({ goBack }) => {
     return '';
   };
 
-  const handleGuess = (guessedName) => {
-    if (guesses.length >= MAX_GUESSES) {
-      if (guesses.length === MAX_GUESSES) {
-        setShowFailureModal(true); // Show failure modal if guesses are exhausted
-      }
-      return;
-    }
-
-    const guessedPlayer = players.find(
-      (player) => player.name.toLowerCase() === guessedName.toLowerCase()
-    );
-
-    if (guessedPlayer) {
-      const feedback = {
-        name: guessedPlayer.name,
-        position: guessedPlayer.position,
-        number: guessedPlayer.number,
-        height: guessedPlayer.height,
-        debut: guessedPlayer.debut,
-        allStarAppearances: guessedPlayer.allStarAppearances,
-        positionCorrect: guessedPlayer.position === currentPlayer.position,
-        numberCorrect: guessedPlayer.number === currentPlayer.number,
-        heightCorrect: guessedPlayer.height === currentPlayer.height,
-        debutCorrect: guessedPlayer.debut === currentPlayer.debut,
-        allStarCorrect: guessedPlayer.allStarAppearances === currentPlayer.allStarAppearances,
-        nameCorrect: guessedPlayer.name.toLowerCase() === currentPlayer.name.toLowerCase(),
-        overallCorrect: guessedPlayer.name.toLowerCase() === currentPlayer.name.toLowerCase(),
-        numberHint: getArrow(guessedPlayer.number, currentPlayer.number),
-        heightHint: getArrow(guessedPlayer.height, currentPlayer.height),
-        debutHint: getArrow(guessedPlayer.debut, currentPlayer.debut),
-        allStarHint: getArrow(guessedPlayer.allStarAppearances, currentPlayer.allStarAppearances)
-      };
-
-      setGuesses([...guesses, feedback]);
-
-      feedback.keys = ['name', 'position', 'number', 'height', 'debut', 'allStarAppearances'];
-      feedback.keys.forEach((_, index) => {
-        setTimeout(() => {
-          setFlipped((prev) => [...prev, guesses.length * 6 + index]);
-        }, index * FLIP_DELAY);
-      });
-
-      const totalFlipTime = feedback.keys.length * FLIP_DELAY + FLIP_DURATION;
-
-      if (feedback.overallCorrect) {
-        setInputDisabled(true);
-        setTimeout(() => {
-          setShowSuccessModal(true);
-        }, totalFlipTime);
-        setGameEnded(true); // Mark the game as ended
-      }
-
-      // Show failure modal if the player has used all guesses and the guess is incorrect
-      if (guesses.length === MAX_GUESSES - 1 && !feedback.overallCorrect) {
-        setTimeout(() => {
-          setShowFailureModal(true);
-          setGameEnded(true); // Mark the game as ended
-        }, totalFlipTime);
-      }
-    } else {
-      alert('Player not found. Try again!');
-    }
-
-    setGuess('');
-  };
-
-  const handleCloseModal = () => {
-    setShowSuccessModal(false);
-    setShowFailureModal(false);
-    setInputDisabled(true);
-    setGameEnded(true); // Ensure the game is marked as ended when modals close
+  const convertHeightToInches = (heightStr) => {
+    const [feet, inches] = heightStr.split("'").map((part) => parseInt(part, 10));
+    return feet * 12 + (inches || 0);
   };
 
   const getPosition = (position) => {
@@ -171,11 +102,89 @@ const Game = ({ goBack }) => {
     return position; 
   };
 
+  const handleGuess = (guessedName) => {
+    if (guesses.length >= MAX_GUESSES) {
+      if (guesses.length === MAX_GUESSES) {
+        setShowFailureModal(true);
+      }
+      return;
+    }
+
+    const guessedPlayer = players.find(
+      (player) => player.name.toLowerCase() === guessedName.toLowerCase()
+    );
+
+    if (guessedPlayer) {
+      const numberDifference = Math.abs(guessedPlayer.number - currentPlayer.number);
+      const debutDifference = Math.abs(guessedPlayer.debut - currentPlayer.debut);
+      const guessedHeightInches = convertHeightToInches(guessedPlayer.height);
+      const targetHeightInches = convertHeightToInches(currentPlayer.height);
+      const heightDifference = Math.abs(guessedHeightInches - targetHeightInches);
+
+      const feedback = {
+        name: guessedPlayer.name,
+        position: guessedPlayer.position,
+        number: guessedPlayer.number,
+        height: guessedPlayer.height,
+        debut: guessedPlayer.debut,
+        allStarAppearances: guessedPlayer.allStarAppearances,
+        positionCorrect: guessedPlayer.position === currentPlayer.position,
+        numberCorrect: guessedPlayer.number === currentPlayer.number,
+        numberClose: numberDifference <= 5 && numberDifference !== 0,
+        numberHint: getArrow(guessedPlayer.number, currentPlayer.number),
+        heightCorrect: guessedPlayer.height === currentPlayer.height,
+        heightClose: heightDifference <= 5 && heightDifference !== 0,
+        heightHint: getArrow(guessedHeightInches, targetHeightInches),
+        debutCorrect: guessedPlayer.debut === currentPlayer.debut,
+        debutClose: debutDifference <= 5 && debutDifference !== 0,
+        debutHint: getArrow(guessedPlayer.debut, currentPlayer.debut),
+        allStarCorrect: guessedPlayer.allStarAppearances === currentPlayer.allStarAppearances,
+        nameCorrect: guessedPlayer.name.toLowerCase() === currentPlayer.name.toLowerCase(),
+        overallCorrect: guessedPlayer.name.toLowerCase() === currentPlayer.name.toLowerCase(),
+        allStarHint: getArrow(guessedPlayer.allStarAppearances, currentPlayer.allStarAppearances)
+      };
+
+      setGuesses([...guesses, feedback]);
+
+      feedback.keys = ['name', 'position', 'number', 'height', 'debut', 'allStarAppearances'];
+      feedback.keys.forEach((_, index) => {
+        setTimeout(() => {
+          setFlipped((prev) => [...prev, guesses.length * 6 + index]);
+        }, index * FLIP_DELAY);
+      });
+
+      const totalFlipTime = feedback.keys.length * FLIP_DELAY + FLIP_DURATION;
+
+      if (feedback.overallCorrect) {
+        setInputDisabled(true);
+        setTimeout(() => {
+          setShowSuccessModal(true);
+        }, totalFlipTime);
+      }
+
+      if (guesses.length === MAX_GUESSES - 1 && !feedback.overallCorrect) {
+        setTimeout(() => {
+          setShowFailureModal(true);
+        }, totalFlipTime);
+      }
+    } else {
+      alert('Player not found. Try again!');
+    }
+
+    setGuess('');
+  };
+
+  const handleCloseModal = () => {
+    setShowSuccessModal(false);
+    setShowFailureModal(false);
+    setInputDisabled(true);
+  };
+
   const handleCopyResults = () => {
     const results = generateResultsString();
     navigator.clipboard.writeText(results).then(() => {
       setShowCopyMessage(true);
-      setTimeout(() => setShowCopyMessage(false), 2000); 
+      setTimeout(() => setShowCopyMessage(false), 2000);
     }).catch(err => {
       console.error('Could not copy text: ', err);
     });
@@ -185,12 +194,25 @@ const Game = ({ goBack }) => {
     let results = `Daily SCALDLE:\n`;
     guesses.forEach((guess) => {
       const rowString = guess.keys.map((key, index) => {
+        // Green square for correct guesses
         if (guess[`${key}Correct`]) {
           return '🟩'; 
         }
-        if (guess.nameCorrect && key === 'position') {
+        // Yellow square for close guesses (number, debut, height)
+        if (key === 'number' && guess.numberClose) {
           return '🟨'; 
         }
+        if (key === 'debut' && guess.debutClose) {
+          return '🟨'; 
+        }
+        if (key === 'height' && guess.heightClose) {
+          return '🟨'; 
+        }
+        // Green square for correct All-Star appearances
+        if (key === 'allStarAppearances' && guess.allStarCorrect) {
+          return '🟩'; 
+        }
+        // Black square for incorrect guesses
         return '⬛'; 
       }).join('');
       results += rowString + '\n';
@@ -225,56 +247,12 @@ const Game = ({ goBack }) => {
         </div>
       )}
 
-      <div className="grid-container">
-        <h2>Guesses:</h2>
-        <div className="guess-grid">
-          <div className="guess-header">
-            <div>Name</div>
-            <div>{isSmallScreen ? 'POS' : 'Position'}</div>
-            <div>{isSmallScreen ? '#' : 'Number'}</div>
-            <div>{isSmallScreen ? 'HT' : 'Height'}</div>
-            <div>{isSmallScreen ? "C's Debut" : 'Celtic Debut'}</div>
-            <div>{isSmallScreen ? "ASG's" : 'All Star Games'}</div>
-          </div>
-
-          {[...Array(MAX_GUESSES)].map((_, rowIndex) => (
-            <div
-              key={rowIndex}
-              className={`guess-row ${rowIndex < guesses.length ? '' : 'skeleton'}`}
-              style={{ gridTemplateColumns: '2fr 1fr 1fr 1fr 2fr 1fr' }}
-            >
-              {rowIndex < guesses.length ? (
-                guesses[rowIndex].keys.map((key, index) => (
-                  <div
-                    key={index}
-                    className={`guess-item flip ${flipped.includes(rowIndex * 6 + index) ? 'flip-active' : ''}`}
-                    style={{ animationDelay: `${0.2 * index}s` }}
-                  >
-                    <div className="flip-front"></div>
-                    <div className={`flip-back ${guesses[rowIndex][`${key}Correct`] ? 'correct' : 'incorrect'}`}>
-                      {key === 'name' ? guesses[rowIndex][key] : null}
-                      {key === 'position' ? getPosition(guesses[rowIndex][key]) : null}
-                      {key === 'number' ? `${guesses[rowIndex][key]} ${guesses[rowIndex].numberHint}` : null}
-                      {key === 'height' ? `${guesses[rowIndex][key]} ${guesses[rowIndex].heightHint}` : null}
-                      {key === 'debut' ? `${guesses[rowIndex][key]} ${guesses[rowIndex].debutHint}` : null}
-                      {key === 'allStarAppearances' ? `${guesses[rowIndex][key]} ${guesses[rowIndex].allStarHint}` : null}
-                    </div>
-                  </div>
-                ))
-              ) : (
-                <>
-                  <div className="guess-item skeleton-item"></div>
-                  <div className="guess-item skeleton-item"></div>
-                  <div className="guess-item skeleton-item"></div>
-                  <div className="guess-item skeleton-item"></div>
-                  <div className="guess-item skeleton-item"></div>
-                  <div className="guess-item skeleton-item"></div>
-                </>
-              )}
-            </div>
-          ))}
-        </div>
-      </div>
+      <GuessGrid
+        guesses={guesses}
+        flipped={flipped}
+        isSmallScreen={isSmallScreen}
+        getPosition={getPosition}
+      />
 
       {showSuccessModal && (
         <div className="modal-overlay">
@@ -285,9 +263,7 @@ const Game = ({ goBack }) => {
             <p style={{ fontSize: '6rem', color: '#007A33' }}>{currentPlayer.number}</p>
             <p>Come back tomorrow to try again!</p>
             <button onClick={handleCloseModal} style={{ marginTop: '20px', cursor: 'pointer' }}>X</button>
-            {gameEnded && ( // Show button only if the game has ended
-              <button onClick={handleCopyResults} style={{ marginTop: '20px', cursor: 'pointer' }}>Copy Results</button>
-            )}
+            <button onClick={handleCopyResults} style={{ marginTop: '20px', cursor: 'pointer' }}>Copy Results</button>
           </div>
         </div>
       )}
@@ -301,9 +277,7 @@ const Game = ({ goBack }) => {
             <p style={{ fontSize: '5rem', color: '#007A33' }}>{currentPlayer.number}</p>
             <p>Come back tomorrow to try again!</p>
             <button onClick={handleCloseModal} style={{ marginTop: '20px', cursor: 'pointer' }}>X</button>
-            {gameEnded && ( // Show button only if the game has ended
-              <button onClick={handleCopyResults} style={{ marginTop: '20px', cursor: 'pointer' }}>Copy Results</button>
-            )}
+            <button onClick={handleCopyResults} style={{ marginTop: '20px', cursor: 'pointer' }}>Copy Results</button>
           </div>
         </div>
       )}
@@ -311,10 +285,6 @@ const Game = ({ goBack }) => {
       {showCopyMessage && (
         <div className="toast-notification">Results Copied!</div>
       )}
-
-    {gameEnded && ( // Show button only if the game has ended
-              <button onClick={handleCopyResults} style={{ marginTop: '20px', cursor: 'pointer' }}>Copy Results</button>
-            )}
     </div>
   );
 };

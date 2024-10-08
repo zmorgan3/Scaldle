@@ -27,7 +27,6 @@ html, body {
   justify-content: center;
   min-height: 150vh; /* Ensure the app covers the full viewport height */
   padding: 20px; /* Added padding to prevent content from being cut off */
-
 }
 
 /* Ensure the grid container is centered and stays centered */
@@ -118,7 +117,6 @@ button:hover {
     font-size: 14px; /* Ensure text is readable */
   }
 }
-
 
 .suggestions li {
   padding: 10px;
@@ -229,6 +227,12 @@ button:hover {
   background-color: #c26060;
   color: white;
   border: 2px solid #c26060; /* No border for incorrect guesses */
+}
+
+/* New style for yellow hints */
+.yellow {
+  background-color: #f1f18f; /* Light yellow for close guesses */
+  color: black; /* Change text color for better contrast */
 }
 
 /* Winning cards (Celtics banner style) */
@@ -366,7 +370,7 @@ button:hover {
   overflow: hidden;
 }
 
-.app p{
+.app p {
   font-size: 2rem;
 }
 
@@ -378,12 +382,6 @@ button:hover {
 
   .guess-header {
     font-size: 14px; /* Optional: Adjust header font size for smaller screens */
-  }
-}
-
-@media only screen and (max-width: 767px) {
-  .guess-item {
-    font-size: 12px; /* Smaller font size for mobile screens */
   }
 }
 
@@ -403,3 +401,8 @@ button:hover {
   }
 }
 
+/* New yellow shading for close guesses */
+.yellow {
+  background-color: #f1df69; /* Light yellow for close guesses */
+  color: black; /* Ensure text is visible */
+}

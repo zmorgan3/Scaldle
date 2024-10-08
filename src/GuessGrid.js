@@ -29,7 +29,14 @@ const GuessGrid = ({ guesses, flipped, isSmallScreen, getPosition }) => {
                   style={{ animationDelay: `${0.2 * index}s` }}
                 >
                   <div className="flip-front"></div>
-                  <div className={`flip-back ${guesses[rowIndex][`${key}Correct`] ? 'correct' : 'incorrect'}`}>
+                  <div className={`flip-back ${key === 'number' && guesses[rowIndex].numberCorrect ? 'correct' 
+                                  : key === 'number' && guesses[rowIndex].numberClose ? 'yellow' 
+                                  : key === 'debut' && guesses[rowIndex].debutCorrect ? 'correct'
+                                  : key === 'debut' && guesses[rowIndex].debutClose ? 'yellow'
+                                  : key === 'height' && guesses[rowIndex].heightCorrect ? 'correct'
+                                  : key === 'height' && guesses[rowIndex].heightClose ? 'yellow'
+                                  : key === 'allStarAppearances' && guesses[rowIndex].allStarCorrect ? 'correct'
+                                  : guesses[rowIndex][`${key}Correct`] ? 'correct' : 'incorrect'}`}>
                     {key === 'name' ? guesses[rowIndex][key] : null}
                     {key === 'position' ? getPosition(guesses[rowIndex][key]) : null}
                     {key === 'number' ? `${guesses[rowIndex][key]} ${guesses[rowIndex].numberHint}` : null}
