@@ -3,7 +3,6 @@ import './App.css'; // Ensure your main CSS file is imported
 import './Game.css';
 import players from './players.json'; // Assuming player data is stored here
 import JerseysAnimation from './JerseysAnimation'; // Import the JerseysAnimation component
-import FailureModal from './FailureModal'; // Import the FailureModal component
 
 const MAX_GUESSES = 8;
 const FLIP_DURATION = 800;
@@ -64,10 +63,6 @@ const Game = ({ goBack }) => {
   };
 
   const handleGuess = (guessedName) => {
-    if (guesses.length >= MAX_GUESSES) {
-      return;
-    }
-
     const guessedPlayer = players.find(
       (player) => player.name.toLowerCase() === guessedName.toLowerCase()
     );
@@ -105,9 +100,14 @@ const Game = ({ goBack }) => {
       const totalFlipTime = feedback.keys.length * FLIP_DELAY + FLIP_DURATION;
 
       if (feedback.overallCorrect) {
-        setInputDisabled(true); // Disable the input box
+        setInputDisabled(true); // Disable the input box after a correct guess
         setTimeout(() => {
           setShowSuccessModal(true);
+        }, totalFlipTime);
+      } else if (guesses.length === MAX_GUESSES - 1) {
+        // If this was the last guess and it was incorrect, flip it and then show the failure modal
+        setTimeout(() => {
+          setShowFailureModal(true);
         }, totalFlipTime);
       }
     } else {
@@ -119,6 +119,7 @@ const Game = ({ goBack }) => {
 
   const handleCloseModal = () => {
     setShowSuccessModal(false);
+    setShowFailureModal(false); // Close failure modal
     setInputDisabled(false); // Re-enable input when modal is closed
   };
 
@@ -139,13 +140,13 @@ const Game = ({ goBack }) => {
           return 'G';
         case 'Forward':
           return 'F';
-        case 'Forward/Center':
+        case 'Fwrd/Cen':
           return "F/C";
-        case 'Center/Forward':
+        case 'Center/Fwrd':
           return "C/F";
-        case 'Guard/Forward':
+        case 'Guard/Fwrd':
           return "G/F";
-        case 'Forward/Guard':
+        case 'Fwrd/Guard':
           return "F/G";
         default:
           return position; // Return the full position if it doesn't match any case
@@ -245,10 +246,14 @@ const Game = ({ goBack }) => {
       )}
 
       {showFailureModal && (
-        <FailureModal
-          onClose={() => setShowFailureModal(false)}
-          currentPlayer={currentPlayer}
-        />
+        <div className="modal-overlay">
+          <div className="modal">
+            <h2>Game Over!</h2>
+            <p>You did not guess the correct player.</p>
+            <p>Come back tomorrow to try again!</p>
+            <button onClick={handleCloseModal} style={{ marginTop: '20px', cursor: 'pointer' }}>X</button>
+          </div>
+        </div>
       )}
     </div>
   );

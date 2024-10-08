@@ -19,7 +19,7 @@
   },
   {
     "name": "John Havlicek",
-    "position": "Guard/Forward",
+    "position": "Guard/Fwrd",
     "number": 17,
     "height": "6'5\"",
     "debut": 1962,
@@ -37,7 +37,7 @@
   },
   {
     "name": "Kevin Garnett",
-    "position": "Forward/Center",
+    "position": "Fwrd/Center",
     "number": 5,
     "height": "6'11\"",
     "debut": 2007,
@@ -100,7 +100,7 @@
   },
   {
     "name": "Al Horford",
-    "position": "Center/Forward",
+    "position": "Center/Fwrd",
     "number": 42,
     "height": "6'9\"",
     "debut": 2016,
@@ -109,7 +109,7 @@
   },
   {
     "name": "Dave Cowens",
-    "position": "Center/Forward",
+    "position": "Center/Fwrd",
     "number": 18,
     "height": "6'9\"",
     "debut": 1970,
@@ -181,7 +181,7 @@
   },
   {
     "name": "Gerald Green",
-    "position": "Guard/Forward",
+    "position": "Guard/Fwrd",
     "number": 8,
     "height": "6'8\"",
     "debut": 2005,
@@ -190,7 +190,7 @@
   },
   {
     "name": "Evan Turner",
-    "position": "Guard/Forward",
+    "position": "Guard/Fwrd",
     "number": 11,
     "height": "6'7\"",
     "debut": 2010,
@@ -208,7 +208,7 @@
   },
   {
     "name": "Daniel Theis",
-    "position": "Center/Forward",
+    "position": "Center/Fwrd",
     "number": 27,
     "height": "6'8\"",
     "debut": 2018,
