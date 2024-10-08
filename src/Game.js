@@ -1,8 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import './App.css'; // Ensure your main CSS file is imported
+import './App.css';
 import './Game.css';
-import players from './players.json'; // Assuming player data is stored here
-import JerseysAnimation from './JerseysAnimation'; // Import the JerseysAnimation component
+import players from './players.json';
+import JerseysAnimation from './JerseysAnimation';
+import GuessGrid from './GuessGrid';
+import FailureModal from './FailureModal';
+import ToastNotification from './ToastNotification';
 
 const MAX_GUESSES = 8;
 const FLIP_DURATION = 800;
@@ -19,9 +22,10 @@ const Game = ({ goBack }) => {
   const [showSuccessModal, setShowSuccessModal] = useState(false);
   const [showFailureModal, setShowFailureModal] = useState(false);
   const [isSmallScreen, setIsSmallScreen] = useState(window.innerWidth < 768);
-  const [inputDisabled, setInputDisabled] = useState(false); // New state to control input box visibility
+  const [inputDisabled, setInputDisabled] = useState(false);
+  const [showCopyMessage, setShowCopyMessage] = useState(false);
+  const [gameEnded, setGameEnded] = useState(false); // New state for tracking if game has ended
 
-  // Check for screen size
   useEffect(() => {
     const handleResize = () => {
       setIsSmallScreen(window.innerWidth < 768);
@@ -49,20 +53,27 @@ const Game = ({ goBack }) => {
 
   const handleSuggestionClick = (name) => {
     setGuess(name);
-    handleGuess(name); // Automatically call handleGuess with the player's name
+    handleGuess(name);
     setFilteredPlayers([]);
   };
 
   const getArrow = (guessedValue, targetValue) => {
     if (guessedValue < targetValue) {
-      return '↑'; // Up arrow
+      return '↑';
     } else if (guessedValue > targetValue) {
-      return '↓'; // Down arrow
+      return '↓';
     }
-    return ''; // No arrow if they are equal
+    return '';
   };
 
   const handleGuess = (guessedName) => {
+    if (guesses.length >= MAX_GUESSES) {
+      if (guesses.length === MAX_GUESSES) {
+        setShowFailureModal(true); // Show failure modal if guesses are exhausted
+      }
+      return;
+    }
+
     const guessedPlayer = players.find(
       (player) => player.name.toLowerCase() === guessedName.toLowerCase()
     );
@@ -100,14 +111,18 @@ const Game = ({ goBack }) => {
       const totalFlipTime = feedback.keys.length * FLIP_DELAY + FLIP_DURATION;
 
       if (feedback.overallCorrect) {
-        setInputDisabled(true); // Disable the input box after a correct guess
+        setInputDisabled(true);
         setTimeout(() => {
           setShowSuccessModal(true);
         }, totalFlipTime);
-      } else if (guesses.length === MAX_GUESSES - 1) {
-        // If this was the last guess and it was incorrect, flip it and then show the failure modal
+        setGameEnded(true); // Mark the game as ended
+      }
+
+      // Show failure modal if the player has used all guesses and the guess is incorrect
+      if (guesses.length === MAX_GUESSES - 1 && !feedback.overallCorrect) {
         setTimeout(() => {
           setShowFailureModal(true);
+          setGameEnded(true); // Mark the game as ended
         }, totalFlipTime);
       }
     } else {
@@ -119,8 +134,9 @@ const Game = ({ goBack }) => {
 
   const handleCloseModal = () => {
     setShowSuccessModal(false);
-    setShowFailureModal(false); // Close failure modal
-    setInputDisabled(true); // Re-enable input when modal is closed
+    setShowFailureModal(false);
+    setInputDisabled(true);
+    setGameEnded(true); // Ensure the game is marked as ended when modals close
   };
 
   const getPosition = (position) => {
@@ -149,10 +165,37 @@ const Game = ({ goBack }) => {
         case 'Fwrd/Guard':
           return "F/G";
         default:
-          return position; // Return the full position if it doesn't match any case
+          return position; 
       }
     }
-    return position; // Return the full position if the screen is not small
+    return position; 
+  };
+
+  const handleCopyResults = () => {
+    const results = generateResultsString();
+    navigator.clipboard.writeText(results).then(() => {
+      setShowCopyMessage(true);
+      setTimeout(() => setShowCopyMessage(false), 2000); 
+    }).catch(err => {
+      console.error('Could not copy text: ', err);
+    });
+  };
+
+  const generateResultsString = () => {
+    let results = `Daily SCALDLE:\n`;
+    guesses.forEach((guess) => {
+      const rowString = guess.keys.map((key, index) => {
+        if (guess[`${key}Correct`]) {
+          return '🟩'; 
+        }
+        if (guess.nameCorrect && key === 'position') {
+          return '🟨'; 
+        }
+        return '⬛'; 
+      }).join('');
+      results += rowString + '\n';
+    });
+    return results;
   };
 
   return (
@@ -160,7 +203,7 @@ const Game = ({ goBack }) => {
       <h1 className={isSmallScreen ? 'hidden-title' : ''}>SCALDLE</h1>
       <JerseysAnimation />
 
-      <p>Guess the Celtic: </p>
+      <p>Guess the player: </p>
       {!inputDisabled && (
         <div className="input-container">
           <input
@@ -237,10 +280,14 @@ const Game = ({ goBack }) => {
         <div className="modal-overlay">
           <div className="modal">
             <h2>Congratulations!</h2>
-            <p>You correctly guessed the player:</p>
-            <p style={{ fontSize: '4rem', color: '#007A33' }}>{currentPlayer.name}</p>
-            <p style={{ fontSize: '7rem', color: '#007A33' }}>{currentPlayer.number}</p>
+            <p>You correctly guessed today's player:</p>
+            <p style={{ fontSize: '3rem', color: '#007A33' }}>{currentPlayer.name}</p>
+            <p style={{ fontSize: '6rem', color: '#007A33' }}>{currentPlayer.number}</p>
+            <p>Come back tomorrow to try again!</p>
             <button onClick={handleCloseModal} style={{ marginTop: '20px', cursor: 'pointer' }}>X</button>
+            {gameEnded && ( // Show button only if the game has ended
+              <button onClick={handleCopyResults} style={{ marginTop: '20px', cursor: 'pointer' }}>Copy Results</button>
+            )}
           </div>
         </div>
       )}
@@ -250,13 +297,24 @@ const Game = ({ goBack }) => {
           <div className="modal">
             <h2>Game Over!</h2>
             <p>You did not guess the correct player. Today's player was:</p>
-            <p style={{ fontSize: '2rem', color: '#007A33' }}>{currentPlayer.name}</p>
-            <p style={{ fontSize: '4rem', color: '#007A33' }}>{currentPlayer.number}</p>
+            <p style={{ fontSize: '3rem', color: '#007A33' }}>{currentPlayer.name}</p>
+            <p style={{ fontSize: '5rem', color: '#007A33' }}>{currentPlayer.number}</p>
             <p>Come back tomorrow to try again!</p>
             <button onClick={handleCloseModal} style={{ marginTop: '20px', cursor: 'pointer' }}>X</button>
+            {gameEnded && ( // Show button only if the game has ended
+              <button onClick={handleCopyResults} style={{ marginTop: '20px', cursor: 'pointer' }}>Copy Results</button>
+            )}
           </div>
         </div>
       )}
+
+      {showCopyMessage && (
+        <div className="toast-notification">Results Copied!</div>
+      )}
+
+    {gameEnded && ( // Show button only if the game has ended
+              <button onClick={handleCopyResults} style={{ marginTop: '20px', cursor: 'pointer' }}>Copy Results</button>
+            )}
     </div>
   );
 };

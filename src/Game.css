@@ -80,3 +80,35 @@
     background-color: #f0f0f0;
   }
   
+  .copy-results-button {
+    width: 100%; /* 100% width of the grid */
+    max-width: 700px; /* Max width */
+    padding: 10px;
+    background-color: #007A33; /* Button color */
+    color: white;
+    border: none;
+    cursor: pointer;
+    margin-top: 20px; /* Space above the button */
+    font-size: 1.2rem; /* Adjust font size */
+  }
+  
+  .copy-results-button:hover {
+    background-color: #00522C; /* Darken on hover */
+  }
+  
+  .copy-results-button {
+    background-color: #007A33; /* Change to your desired button color */
+    color: white; /* Change to your desired text color */
+    border: 2px solid black; /* Black border */
+    border-radius: 5px; /* Rounded corners (optional) */
+    padding: 10px 20px; /* Padding for the button */
+    font-size: 1rem; /* Font size */
+    cursor: pointer; /* Pointer cursor on hover */
+    transition: background-color 0.3s, transform 0.3s; /* Smooth transitions for hover effects */
+  }
+  
+  .copy-results-button:hover {
+    background-color: #005f24; /* Darker shade on hover */
+    transform: scale(1.05); /* Slightly enlarge the button on hover */
+  }
+  
