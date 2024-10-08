@@ -22,7 +22,7 @@
 /* For small screens (less than 768px) */
 @media only screen and (max-width: 767px) {
     .flip-back {
-      font-size: 10px; /* Smaller font size for small screens */
+      font-size: 12px; /* Smaller font size for small screens */
     }
   }
   
@@ -38,4 +38,45 @@
     color: black; /* Adjust text color if needed */
   }
   
+  .input-container {
+    position: relative; /* To position suggestions absolutely */
+    margin-bottom: 20px; /* Spacing between input and guesses */
+  }
+  
+  .suggestions {
+    list-style-type: none;
+    padding: 0;
+    margin: 0; /* Remove margins */
+    width: 100%; /* Ensure suggestions take full width */
+    max-width: 300px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    max-height: 160px;
+    overflow-y: auto;
+    background-color: white; /* White background for suggestions */
+    box-sizing: border-box;
+    z-index: 10; /* Ensure it appears above other content */
+    position: absolute; /* Position suggestions absolutely */
+    top: 100%; /* Place suggestions directly below the input */
+    left: 0; /* Align suggestions with the input field */
+  }
+  
+  /* Responsive suggestions list for small screens */
+  @media only screen and (max-width: 767px) {
+    .suggestions {
+      width: 90%; /* Adjust width for small screens */
+    }
+  }
+  
+  .suggestions li {
+    padding: 10px;
+    cursor: pointer;
+    background-color: white;
+    border-bottom: 1px solid #ddd;
+    text-align: center;
+  }
+  
+  .suggestions li:hover {
+    background-color: #f0f0f0;
+  }
   

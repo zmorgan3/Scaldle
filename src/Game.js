@@ -3,6 +3,7 @@ import './App.css'; // Ensure your main CSS file is imported
 import './Game.css';
 import players from './players.json'; // Assuming player data is stored here
 import JerseysAnimation from './JerseysAnimation'; // Import the JerseysAnimation component
+import FailureModal from './FailureModal'; // Import the FailureModal component
 
 const MAX_GUESSES = 8;
 const FLIP_DURATION = 800;
@@ -17,6 +18,7 @@ const Game = ({ goBack }) => {
     players[Math.floor(Math.random() * players.length)]
   );
   const [showSuccessModal, setShowSuccessModal] = useState(false);
+  const [showFailureModal, setShowFailureModal] = useState(false);
   const [isSmallScreen, setIsSmallScreen] = useState(window.innerWidth < 768);
   const [inputDisabled, setInputDisabled] = useState(false); // New state to control input box visibility
 
@@ -91,7 +93,7 @@ const Game = ({ goBack }) => {
         allStarHint: getArrow(guessedPlayer.allStarAppearances, currentPlayer.allStarAppearances)
       };
 
-      setGuesses((prevGuesses) => [...prevGuesses, feedback]);
+      setGuesses([...guesses, feedback]);
 
       feedback.keys = ['name', 'position', 'number', 'height', 'debut', 'allStarAppearances'];
       feedback.keys.forEach((_, index) => {
@@ -134,17 +136,17 @@ const Game = ({ goBack }) => {
         case 'Center':
           return 'C';
         case 'Guard':
-            return 'G';
+          return 'G';
         case 'Forward':
-            return 'F';
+          return 'F';
         case 'Forward/Center':
-            return "F/C";
+          return "F/C";
         case 'Center/Forward':
-            return "C/F";
+          return "C/F";
         case 'Guard/Forward':
-            return "G/F";
+          return "G/F";
         case 'Forward/Guard':
-            return "F/G";
+          return "F/G";
         default:
           return position; // Return the full position if it doesn't match any case
       }
@@ -155,28 +157,28 @@ const Game = ({ goBack }) => {
   return (
     <div className="app">
       <h1 className={isSmallScreen ? 'hidden-title' : ''}>SCALDLE</h1>
-      {/* Jerseys Animation under the scoreboard */}
       <JerseysAnimation />
 
       <p>Guess the player: </p>
       {!inputDisabled && (
-        <input
-          type="text"
-          value={guess}
-          onChange={handleInputChange}
-          placeholder="Enter player name"
-          disabled={guesses.length >= MAX_GUESSES}
-        />
-      )}
-
-      {filteredPlayers.length > 0 && (
-        <ul className="suggestions">
-          {filteredPlayers.slice(0, 5).map((player, index) => (
-            <li key={index} onClick={() => handleSuggestionClick(player.name)}>
-              {player.name}
-            </li>
-          ))}
-        </ul>
+        <div className="input-container">
+          <input
+            type="text"
+            value={guess}
+            onChange={handleInputChange}
+            placeholder="Enter player name"
+            disabled={guesses.length >= MAX_GUESSES}
+          />
+          {filteredPlayers.length > 0 && (
+            <ul className="suggestions">
+              {filteredPlayers.slice(0, 5).map((player, index) => (
+                <li key={index} onClick={() => handleSuggestionClick(player.name)}>
+                  {player.name}
+                </li>
+              ))}
+            </ul>
+          )}
+        </div>
       )}
 
       <div className="grid-container">
@@ -187,7 +189,7 @@ const Game = ({ goBack }) => {
             <div>{isSmallScreen ? 'POS' : 'Position'}</div>
             <div>{isSmallScreen ? '#' : 'Number'}</div>
             <div>{isSmallScreen ? 'HT' : 'Height'}</div>
-            <div>{isSmallScreen ? "DBT" : 'Celtic Debut'}</div>
+            <div>{isSmallScreen ? "C's Debut" : 'Celtic Debut'}</div>
             <div>{isSmallScreen ? "ASG's" : 'All Star Games'}</div>
           </div>
 
@@ -234,12 +236,19 @@ const Game = ({ goBack }) => {
         <div className="modal-overlay">
           <div className="modal">
             <h2>Congratulations!</h2>
-            <p>You correctly guessed today's Celtic:</p>
+            <p>You correctly guessed the player:</p>
             <p style={{ fontSize: '4rem', color: '#007A33' }}>{currentPlayer.name}</p>
             <p style={{ fontSize: '7rem', color: '#007A33' }}>{currentPlayer.number}</p>
             <button onClick={handleCloseModal} style={{ marginTop: '20px', cursor: 'pointer' }}>X</button>
           </div>
         </div>
+      )}
+
+      {showFailureModal && (
+        <FailureModal
+          onClose={() => setShowFailureModal(false)}
+          currentPlayer={currentPlayer}
+        />
       )}
     </div>
   );
