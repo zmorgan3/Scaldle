@@ -120,7 +120,7 @@ const Game = ({ goBack }) => {
   const handleCloseModal = () => {
     setShowSuccessModal(false);
     setShowFailureModal(false); // Close failure modal
-    setInputDisabled(false); // Re-enable input when modal is closed
+    setInputDisabled(true); // Re-enable input when modal is closed
   };
 
   const getPosition = (position) => {
@@ -160,7 +160,7 @@ const Game = ({ goBack }) => {
       <h1 className={isSmallScreen ? 'hidden-title' : ''}>SCALDLE</h1>
       <JerseysAnimation />
 
-      <p>Guess the player: </p>
+      <p>Guess the Celtic: </p>
       {!inputDisabled && (
         <div className="input-container">
           <input
@@ -249,7 +249,9 @@ const Game = ({ goBack }) => {
         <div className="modal-overlay">
           <div className="modal">
             <h2>Game Over!</h2>
-            <p>You did not guess the correct player.</p>
+            <p>You did not guess the correct player. Today's player was:</p>
+            <p style={{ fontSize: '2rem', color: '#007A33' }}>{currentPlayer.name}</p>
+            <p style={{ fontSize: '4rem', color: '#007A33' }}>{currentPlayer.number}</p>
             <p>Come back tomorrow to try again!</p>
             <button onClick={handleCloseModal} style={{ marginTop: '20px', cursor: 'pointer' }}>X</button>
           </div>
