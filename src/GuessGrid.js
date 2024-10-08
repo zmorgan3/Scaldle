@@ -1,7 +1,41 @@
 import React from 'react';
-import './GuessGrid.css'; // Assuming you have some CSS for styling
+import './GuessGrid.css';
 
-const GuessGrid = ({ guesses, flipped, isSmallScreen, getPosition }) => {
+const GuessGrid = ({ guesses, flipped, isSmallScreen }) => {
+  const getPosition = (position) => {
+    if (isSmallScreen) {
+      switch (position) {
+        case 'Point Guard':
+          return 'PG';
+        case 'Shooting Guard':
+          return 'SG';
+        case 'Small Forward':
+          return 'SF';
+        case 'Power Forward':
+          return 'PF';
+        case 'Center':
+          return 'C';
+        case 'Guard':
+          return 'G';
+        case 'Forward':
+          return 'F';
+        default:
+          return position;
+      }
+    }
+    return position;
+  };
+
+  const getBackgroundColor = (key, feedback) => {
+    if (feedback[`${key}Correct`]) {
+      return 'correct'; // Green for correct guess
+    }
+    if (feedback[`${key}Close`]) {
+      return 'yellow'; // Yellow for close guess
+    }
+    return 'incorrect'; // Red for incorrect guess
+  };
+
   return (
     <div className="grid-container">
       <h2>Guesses:</h2>
@@ -12,7 +46,7 @@ const GuessGrid = ({ guesses, flipped, isSmallScreen, getPosition }) => {
           <div>{isSmallScreen ? '#' : 'Number'}</div>
           <div>{isSmallScreen ? 'HT' : 'Height'}</div>
           <div>{isSmallScreen ? "C's Debut" : 'Celtic Debut'}</div>
-          <div>{isSmallScreen ? "ASG's" : 'All Star Games'}</div>
+          <div>{isSmallScreen ? "ASG's" : 'All-Star Games'}</div>
         </div>
 
         {[...Array(8)].map((_, rowIndex) => (
@@ -26,17 +60,9 @@ const GuessGrid = ({ guesses, flipped, isSmallScreen, getPosition }) => {
                 <div
                   key={index}
                   className={`guess-item flip ${flipped.includes(rowIndex * 6 + index) ? 'flip-active' : ''}`}
-                  style={{ animationDelay: `${0.2 * index}s` }}
                 >
                   <div className="flip-front"></div>
-                  <div className={`flip-back ${key === 'number' && guesses[rowIndex].numberCorrect ? 'correct' 
-                                  : key === 'number' && guesses[rowIndex].numberClose ? 'yellow' 
-                                  : key === 'debut' && guesses[rowIndex].debutCorrect ? 'correct'
-                                  : key === 'debut' && guesses[rowIndex].debutClose ? 'yellow'
-                                  : key === 'height' && guesses[rowIndex].heightCorrect ? 'correct'
-                                  : key === 'height' && guesses[rowIndex].heightClose ? 'yellow'
-                                  : key === 'allStarAppearances' && guesses[rowIndex].allStarCorrect ? 'correct'
-                                  : guesses[rowIndex][`${key}Correct`] ? 'correct' : 'incorrect'}`}>
+                  <div className={`flip-back ${getBackgroundColor(key, guesses[rowIndex])}`}>
                     {key === 'name' ? guesses[rowIndex][key] : null}
                     {key === 'position' ? getPosition(guesses[rowIndex][key]) : null}
                     {key === 'number' ? `${guesses[rowIndex][key]} ${guesses[rowIndex].numberHint}` : null}

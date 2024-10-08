@@ -1,19 +1,18 @@
+.correct {
+  background-color: #6AAA64; /* Green for correct */
+  color: white;
+}
+
+.yellow {
+  background-color: #f1df69; /* Yellow for close guesses */
+  color: black;
+}
+
+.incorrect {
+  background-color: #c26060; /* Red for incorrect guesses */
+  color: white;
+}
+
 .skeleton {
-    background-color: #e0e0e0; /* Light grey background for skeleton */
-    animation: shimmer 1.5s infinite; /* Example shimmer effect */
-  }
-  
-  .skeleton-item {
-    background-color: #cccccc; /* Lighter grey for individual skeleton items */
-    height: 100%;
-  }
-  
-  @keyframes shimmer {
-    0% {
-      background-position: -1000px 0;
-    }
-    100% {
-      background-position: 1000px 0;
-    }
-  }
-  
+  background-color: #e0e0e0; /* Light grey background for skeleton */
+}

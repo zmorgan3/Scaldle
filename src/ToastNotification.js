@@ -1,12 +1,10 @@
-// ToastNotification.js
 import React from 'react';
-import './ToastNotification.css'; // Import your CSS for styling
+import './ToastNotification.css';
 
-const ToastNotification = ({ message, onClose }) => {
+const ToastNotification = ({ message }) => {
   return (
     <div className="toast-notification">
       {message}
-      <button className="close-button" onClick={onClose}>X</button>
     </div>
   );
 };

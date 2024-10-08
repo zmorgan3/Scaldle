@@ -142,7 +142,7 @@ button:hover {
 .guess-header,
 .guess-row {
   display: grid;
-  grid-template-columns: 2fr 1fr 1fr 1fr 2fr 1fr; /* Adjust the column width as needed */
+  grid-template-columns: 2fr 2fr 1fr 1fr 1fr 1fr; /* Adjust the column width as needed */
   align-items: center;
   justify-items: center;
   font-weight: bold;
@@ -399,10 +399,4 @@ button:hover {
   .guess-item {
     font-size: 14px; /* Adjust the font size for guess items */
   }
-}
-
-/* New yellow shading for close guesses */
-.yellow {
-  background-color: #f1df69; /* Light yellow for close guesses */
-  color: black; /* Ensure text is visible */
 }
