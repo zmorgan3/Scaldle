@@ -4,15 +4,21 @@
 }
 
 .yellow {
-  background-color: #f1df69; /* Yellow for close guesses */
+  background-color: #e7d140; /* Yellow for close guesses */
   color: black;
 }
 
 .incorrect {
-  background-color: #c26060; /* Red for incorrect guesses */
+  background-color: #cd4e4e; /* Red for incorrect guesses */
   color: white;
 }
 
 .skeleton {
   background-color: #e0e0e0; /* Light grey background for skeleton */
+}
+
+
+.flip-back.yellow {
+  background-color: #fbe77b !important;
+  color: black;
 }

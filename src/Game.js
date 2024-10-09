@@ -77,82 +77,88 @@ const Game = () => {
     localStorage.setItem('gameStats', JSON.stringify(updatedStats));
   };
 
-  const handleGuess = (guessedName) => {
-    if (guesses.length >= MAX_GUESSES) {
-      if (guesses.length === MAX_GUESSES) {
+const handleGuess = (guessedName) => {
+  if (guesses.length >= MAX_GUESSES) {
+    if (guesses.length === MAX_GUESSES) {
+      setShowFailureModal(true);
+    }
+    return;
+  }
+
+  const guessedPlayer = players.find(
+    (player) => player.name.toLowerCase() === guessedName.toLowerCase()
+  );
+
+  if (guessedPlayer) {
+    const numberDifference = Math.abs(guessedPlayer.number - currentPlayer.number);
+    const debutDifference = Math.abs(guessedPlayer.debut - currentPlayer.debut);
+    const guessedHeightInches = convertHeightToInches(guessedPlayer.height);
+    const targetHeightInches = convertHeightToInches(currentPlayer.height);
+    const heightDifference = Math.abs(guessedHeightInches - targetHeightInches);
+    const allStarDifference = Math.abs(guessedPlayer.allStarAppearances - currentPlayer.allStarAppearances);
+
+    // Log values for debugging
+    console.log('Guessed Player All-Star Appearances:', guessedPlayer.allStarAppearances);
+    console.log('Current Player All-Star Appearances:', currentPlayer.allStarAppearances);
+    console.log('All-Star Correct Comparison:', guessedPlayer.allStarAppearances === currentPlayer.allStarAppearances);
+
+    const feedback = {
+      name: guessedPlayer.name,
+      position: guessedPlayer.position,
+      number: guessedPlayer.number,
+      height: guessedPlayer.height,
+      debut: guessedPlayer.debut,
+      allStarAppearances: guessedPlayer.allStarAppearances,
+      positionCorrect: guessedPlayer.position === currentPlayer.position,
+      numberCorrect: guessedPlayer.number === currentPlayer.number,
+      numberClose: numberDifference <= 5 && numberDifference !== 0,
+      numberHint: getArrow(guessedPlayer.number, currentPlayer.number),
+      heightCorrect: guessedPlayer.height === currentPlayer.height,
+      heightClose: heightDifference <= 5 && heightDifference !== 0,
+      heightHint: getArrow(guessedHeightInches, targetHeightInches),
+      debutCorrect: guessedPlayer.debut === currentPlayer.debut,
+      debutClose: debutDifference <= 5 && debutDifference !== 0,
+      debutHint: getArrow(guessedPlayer.debut, currentPlayer.debut),
+      allStarCorrect: Number(guessedPlayer.allStarAppearances) === Number(currentPlayer.allStarAppearances),
+      allStarClose: allStarDifference <= 5 && allStarDifference !== 0,
+      allStarHint: getArrow(guessedPlayer.allStarAppearances, currentPlayer.allStarAppearances),
+      nameCorrect: guessedPlayer.name.toLowerCase() === currentPlayer.name.toLowerCase(),
+      overallCorrect: guessedPlayer.name.toLowerCase() === currentPlayer.name.toLowerCase(),
+    };
+
+    // Pass feedback for each guess into the GuessGrid component
+    setGuesses([...guesses, feedback]);
+
+    feedback.keys = ['name', 'position', 'number', 'height', 'debut', 'allStarAppearances'];
+    feedback.keys.forEach((_, index) => {
+      setTimeout(() => {
+        setFlipped((prev) => [...prev, guesses.length * 6 + index]);
+      }, index * FLIP_DELAY);
+    });
+
+    const totalFlipTime = feedback.keys.length * FLIP_DELAY + FLIP_DURATION;
+
+    if (feedback.overallCorrect) {
+      setInputDisabled(true);
+      setTimeout(() => {
+        setShowSuccessModal(true);
+        updateStatsOnWin(guesses.length + 1);
+      }, totalFlipTime);
+    }
+
+    if (guesses.length === MAX_GUESSES - 1 && !feedback.overallCorrect) {
+      setTimeout(() => {
         setShowFailureModal(true);
-      }
-      return;
+        updateStatsOnLoss();
+      }, totalFlipTime);
     }
+  } else {
+    alert('Player not found. Try again!');
+  }
 
-    const guessedPlayer = players.find(
-      (player) => player.name.toLowerCase() === guessedName.toLowerCase()
-    );
+  setGuess('');
+};
 
-    if (guessedPlayer) {
-      const numberDifference = Math.abs(guessedPlayer.number - currentPlayer.number);
-      const debutDifference = Math.abs(guessedPlayer.debut - currentPlayer.debut);
-      const guessedHeightInches = convertHeightToInches(guessedPlayer.height);
-      const targetHeightInches = convertHeightToInches(currentPlayer.height);
-      const heightDifference = Math.abs(guessedHeightInches - targetHeightInches);
-      const allStarDifference = Math.abs(guessedPlayer.allStarAppearances - currentPlayer.allStarAppearances);
-
-      const feedback = {
-        name: guessedPlayer.name,
-        position: guessedPlayer.position,
-        number: guessedPlayer.number,
-        height: guessedPlayer.height,
-        debut: guessedPlayer.debut,
-        allStarAppearances: guessedPlayer.allStarAppearances,
-        positionCorrect: guessedPlayer.position === currentPlayer.position,
-        numberCorrect: guessedPlayer.number === currentPlayer.number,
-        numberClose: numberDifference <= 5 && numberDifference !== 0,
-        numberHint: getArrow(guessedPlayer.number, currentPlayer.number),
-        heightCorrect: guessedPlayer.height === currentPlayer.height,
-        heightClose: heightDifference <= 5 && heightDifference !== 0,
-        heightHint: getArrow(guessedHeightInches, targetHeightInches),
-        debutCorrect: guessedPlayer.debut === currentPlayer.debut,
-        debutClose: debutDifference <= 5 && debutDifference !== 0,
-        debutHint: getArrow(guessedPlayer.debut, currentPlayer.debut),
-        allStarCorrect: guessedPlayer.allStarAppearances === currentPlayer.allStarAppearances,
-        allStarClose: allStarDifference <= 5 && allStarDifference !== 0, // Correct logic for closeness
-        allStarHint: getArrow(guessedPlayer.allStarAppearances, currentPlayer.allStarAppearances),
-        nameCorrect: guessedPlayer.name.toLowerCase() === currentPlayer.name.toLowerCase(),
-        overallCorrect: guessedPlayer.name.toLowerCase() === currentPlayer.name.toLowerCase(),
-      };
-
-      // Pass feedback for each guess into the GuessGrid component
-      setGuesses([...guesses, feedback]);
-
-      feedback.keys = ['name', 'position', 'number', 'height', 'debut', 'allStarAppearances'];
-      feedback.keys.forEach((_, index) => {
-        setTimeout(() => {
-          setFlipped((prev) => [...prev, guesses.length * 6 + index]);
-        }, index * FLIP_DELAY);
-      });
-
-      const totalFlipTime = feedback.keys.length * FLIP_DELAY + FLIP_DURATION;
-
-      if (feedback.overallCorrect) {
-        setInputDisabled(true);
-        setTimeout(() => {
-          setShowSuccessModal(true);
-          updateStatsOnWin(guesses.length + 1);
-        }, totalFlipTime);
-      }
-
-      if (guesses.length === MAX_GUESSES - 1 && !feedback.overallCorrect) {
-        setTimeout(() => {
-          setShowFailureModal(true);
-          updateStatsOnLoss();
-        }, totalFlipTime);
-      }
-    } else {
-      alert('Player not found. Try again!');
-    }
-
-    setGuess('');
-  };
 
   const updateStatsOnWin = (guessesTaken) => {
     const updatedStats = {

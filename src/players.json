@@ -32,8 +32,7 @@
     "number": 34,
     "height": "6'7\"",
     "debut": 1998,
-    "allStarAppearances": 10,
-    "allStar": true
+    "allStarAppearances": 10
   },
   {
     "name": "Kevin Garnett",
@@ -41,17 +40,16 @@
     "number": 5,
     "height": "6'11\"",
     "debut": 2007,
-    "allStarAppearances": 15,
-    "allStar": true
+    "allStarAppearances": 15
   },
+  
   {
     "name": "Bob Cousy",
     "position": "Guard",
     "number": 14,
     "height": "6'1\"",
     "debut": 1950,
-    "allStarAppearances": 13,
-    "allStar": true
+    "allStarAppearances": 13
   },
   {
     "name": "Sam Jones",
@@ -59,8 +57,7 @@
     "number": 24,
     "height": "6'4\"",
     "debut": 1957,
-    "allStarAppearances": 10,
-    "allStar": true
+    "allStarAppearances": 10
   },
   {
     "name": "Rajon Rondo",
@@ -68,8 +65,7 @@
     "number": 9,
     "height": "6'1\"",
     "debut": 2006,
-    "allStarAppearances": 4,
-    "allStar": true
+    "allStarAppearances": 4
   },
   {
     "name": "Ray Allen",

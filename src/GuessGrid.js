@@ -27,12 +27,19 @@ const GuessGrid = ({ guesses, flipped, isSmallScreen }) => {
   };
 
   const getBackgroundColor = (key, feedback) => {
+    console.log(`Checking background color for key: ${key}`, feedback);
+
     if (feedback[`${key}Correct`]) {
+      console.log(`Key "${key}" is correct, returning 'correct' (green).`);
       return 'correct'; // Green for correct guess
     }
+
     if (feedback[`${key}Close`]) {
+      console.log(`Key "${key}" is close, returning 'yellow' (yellow).`);
       return 'yellow'; // Yellow for close guess
     }
+
+    console.log(`Key "${key}" is incorrect, returning 'incorrect' (red).`);
     return 'incorrect'; // Red for incorrect guess
   };
 
@@ -56,22 +63,28 @@ const GuessGrid = ({ guesses, flipped, isSmallScreen }) => {
             style={{ gridTemplateColumns: '2fr 1fr 1fr 1fr 2fr 1fr' }}
           >
             {rowIndex < guesses.length ? (
-              guesses[rowIndex].keys.map((key, index) => (
-                <div
-                  key={index}
-                  className={`guess-item flip ${flipped.includes(rowIndex * 6 + index) ? 'flip-active' : ''}`}
-                >
-                  <div className="flip-front"></div>
-                  <div className={`flip-back ${getBackgroundColor(key, guesses[rowIndex])}`}>
-                    {key === 'name' ? guesses[rowIndex][key] : null}
-                    {key === 'position' ? getPosition(guesses[rowIndex][key]) : null}
-                    {key === 'number' ? `${guesses[rowIndex][key]} ${guesses[rowIndex].numberHint}` : null}
-                    {key === 'height' ? `${guesses[rowIndex][key]} ${guesses[rowIndex].heightHint}` : null}
-                    {key === 'debut' ? `${guesses[rowIndex][key]} ${guesses[rowIndex].debutHint}` : null}
-                    {key === 'allStarAppearances' ? `${guesses[rowIndex][key]} ${guesses[rowIndex].allStarHint}` : null}
+              guesses[rowIndex].keys.map((key, index) => {
+                // Calculate the background color class for the current key
+                const backgroundColorClass = getBackgroundColor(key, guesses[rowIndex]);
+                console.log(`Assigning class: flip-back ${backgroundColorClass}`);
+
+                return (
+                  <div
+                    key={index}
+                    className={`guess-item flip ${flipped.includes(rowIndex * 6 + index) ? 'flip-active' : ''}`}
+                  >
+                    <div className="flip-front"></div>
+                    <div className={`flip-back ${backgroundColorClass}`}>
+                      {key === 'name' ? guesses[rowIndex][key] : null}
+                      {key === 'position' ? getPosition(guesses[rowIndex][key]) : null}
+                      {key === 'number' ? `${guesses[rowIndex][key]} ${guesses[rowIndex].numberHint}` : null}
+                      {key === 'height' ? `${guesses[rowIndex][key]} ${guesses[rowIndex].heightHint}` : null}
+                      {key === 'debut' ? `${guesses[rowIndex][key]} ${guesses[rowIndex].debutHint}` : null}
+                      {key === 'allStarAppearances' ? `${guesses[rowIndex][key]} ${guesses[rowIndex].allStarHint}` : null}
+                    </div>
                   </div>
-                </div>
-              ))
+                );
+              })
             ) : (
               <>
                 <div className="guess-item skeleton-item"></div>
