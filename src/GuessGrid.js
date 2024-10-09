@@ -28,20 +28,26 @@ const GuessGrid = ({ guesses, flipped, isSmallScreen }) => {
 
   const getBackgroundColor = (key, feedback) => {
     console.log(`Checking background color for key: ${key}`, feedback);
-
+  
     if (feedback[`${key}Correct`]) {
       console.log(`Key "${key}" is correct, returning 'correct' (green).`);
       return 'correct'; // Green for correct guess
     }
-
+  
+    if (key === 'position' && feedback.positionClose) {
+      console.log(`Key "position" is partially correct, returning 'yellow' (yellow).`);
+      return 'yellow'; // Yellow for partial match
+    }
+  
     if (feedback[`${key}Close`]) {
       console.log(`Key "${key}" is close, returning 'yellow' (yellow).`);
-      return 'yellow'; // Yellow for close guess
+      return 'yellow'; // Yellow for other close guesses
     }
-
+  
     console.log(`Key "${key}" is incorrect, returning 'incorrect' (red).`);
     return 'incorrect'; // Red for incorrect guess
   };
+  
 
   return (
     <div className="grid-container">

@@ -230,6 +230,15 @@
     "allStar": false
   },
   {
+    "name": "Guess Player",
+    "position": "Guard",
+    "number": 26,
+    "height": "6'5\"",
+    "debut": 1973,
+    "allStarAppearances": 0,
+    "allStar": false
+  },
+  {
     "name": "Payton Pritchard",
     "position": "Guard",
     "number": 3,

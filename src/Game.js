@@ -1,3 +1,4 @@
+// Game.js
 import React, { useState, useEffect } from 'react';
 import './App.css';
 import './Game.css';
@@ -9,73 +10,72 @@ import SuccessModal from './SuccessModal';
 import ToastNotification from './ToastNotification';
 import StatsModal from './StatsModal';
 import PlayerGuessInput from './PlayerGuessInput';
-import { convertHeightToInches, getArrow } from './gameUtils'; // Add this line
-
+import { convertHeightToInches, getArrow, comparePositions } from './gameUtils';
 
 const MAX_GUESSES = 8;
 const FLIP_DURATION = 800;
 const FLIP_DELAY = 400;
 
 const Game = () => {
-  const [guess, setGuess] = useState('');
-  const [guesses, setGuesses] = useState([]);
-  const [flipped, setFlipped] = useState([]);
-  const [currentPlayer, setCurrentPlayer] = useState(null); // No initial player yet
-  const [showSuccessModal, setShowSuccessModal] = useState(false);
-  const [showFailureModal, setShowFailureModal] = useState(false);
-  const [isSmallScreen, setIsSmallScreen] = useState(window.innerWidth < 768);
-  const [inputDisabled, setInputDisabled] = useState(false);
-  const [showCopyMessage, setShowCopyMessage] = useState(false);
-  const [showStatsModal, setShowStatsModal] = useState(false); // State to toggle stats modal
-  const [stats, setStats] = useState({
-    wins: 0,
-    gamesPlayed: 0,
-    guessDistribution: Array(MAX_GUESSES).fill(0),
-  });
+const [guess, setGuess] = useState('');
+const [guesses, setGuesses] = useState([]);
+const [flipped, setFlipped] = useState([]);
+const [currentPlayer, setCurrentPlayer] = useState(null); // No initial player yet
+const [showSuccessModal, setShowSuccessModal] = useState(false);
+const [showFailureModal, setShowFailureModal] = useState(false);
+const [isSmallScreen, setIsSmallScreen] = useState(window.innerWidth < 768);
+const [inputDisabled, setInputDisabled] = useState(false);
+const [showCopyMessage, setShowCopyMessage] = useState(false);
+const [showStatsModal, setShowStatsModal] = useState(false); // State to toggle stats modal
+const [stats, setStats] = useState({
+  wins: 0,
+  gamesPlayed: 0,
+  guessDistribution: Array(MAX_GUESSES).fill(0),
+});
 
-  useEffect(() => {
-    const handleResize = () => {
-      setIsSmallScreen(window.innerWidth < 768);
-    };
-    window.addEventListener('resize', handleResize);
-
-    // Load player of the day and stats when the component mounts
-    loadPlayerOfTheDay();
-    loadStats();
-
-    return () => {
-      window.removeEventListener('resize', handleResize);
-    };
-  }, []);
-
-  const loadPlayerOfTheDay = () => {
-    const lastPlayedDate = localStorage.getItem('lastPlayedDate');
-    const today = new Date().toISOString().split('T')[0]; // Get today's date in YYYY-MM-DD format
-
-    if (lastPlayedDate !== today) {
-      // It's a new day, so set a new random player
-      const newPlayer = players[Math.floor(Math.random() * players.length)];
-      setCurrentPlayer(newPlayer);
-      localStorage.setItem('currentPlayer', JSON.stringify(newPlayer));
-      localStorage.setItem('lastPlayedDate', today);
-    } else {
-      // Load the saved player of the day
-      const savedPlayer = JSON.parse(localStorage.getItem('currentPlayer'));
-      setCurrentPlayer(savedPlayer);
-    }
+useEffect(() => {
+  const handleResize = () => {
+    setIsSmallScreen(window.innerWidth < 768);
   };
+  window.addEventListener('resize', handleResize);
 
-  const loadStats = () => {
-    const savedStats = JSON.parse(localStorage.getItem('gameStats'));
-    if (savedStats) {
-      setStats(savedStats);
-    }
-  };
+  // Load player of the day and stats when the component mounts
+  loadPlayerOfTheDay();
+  loadStats();
 
-  const saveStats = (updatedStats) => {
-    setStats(updatedStats);
-    localStorage.setItem('gameStats', JSON.stringify(updatedStats));
+  return () => {
+    window.removeEventListener('resize', handleResize);
   };
+}, []);
+
+const loadPlayerOfTheDay = () => {
+  const lastPlayedDate = localStorage.getItem('lastPlayedDate');
+  const today = new Date().toISOString().split('T')[0]; // Get today's date in YYYY-MM-DD format
+
+  if (lastPlayedDate !== today) {
+    // It's a new day, so set a new random player
+    const newPlayer = players[Math.floor(Math.random() * players.length)];
+    setCurrentPlayer(newPlayer);
+    localStorage.setItem('currentPlayer', JSON.stringify(newPlayer));
+    localStorage.setItem('lastPlayedDate', today);
+  } else {
+    // Load the saved player of the day
+    const savedPlayer = JSON.parse(localStorage.getItem('currentPlayer'));
+    setCurrentPlayer(savedPlayer);
+  }
+};
+
+const loadStats = () => {
+  const savedStats = JSON.parse(localStorage.getItem('gameStats'));
+  if (savedStats) {
+    setStats(savedStats);
+  }
+};
+
+const saveStats = (updatedStats) => {
+  setStats(updatedStats);
+  localStorage.setItem('gameStats', JSON.stringify(updatedStats));
+};
 
 const handleGuess = (guessedName) => {
   if (guesses.length >= MAX_GUESSES) {
@@ -97,10 +97,8 @@ const handleGuess = (guessedName) => {
     const heightDifference = Math.abs(guessedHeightInches - targetHeightInches);
     const allStarDifference = Math.abs(guessedPlayer.allStarAppearances - currentPlayer.allStarAppearances);
 
-    // Log values for debugging
-    console.log('Guessed Player All-Star Appearances:', guessedPlayer.allStarAppearances);
-    console.log('Current Player All-Star Appearances:', currentPlayer.allStarAppearances);
-    console.log('All-Star Correct Comparison:', guessedPlayer.allStarAppearances === currentPlayer.allStarAppearances);
+    // Compare positions using the comparePositions utility function
+    const { isExactMatch, hasPartialMatch } = comparePositions(guessedPlayer.position, currentPlayer.position);
 
     const feedback = {
       name: guessedPlayer.name,
@@ -109,7 +107,8 @@ const handleGuess = (guessedName) => {
       height: guessedPlayer.height,
       debut: guessedPlayer.debut,
       allStarAppearances: guessedPlayer.allStarAppearances,
-      positionCorrect: guessedPlayer.position === currentPlayer.position,
+      positionCorrect: isExactMatch,
+      positionClose: !isExactMatch && hasPartialMatch,
       numberCorrect: guessedPlayer.number === currentPlayer.number,
       numberClose: numberDifference <= 5 && numberDifference !== 0,
       numberHint: getArrow(guessedPlayer.number, currentPlayer.number),
@@ -159,124 +158,121 @@ const handleGuess = (guessedName) => {
   setGuess('');
 };
 
-
-  const updateStatsOnWin = (guessesTaken) => {
-    const updatedStats = {
-      ...stats,
-      wins: stats.wins + 1,
-      gamesPlayed: stats.gamesPlayed + 1,
-    };
-    updatedStats.guessDistribution[guessesTaken - 1] += 1;
-    saveStats(updatedStats);
+const updateStatsOnWin = (guessesTaken) => {
+  const updatedStats = {
+    ...stats,
+    wins: stats.wins + 1,
+    gamesPlayed: stats.gamesPlayed + 1,
   };
+  updatedStats.guessDistribution[guessesTaken - 1] += 1;
+  saveStats(updatedStats);
+};
 
-  const updateStatsOnLoss = () => {
-    const updatedStats = {
-      ...stats,
-      gamesPlayed: stats.gamesPlayed + 1,
-    };
-    saveStats(updatedStats);
+const updateStatsOnLoss = () => {
+  const updatedStats = {
+    ...stats,
+    gamesPlayed: stats.gamesPlayed + 1,
   };
+  saveStats(updatedStats);
+};
 
-  const handleCloseModal = () => {
-    setShowSuccessModal(false);
-    setShowFailureModal(false);
-    setInputDisabled(true);
-  };
+const handleCloseModal = () => {
+  setShowSuccessModal(false);
+  setShowFailureModal(false);
+  setInputDisabled(true);
+};
 
-  const handleCopyResults = () => {
-    const results = generateResultsString();
-    navigator.clipboard.writeText(results).then(() => {
-      setShowCopyMessage(true);
-      setTimeout(() => setShowCopyMessage(false), 2000);
-    }).catch(err => {
-      console.error('Could not copy text: ', err);
-    });
-  };
+const handleCopyResults = () => {
+  const results = generateResultsString();
+  navigator.clipboard.writeText(results).then(() => {
+    setShowCopyMessage(true);
+    setTimeout(() => setShowCopyMessage(false), 2000);
+  }).catch(err => {
+    console.error('Could not copy text: ', err);
+  });
+};
 
-  const toggleStatsModal = () => {
-    setShowStatsModal(!showStatsModal);
-  };
+const toggleStatsModal = () => {
+  setShowStatsModal(!showStatsModal);
+};
 
-  const generateResultsString = () => {
-    let results = `Daily SCALDLE:\n`;
-    guesses.forEach((guess) => {
-      const rowString = guess.keys.map((key, index) => {
-        if (guess[`${key}Correct`]) {
-          return '🟩';
-        }
-        if (key === 'number' && guess.numberClose) {
-          return '🟨';
-        }
-        if (key === 'debut' && guess.debutClose) {
-          return '🟨';
-        }
-        if (key === 'height' && guess.heightClose) {
-          return '🟨';
-        }
-        // Ensure the 'allStarClose' condition comes before 'allStarCorrect'
-        if (key === 'allStarAppearances' && guess.allStarClose) {
-          return '🟨';
-        }
-        if (key === 'allStarAppearances' && guess.allStarCorrect) {
-          return '🟩';
-        }
-        return '⬛';
-      }).join('');
-      results += rowString + '\n';
-    });
-    return results;
-  };
+const generateResultsString = () => {
+  let results = `Daily SCALDLE:\n`;
+  guesses.forEach((guess) => {
+    const rowString = guess.keys.map((key, index) => {
+      if (guess[`${key}Correct`]) {
+        return '🟩';
+      }
+      if (key === 'number' && guess.numberClose) {
+        return '🟨';
+      }
+      if (key === 'debut' && guess.debutClose) {
+        return '🟨';
+      }
+      if (key === 'height' && guess.heightClose) {
+        return '🟨';
+      }
+      // Ensure the 'allStarClose' condition comes before 'allStarCorrect'
+      if (key === 'allStarAppearances' && guess.allStarClose) {
+        return '🟨';
+      }
+      if (key === 'allStarAppearances' && guess.allStarCorrect) {
+        return '🟩';
+      }
+      return '⬛';
+    }).join('');
+    results += rowString + '\n';
+  });
+  return results;
+};
 
-  return (
-    <div className="app">
-      <h1 className={isSmallScreen ? 'hidden-title' : ''}>SCALDLE</h1>
-      <JerseysAnimation />
+return (
+  <div className="app">
+    <h1 className={isSmallScreen ? 'hidden-title' : ''}>SCALDLE</h1>
+    <JerseysAnimation />
 
-      {/* Use the new PlayerGuessInput component */}
-      <PlayerGuessInput
-        guess={guess}
-        setGuess={setGuess}
-        handleGuess={handleGuess}
-        inputDisabled={inputDisabled}
-        MAX_GUESSES={MAX_GUESSES}
-        guesses={guesses}
+    <PlayerGuessInput
+      guess={guess}
+      setGuess={setGuess}
+      handleGuess={handleGuess}
+      inputDisabled={inputDisabled}
+      MAX_GUESSES={MAX_GUESSES}
+      guesses={guesses}
+    />
+
+    <GuessGrid
+      guesses={guesses}
+      flipped={flipped}
+      isSmallScreen={isSmallScreen}
+    />
+
+    {showSuccessModal && (
+      <SuccessModal
+        currentPlayer={currentPlayer}
+        handleCloseModal={handleCloseModal}
+        handleCopyResults={handleCopyResults}
       />
+    )}
 
-      {/* Pass the guesses feedback to GuessGrid */}
-      <GuessGrid
-        guesses={guesses}
-        flipped={flipped}
-        isSmallScreen={isSmallScreen}
+    {showFailureModal && (
+      <FailureModal
+        currentPlayer={currentPlayer}
+        handleCloseModal={handleCloseModal}
+        handleCopyResults={handleCopyResults}
       />
+    )}
 
-      {showSuccessModal && (
-        <SuccessModal
-          currentPlayer={currentPlayer}
-          handleCloseModal={handleCloseModal}
-          handleCopyResults={handleCopyResults}
-        />
-      )}
+    {showCopyMessage && (
+      <ToastNotification message="Results Copied!" />
+    )}
 
-      {showFailureModal && (
-        <FailureModal
-          currentPlayer={currentPlayer}
-          handleCloseModal={handleCloseModal}
-          handleCopyResults={handleCopyResults}
-        />
-      )}
+    <button onClick={toggleStatsModal} className="stats-button">
+      Stats
+    </button>
 
-      {showCopyMessage && (
-        <ToastNotification message="Results Copied!" />
-      )}
-
-      <button onClick={toggleStatsModal} className="stats-button">
-        Stats
-      </button>
-
-      {showStatsModal && <StatsModal stats={stats} onClose={toggleStatsModal} />}
-    </div>
-  );
+    {showStatsModal && <StatsModal stats={stats} onClose={toggleStatsModal} />}
+  </div>
+);
 };
 
 export default Game;
