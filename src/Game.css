@@ -1,0 +1,114 @@
+/* Hide the title when screen width is less than 768 pixels */
+@media (max-width: 375px) {
+    .hidden-title {
+      display: none; /* Hide the title */
+    }
+  }
+  /* Add this to your Game.css file */
+
+/* Font size for guess row cells on smaller screens */
+@media only screen and (max-width: 767px) {
+    .guess-item {
+      font-size: 0px; /* Adjust the font size for smaller screens */
+    }
+  
+    .guess-header div {
+      font-size: 14px; /* Adjust the font size for headers on smaller screens */
+    }
+  }
+
+/* Game.css */
+
+/* For small screens (less than 768px) */
+@media only screen and (max-width: 767px) {
+    .flip-back {
+      font-size: 12px; /* Smaller font size for small screens */
+    }
+  }
+  
+  /* For larger screens */
+  @media only screen and (min-width: 768px) {
+    .flip-back {
+      font-size: 18px; /* Default font size for larger screens */
+    }
+  }
+  
+  .yellow {
+    background-color: #fbe77b; /* Gold color */
+    color: black; /* Adjust text color if needed */
+  }
+  
+  .input-container {
+    position: relative; /* To position suggestions absolutely */
+    margin-bottom: 20px; /* Spacing between input and guesses */
+  }
+  
+  .suggestions {
+    list-style-type: none;
+    padding: 0;
+    margin: 0; /* Remove margins */
+    width: 100%; /* Ensure suggestions take full width */
+    max-width: 300px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    max-height: 160px;
+    overflow-y: auto;
+    background-color: white; /* White background for suggestions */
+    box-sizing: border-box;
+    z-index: 10; /* Ensure it appears above other content */
+    position: absolute; /* Position suggestions absolutely */
+    top: 100%; /* Place suggestions directly below the input */
+    left: 0; /* Align suggestions with the input field */
+  }
+  
+  /* Responsive suggestions list for small screens */
+  @media only screen and (max-width: 767px) {
+    .suggestions {
+      width: 90%; /* Adjust width for small screens */
+    }
+  }
+  
+  .suggestions li {
+    padding: 10px;
+    cursor: pointer;
+    background-color: white;
+    border-bottom: 1px solid #ddd;
+    text-align: center;
+  }
+  
+  .suggestions li:hover {
+    background-color: #f0f0f0;
+  }
+  
+  .copy-results-button {
+    width: 100%; /* 100% width of the grid */
+    max-width: 700px; /* Max width */
+    padding: 10px;
+    background-color: #007A33; /* Button color */
+    color: white;
+    border: none;
+    cursor: pointer;
+    margin-top: 20px; /* Space above the button */
+    font-size: 1.2rem; /* Adjust font size */
+  }
+  
+  .copy-results-button:hover {
+    background-color: #00522C; /* Darken on hover */
+  }
+  
+  .copy-results-button {
+    background-color: #007A33; /* Change to your desired button color */
+    color: white; /* Change to your desired text color */
+    border: 2px solid black; /* Black border */
+    border-radius: 5px; /* Rounded corners (optional) */
+    padding: 10px 20px; /* Padding for the button */
+    font-size: 1rem; /* Font size */
+    cursor: pointer; /* Pointer cursor on hover */
+    transition: background-color 0.3s, transform 0.3s; /* Smooth transitions for hover effects */
+  }
+  
+  .copy-results-button:hover {
+    background-color: #005f24; /* Darker shade on hover */
+    transform: scale(1.05); /* Slightly enlarge the button on hover */
+  }
+  
