@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import './App.css';
 import './Game.css';
 import players from './players.json';
@@ -26,11 +26,31 @@ const Game = () => {
   const [inputDisabled, setInputDisabled] = useState(false);
   const [showCopyMessage, setShowCopyMessage] = useState(false);
   const [showStatsModal, setShowStatsModal] = useState(false);
+  const [gameFinished, setGameFinished] = useState(false); 
   const [stats, setStats] = useState({
     wins: 0,
     gamesPlayed: 0,
     guessDistribution: Array(MAX_GUESSES).fill(0),
   });
+
+  // Memoized loadPlayerOfTheDay to prevent unnecessary re-renders
+  const loadPlayerOfTheDay = useCallback(() => {
+    const lastPlayedDate = localStorage.getItem('lastPlayedDate');
+    const today = new Date().toISOString().split('T')[0];
+
+    if (lastPlayedDate !== today) {
+      // New day, select a new player and reset the game state
+      const newPlayer = players[Math.floor(Math.random() * players.length)];
+      setCurrentPlayer(newPlayer);
+      localStorage.setItem('currentPlayer', JSON.stringify(newPlayer));
+      localStorage.setItem('lastPlayedDate', today);
+      resetGameState(); // Reset the game for the new day
+    } else {
+      // Use the saved player from localStorage
+      const savedPlayer = JSON.parse(localStorage.getItem('currentPlayer'));
+      setCurrentPlayer(savedPlayer);
+    }
+  }, []); // Memoized function with no dependencies
 
   useEffect(() => {
     const handleResize = () => {
@@ -38,27 +58,44 @@ const Game = () => {
     };
     window.addEventListener('resize', handleResize);
 
+    // Load player of the day and game state when the component mounts
     loadPlayerOfTheDay();
+    loadGameState();
     loadStats();
 
     return () => {
       window.removeEventListener('resize', handleResize);
     };
-  }, []);
+  }, [loadPlayerOfTheDay]); // Added loadPlayerOfTheDay as a dependency
 
-  const loadPlayerOfTheDay = () => {
-    const lastPlayedDate = localStorage.getItem('lastPlayedDate');
-    const today = new Date().toISOString().split('T')[0];
+  const loadGameState = () => {
+    const savedGuesses = JSON.parse(localStorage.getItem('guesses'));
+    const savedFlipped = JSON.parse(localStorage.getItem('flipped'));
+    const savedGameFinished = JSON.parse(localStorage.getItem('gameFinished'));
 
-    if (lastPlayedDate !== today) {
-      const newPlayer = players[Math.floor(Math.random() * players.length)];
-      setCurrentPlayer(newPlayer);
-      localStorage.setItem('currentPlayer', JSON.stringify(newPlayer));
-      localStorage.setItem('lastPlayedDate', today);
-    } else {
-      const savedPlayer = JSON.parse(localStorage.getItem('currentPlayer'));
-      setCurrentPlayer(savedPlayer);
+    if (savedGuesses && savedFlipped && savedGameFinished !== null) {
+      setGuesses(savedGuesses);
+      setFlipped(savedFlipped);
+      setGameFinished(savedGameFinished);
+      if (savedGameFinished) {
+        setInputDisabled(true); // Disable input if the game was already finished
+      }
     }
+  };
+
+  const resetGameState = () => {
+    setGuesses([]);
+    setFlipped([]);
+    setGameFinished(false);
+    localStorage.removeItem('guesses');
+    localStorage.removeItem('flipped');
+    localStorage.removeItem('gameFinished');
+  };
+
+  const saveGameState = (updatedGuesses, updatedFlipped, gameFinishedState) => {
+    localStorage.setItem('guesses', JSON.stringify(updatedGuesses));
+    localStorage.setItem('flipped', JSON.stringify(updatedFlipped));
+    localStorage.setItem('gameFinished', JSON.stringify(gameFinishedState));
   };
 
   const loadStats = () => {
@@ -74,11 +111,8 @@ const Game = () => {
   };
 
   const handleGuess = (guessedName) => {
-    if (guesses.length >= MAX_GUESSES) {
-      if (guesses.length === MAX_GUESSES) {
-        setShowFailureModal(true);
-      }
-      return;
+    if (guesses.length >= MAX_GUESSES || gameFinished) {
+      return; // Prevent further guesses if the game is finished
     }
 
     const guessedPlayer = players.find(
@@ -112,12 +146,13 @@ const Game = () => {
         debutHint: getArrow(guessedPlayer.debut, currentPlayer.debut),
         allStarCorrect: Number(guessedPlayer.allStarAppearances) === Number(currentPlayer.allStarAppearances),
         allStarClose: allStarDifference <= 5 && allStarDifference !== 0,
-        allStarHint: getArrow(Number(guessedPlayer.allStarAppearances), Number(currentPlayer.allStarAppearances)),
+        allStarHint: getArrow(guessedPlayer.allStarAppearances, currentPlayer.allStarAppearances),
         nameCorrect: guessedPlayer.name.toLowerCase() === currentPlayer.name.toLowerCase(),
         overallCorrect: guessedPlayer.name.toLowerCase() === currentPlayer.name.toLowerCase(),
       };
 
-      setGuesses([...guesses, feedback]);
+      const updatedGuesses = [...guesses, feedback];
+      setGuesses(updatedGuesses);
 
       feedback.keys = ['name', 'position', 'number', 'height', 'debut', 'allStarAppearances'];
       feedback.keys.forEach((_, index) => {
@@ -130,18 +165,24 @@ const Game = () => {
 
       if (feedback.overallCorrect) {
         setInputDisabled(true);
+        setGameFinished(true);
         setTimeout(() => {
           setShowSuccessModal(true);
-          updateStatsOnWin(guesses.length + 1);
+          updateStatsOnWin(updatedGuesses.length);
         }, totalFlipTime);
+        saveGameState(updatedGuesses, flipped, true); // Save game as finished
       }
 
-      if (guesses.length === MAX_GUESSES - 1 && !feedback.overallCorrect) {
+      if (updatedGuesses.length === MAX_GUESSES && !feedback.overallCorrect) {
         setTimeout(() => {
           setShowFailureModal(true);
           updateStatsOnLoss();
+          setGameFinished(true);
+          saveGameState(updatedGuesses, flipped, true); // Save game as finished
         }, totalFlipTime);
       }
+
+      saveGameState(updatedGuesses, flipped, gameFinished); // Save guesses and game state
     } else {
       alert('Player not found. Try again!');
     }
@@ -222,7 +263,7 @@ const Game = () => {
         guess={guess}
         setGuess={setGuess}
         handleGuess={handleGuess}
-        inputDisabled={inputDisabled}
+        inputDisabled={inputDisabled || gameFinished} 
         MAX_GUESSES={MAX_GUESSES}
         guesses={guesses}
       />
