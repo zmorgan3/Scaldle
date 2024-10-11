@@ -1,0 +1,241 @@
+[
+  {
+    "name": "Bill Russell",
+    "position": "Center",
+    "number": 6,
+    "height": "6'10\"",
+    "debut": 1956,
+    "allStarAppearances": 12,
+    "allStar": true
+  },
+  {
+    "name": "Larry Bird",
+    "position": "Forward",
+    "number": 33,
+    "height": "6'9\"",
+    "debut": 1979,
+    "allStarAppearances": 12,
+    "allStar": true
+  },
+  {
+    "name": "John Havlicek",
+    "position": "Guard/Fwrd",
+    "number": 17,
+    "height": "6'5\"",
+    "debut": 1962,
+    "allStarAppearances": 13,
+    "allStar": true
+  },
+  {
+    "name": "Paul Pierce",
+    "position": "Forward",
+    "number": 34,
+    "height": "6'7\"",
+    "debut": 1998,
+    "allStarAppearances": 10
+  },
+  {
+    "name": "Kevin Garnett",
+    "position": "Fwrd/Center",
+    "number": 5,
+    "height": "6'11\"",
+    "debut": 2007,
+    "allStarAppearances": 15
+  },
+  
+  {
+    "name": "Bob Cousy",
+    "position": "Guard",
+    "number": 14,
+    "height": "6'1\"",
+    "debut": 1950,
+    "allStarAppearances": 13
+  },
+  {
+    "name": "Sam Jones",
+    "position": "Guard",
+    "number": 24,
+    "height": "6'4\"",
+    "debut": 1957,
+    "allStarAppearances": 10
+  },
+  {
+    "name": "Rajon Rondo",
+    "position": "Guard",
+    "number": 9,
+    "height": "6'1\"",
+    "debut": 2006,
+    "allStarAppearances": 4
+  },
+  {
+    "name": "Ray Allen",
+    "position": "Guard",
+    "number": 20,
+    "height": "6'5\"",
+    "debut": 2000,
+    "allStarAppearances": 10,
+    "allStar": true
+  },
+  {
+    "name": "Jayson Tatum",
+    "position": "Forward",
+    "number": 0,
+    "height": "6'8\"",
+    "debut": 2017,
+    "allStarAppearances": 3,
+    "allStar": true
+  },
+  {
+    "name": "Jaylen Brown",
+    "position": "Forward",
+    "number": 7,
+    "height": "6'6\"",
+    "debut": 2016,
+    "allStarAppearances": 2,
+    "allStar": true
+  },
+  {
+    "name": "Al Horford",
+    "position": "Center/Fwrd",
+    "number": 42,
+    "height": "6'9\"",
+    "debut": 2016,
+    "allStarAppearances": 5,
+    "allStar": true
+  },
+  {
+    "name": "Dave Cowens",
+    "position": "Center/Fwrd",
+    "number": 18,
+    "height": "6'9\"",
+    "debut": 1970,
+    "allStarAppearances": 7,
+    "allStar": true
+  },
+  {
+    "name": "Robert Parish",
+    "position": "Center",
+    "number": "00",
+    "height": "7'0\"",
+    "debut": 1980,
+    "allStarAppearances": 9,
+    "allStar": true
+  },
+  {
+    "name": "Jae Crowder",
+    "position": "Forward",
+    "number": 99,
+    "height": "6'6\"",
+    "debut": 2014,
+    "allStarAppearances": 0,
+    "allStar": false
+  },
+  {
+    "name": "Isaiah Thomas",
+    "position": "Guard",
+    "number": 4,
+    "height": "5'9\"",
+    "debut": 2015,
+    "allStarAppearances": 2,
+    "allStar": true
+  },
+  {
+    "name": "Marcus Smart",
+    "position": "Guard",
+    "number": 36,
+    "height": "6'3\"",
+    "debut": 2014,
+    "allStarAppearances": 1,
+    "allStar": true
+  },
+  {
+    "name": "Antoine Walker",
+    "position": "Forward",
+    "number": 8,
+    "height": "6'8\"",
+    "debut": 1996,
+    "allStarAppearances": 3,
+    "allStar": true
+  },
+  {
+    "name": "Reggie Lewis",
+    "position": "Guard",
+    "number": 35,
+    "height": "6'7\"",
+    "debut": 1987,
+    "allStarAppearances": 2,
+    "allStar": true
+  },
+  {
+    "name": "Tony Allen",
+    "position": "Guard",
+    "number": 9,
+    "height": "6'4\"",
+    "debut": 2004,
+    "allStarAppearances": 0,
+    "allStar": false
+  },
+  {
+    "name": "Gerald Green",
+    "position": "Guard/Fwrd",
+    "number": 8,
+    "height": "6'8\"",
+    "debut": 2005,
+    "allStarAppearances": 0,
+    "allStar": false
+  },
+  {
+    "name": "Evan Turner",
+    "position": "Guard/Fwrd",
+    "number": 11,
+    "height": "6'7\"",
+    "debut": 2010,
+    "allStarAppearances": 0,
+    "allStar": false
+  },
+  {
+    "name": "Enes Kanter",
+    "position": "Center",
+    "number": 11,
+    "height": "6'10\"",
+    "debut": 2020,
+    "allStarAppearances": 0,
+    "allStar": false
+  },
+  {
+    "name": "Daniel Theis",
+    "position": "Center/Fwrd",
+    "number": 27,
+    "height": "6'8\"",
+    "debut": 2018,
+    "allStarAppearances": 0,
+    "allStar": false
+  },
+  {
+    "name": "Luke Kornet",
+    "position": "Center",
+    "number": 2,
+    "height": "7'2\"",
+    "debut": 2021,
+    "allStarAppearances": 0,
+    "allStar": false
+  },
+  {
+    "name": "Aaron Nesmith",
+    "position": "Guard",
+    "number": 26,
+    "height": "6'5\"",
+    "debut": 2020,
+    "allStarAppearances": 0,
+    "allStar": false
+  },
+  {
+    "name": "Payton Pritchard",
+    "position": "Guard",
+    "number": 3,
+    "height": "6'1\"",
+    "debut": 2020,
+    "allStarAppearances": 0,
+    "allStar": false
+  }
+]
