@@ -5,20 +5,16 @@ const GuessGrid = ({ guesses, flipped, isSmallScreen }) => {
   const getPosition = (position) => {
     if (isSmallScreen) {
       switch (position) {
-        case 'Point Guard':
-          return 'PG';
-        case 'Shooting Guard':
-          return 'SG';
-        case 'Small Forward':
-          return 'SF';
-        case 'Power Forward':
-          return 'PF';
-        case 'Center':
-          return 'C';
         case 'Guard':
           return 'G';
         case 'Forward':
           return 'F';
+        case 'Center':
+          return 'C';
+        case 'Center/Forward':
+          return 'C/F';
+        case 'Forward/Guard':
+          return 'F/G';
         default:
           return position;
       }
@@ -27,33 +23,12 @@ const GuessGrid = ({ guesses, flipped, isSmallScreen }) => {
   };
 
   const getBackgroundColor = (key, feedback) => {
-    console.log(`Key: ${key}, feedback:`, feedback);
-
-    // Explicitly check for allStarAppearances
-    if (key === 'allStarAppearances') {
-      console.log('Checking allStarAppearances...');
-      
-      if (feedback.allStarCorrect) {
-        console.log('All-Star appearances are correct (green)');
-        return 'correct'; // Green
-      }
-
-      if (feedback.allStarClose) {
-        console.log('All-Star appearances are close (yellow)');
-        return 'yellow'; // Yellow
-      }
-
-      console.log('All-Star appearances are incorrect (red)');
-      return 'incorrect'; // Red
-    }
-
-    // Handle other keys dynamically
     if (feedback[`${key}Correct`]) {
       return 'correct'; // Green for correct guess
     }
 
-    if (feedback[`${key}Close`]) {
-      return 'yellow'; // Yellow for close guess
+    if (feedback[`${key}Partial`] || feedback[`${key}Close`]) {
+      return 'yellow'; // Yellow for partial or close guess
     }
 
     return 'incorrect'; // Red for incorrect guess
@@ -80,9 +55,8 @@ const GuessGrid = ({ guesses, flipped, isSmallScreen }) => {
           >
             {rowIndex < guesses.length ? (
               guesses[rowIndex].keys.map((key, index) => {
+                // Calculate the background color class for the current key
                 const backgroundColorClass = getBackgroundColor(key, guesses[rowIndex]);
-
-                console.log(`Assigning color class: ${backgroundColorClass} for key: ${key}`);
 
                 return (
                   <div
