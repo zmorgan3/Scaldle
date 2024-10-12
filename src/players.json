@@ -18,6 +18,15 @@
     "allStar": true
   },
   {
+    "name": "Guess",
+    "position": "Guard/Forward",
+    "number": 17,
+    "height": "6'5\"",
+    "debut": 1967,
+    "allStarAppearances": 13,
+    "allStar": true
+  },
+  {
     "name": "John Havlicek",
     "position": "Guard/Forward",
     "number": 17,
@@ -42,7 +51,14 @@
     "debut": 2007,
     "allStarAppearances": 15
   },
-  
+  {
+    "name": "Guess 1958",
+    "position": "Center/Forward",
+    "number": 5,
+    "height": "6'11\"",
+    "debut": 1955,
+    "allStarAppearances": 15
+  },
   {
     "name": "Bob Cousy",
     "position": "Guard",

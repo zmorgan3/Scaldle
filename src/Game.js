@@ -93,6 +93,14 @@ const Game = () => {
       const heightDifference = Math.abs(guessedHeightInches - targetHeightInches);
       const allStarDifference = Math.abs(Number(guessedPlayer.allStarAppearances) - Number(currentPlayer.allStarAppearances));
 
+      // Split positions of both guessed and current player
+      const guessedPositions = guessedPlayer.position.split(/[\/, ]+/); // Split guessed player's positions into an array
+      const targetPositions = currentPlayer.position.split(/[\/, ]+/);   // Split target player's positions into an array
+
+      // Check if any of the guessed player's positions match the target player's position
+      const positionCorrect = guessedPositions.some(pos => targetPositions.includes(pos));
+      const positionPartial = !positionCorrect && guessedPositions.some(pos => targetPositions.some(targetPos => pos.includes(targetPos) || targetPos.includes(pos)));
+
       const feedback = {
         name: guessedPlayer.name,
         position: guessedPlayer.position,
@@ -100,7 +108,9 @@ const Game = () => {
         height: guessedPlayer.height,
         debut: guessedPlayer.debut,
         allStarAppearances: guessedPlayer.allStarAppearances,
-        positionCorrect: guessedPlayer.position === currentPlayer.position,
+        // Check for correct or partial position match
+        positionCorrect: positionCorrect,
+        positionPartial: positionPartial, // Yellow for partial match
         numberCorrect: guessedPlayer.number === currentPlayer.number,
         numberClose: numberDifference <= 5 && numberDifference !== 0,
         numberHint: getArrow(guessedPlayer.number, currentPlayer.number),
@@ -194,8 +204,8 @@ const Game = () => {
         if (guess[`${key}Correct`]) {
           return '🟩';
         }
-        if (key === 'allStarAppearances' && guess.allStarCorrect){
-          return '🟩';
+        if (key === 'position' && guess.positionPartial) {
+          return '🟨';
         }
         if (key === 'number' && guess.numberClose) {
           return '🟨';
