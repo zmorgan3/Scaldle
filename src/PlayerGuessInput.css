@@ -42,3 +42,24 @@
     background-color: #f0f0f0;
   }
   
+/* Responsive suggestions list for small screens */
+/* For screens less than 768px */
+
+@media only screen and (max-width: 767px) {
+  .suggestions {
+    width: 90%; 
+    max-width: none; 
+    margin: 0 auto; 
+    position: absolute; 
+    z-index: 1000; 
+    border: 1px solid #ddd; 
+    border-radius: 5px; 
+    background-color: white; 
+  }
+
+  .suggestions li {
+    padding: 10px; 
+    font-size: 14px; 
+  }
+}
+

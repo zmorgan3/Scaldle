@@ -33,11 +33,6 @@
     }
   }
   
-  .yellow {
-    background-color: #fbe77b; /* Gold color */
-    color: black; /* Adjust text color if needed */
-  }
-  
   .input-container {
     position: relative; /* To position suggestions absolutely */
     margin-bottom: 20px; /* Spacing between input and guesses */
