@@ -194,6 +194,9 @@ const Game = () => {
         if (guess[`${key}Correct`]) {
           return '🟩';
         }
+        if (key === 'allStarAppearances' && guess.allStarCorrect){
+          return '🟩';
+        }
         if (key === 'number' && guess.numberClose) {
           return '🟨';
         }
