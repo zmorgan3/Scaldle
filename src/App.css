@@ -83,20 +83,6 @@ button:hover {
   background-color: #00522C;
 }
 
-.suggestions {
-  list-style-type: none;
-  padding: 0;
-  margin: 10px auto;
-  width: 100%;
-  max-width: 300px;
-  border: 1px solid #ddd;
-  border-radius: 5px;
-  max-height: 160px;
-  overflow-y: auto;
-  background-color: white; 
-  box-sizing: border-box;
-}
-
 .suggestions li {
   padding: 10px;
   cursor: pointer;
@@ -292,15 +278,4 @@ button:hover {
 
 .app p {
   font-size: 2rem;
-}
-
-/* For small devices (max-width: 767px) */
-@media only screen and (max-width: 767px) {
-  .guess-item {
-    font-size: 12px;
-  }
-
-  .guess-header {
-    font-size: 14px; 
-  }
 }

@@ -4,6 +4,34 @@
       display: none; /* Hide the title */
     }
   }
+
+  @media (width: 375px) {
+    .hidden-title {
+      display: block;
+      font-size: 20px;
+      white-space: normal;
+      overflow: visible;
+      text-align: center;
+      margin: 10px auto; /* Adjust margin */
+      padding: 100px 0; /* Adjust padding if necessary */
+      height: auto;
+    }
+  }
+
+  @media (width: 540px) {
+    .hidden-title {
+      display: block;
+      font-size: 20px;
+      white-space: normal;
+      overflow: visible;
+      text-align: center;
+      margin: 10px auto; /* Adjust margin */
+      padding: 40px 0; /* Adjust padding if necessary */
+      height: auto;
+    }
+  }
+  
+  
   /* Add this to your Game.css file */
 
 /* Font size for guess row cells on smaller screens */
@@ -38,23 +66,24 @@
     margin-bottom: 20px; /* Spacing between input and guesses */
   }
   
+  /*
   .suggestions {
     list-style-type: none;
     padding: 0;
-    margin: 0; /* Remove margins */
-    width: 100%; /* Ensure suggestions take full width */
+    margin: 0; 
+    width: 100%; 
     max-width: 300px;
     border: 1px solid #ddd;
     border-radius: 5px;
     max-height: 160px;
     overflow-y: auto;
-    background-color: white; /* White background for suggestions */
+    background-color: white; 
     box-sizing: border-box;
-    z-index: 10; /* Ensure it appears above other content */
-    position: absolute; /* Position suggestions absolutely */
-    top: 100%; /* Place suggestions directly below the input */
-    left: 0; /* Align suggestions with the input field */
-  }
+    z-index: 10; 
+    position: absolute; 
+    top: 100%; 
+    left: 0; 
+  }*/
   
   /* Responsive suggestions list for small screens */
   @media only screen and (max-width: 767px) {
