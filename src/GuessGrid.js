@@ -13,7 +13,7 @@ const GuessGrid = ({ guesses, flipped, isSmallScreen }) => {
           return 'C';
         case 'Center/Forward':
           return 'C/F';
-        case 'Forward/Guard':
+        case 'Guard/Forward':
           return 'F/G';
         default:
           return position;
@@ -41,6 +41,17 @@ const GuessGrid = ({ guesses, flipped, isSmallScreen }) => {
 
       console.log('All-Star appearances are incorrect (red)');
       return 'incorrect'; // Red
+    }
+
+    // Handle position key for partial matches
+    if (key === 'position') {
+      if (feedback.positionCorrect) {
+        return 'correct'; // Green for fully correct
+      }
+      if (feedback.positionPartial) {
+        return 'yellow'; // Yellow for partial match
+      }
+      return 'incorrect'; // Red for no match
     }
 
     // Handle other keys dynamically

@@ -97,9 +97,12 @@ const Game = () => {
       const guessedPositions = guessedPlayer.position.split(/[\/, ]+/); // Split guessed player's positions into an array
       const targetPositions = currentPlayer.position.split(/[\/, ]+/);   // Split target player's positions into an array
 
-      // Check if any of the guessed player's positions match the target player's position
-      const positionCorrect = guessedPositions.some(pos => targetPositions.includes(pos));
-      const positionPartial = !positionCorrect && guessedPositions.some(pos => targetPositions.some(targetPos => pos.includes(targetPos) || targetPos.includes(pos)));
+      // Check if the positions match exactly
+      const positionCorrect = guessedPositions.length === targetPositions.length &&
+                            guessedPositions.every(pos => targetPositions.includes(pos));
+
+      // Check for partial match when the positions partially match
+      const positionPartial = !positionCorrect && guessedPositions.some(pos => targetPositions.includes(pos));
 
       const feedback = {
         name: guessedPlayer.name,
@@ -120,6 +123,7 @@ const Game = () => {
         debutCorrect: guessedPlayer.debut === currentPlayer.debut,
         debutClose: debutDifference <= 5 && debutDifference !== 0,
         debutHint: getArrow(guessedPlayer.debut, currentPlayer.debut),
+        // Fixing the ASG appearances logic
         allStarCorrect: Number(guessedPlayer.allStarAppearances) === Number(currentPlayer.allStarAppearances),
         allStarClose: allStarDifference <= 5 && allStarDifference !== 0,
         allStarHint: getArrow(Number(guessedPlayer.allStarAppearances), Number(currentPlayer.allStarAppearances)),
