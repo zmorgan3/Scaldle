@@ -9,8 +9,7 @@ import SuccessModal from './SuccessModal';
 import ToastNotification from './ToastNotification';
 import StatsModal from './StatsModal';
 import PlayerGuessInput from './PlayerGuessInput';
-import { convertHeightToInches, getArrow } from './gameUtils'; // Add this line
-
+import { convertHeightToInches, getArrow } from './gameUtils';
 
 const MAX_GUESSES = 8;
 const FLIP_DURATION = 800;
@@ -20,13 +19,13 @@ const Game = () => {
   const [guess, setGuess] = useState('');
   const [guesses, setGuesses] = useState([]);
   const [flipped, setFlipped] = useState([]);
-  const [currentPlayer, setCurrentPlayer] = useState(null); // No initial player yet
+  const [currentPlayer, setCurrentPlayer] = useState(null);
   const [showSuccessModal, setShowSuccessModal] = useState(false);
   const [showFailureModal, setShowFailureModal] = useState(false);
   const [isSmallScreen, setIsSmallScreen] = useState(window.innerWidth < 768);
   const [inputDisabled, setInputDisabled] = useState(false);
   const [showCopyMessage, setShowCopyMessage] = useState(false);
-  const [showStatsModal, setShowStatsModal] = useState(false); // State to toggle stats modal
+  const [showStatsModal, setShowStatsModal] = useState(false);
   const [stats, setStats] = useState({
     wins: 0,
     gamesPlayed: 0,
@@ -39,7 +38,6 @@ const Game = () => {
     };
     window.addEventListener('resize', handleResize);
 
-    // Load player of the day and stats when the component mounts
     loadPlayerOfTheDay();
     loadStats();
 
@@ -50,16 +48,14 @@ const Game = () => {
 
   const loadPlayerOfTheDay = () => {
     const lastPlayedDate = localStorage.getItem('lastPlayedDate');
-    const today = new Date().toISOString().split('T')[0]; // Get today's date in YYYY-MM-DD format
+    const today = new Date().toISOString().split('T')[0];
 
     if (lastPlayedDate !== today) {
-      // It's a new day, so set a new random player
       const newPlayer = players[Math.floor(Math.random() * players.length)];
       setCurrentPlayer(newPlayer);
       localStorage.setItem('currentPlayer', JSON.stringify(newPlayer));
       localStorage.setItem('lastPlayedDate', today);
     } else {
-      // Load the saved player of the day
       const savedPlayer = JSON.parse(localStorage.getItem('currentPlayer'));
       setCurrentPlayer(savedPlayer);
     }
@@ -77,88 +73,95 @@ const Game = () => {
     localStorage.setItem('gameStats', JSON.stringify(updatedStats));
   };
 
-const handleGuess = (guessedName) => {
-  if (guesses.length >= MAX_GUESSES) {
-    if (guesses.length === MAX_GUESSES) {
-      setShowFailureModal(true);
-    }
-    return;
-  }
-
-  const guessedPlayer = players.find(
-    (player) => player.name.toLowerCase() === guessedName.toLowerCase()
-  );
-
-  if (guessedPlayer) {
-    const numberDifference = Math.abs(guessedPlayer.number - currentPlayer.number);
-    const debutDifference = Math.abs(guessedPlayer.debut - currentPlayer.debut);
-    const guessedHeightInches = convertHeightToInches(guessedPlayer.height);
-    const targetHeightInches = convertHeightToInches(currentPlayer.height);
-    const heightDifference = Math.abs(guessedHeightInches - targetHeightInches);
-    const allStarDifference = Math.abs(guessedPlayer.allStarAppearances - currentPlayer.allStarAppearances);
-
-    // Log values for debugging
-    console.log('Guessed Player All-Star Appearances:', guessedPlayer.allStarAppearances);
-    console.log('Current Player All-Star Appearances:', currentPlayer.allStarAppearances);
-    console.log('All-Star Correct Comparison:', guessedPlayer.allStarAppearances === currentPlayer.allStarAppearances);
-
-    const feedback = {
-      name: guessedPlayer.name,
-      position: guessedPlayer.position,
-      number: guessedPlayer.number,
-      height: guessedPlayer.height,
-      debut: guessedPlayer.debut,
-      allStarAppearances: guessedPlayer.allStarAppearances,
-      positionCorrect: guessedPlayer.position === currentPlayer.position,
-      numberCorrect: guessedPlayer.number === currentPlayer.number,
-      numberClose: numberDifference <= 5 && numberDifference !== 0,
-      numberHint: getArrow(guessedPlayer.number, currentPlayer.number),
-      heightCorrect: guessedPlayer.height === currentPlayer.height,
-      heightClose: heightDifference <= 5 && heightDifference !== 0,
-      heightHint: getArrow(guessedHeightInches, targetHeightInches),
-      debutCorrect: guessedPlayer.debut === currentPlayer.debut,
-      debutClose: debutDifference <= 5 && debutDifference !== 0,
-      debutHint: getArrow(guessedPlayer.debut, currentPlayer.debut),
-      allStarCorrect: Number(guessedPlayer.allStarAppearances) === Number(currentPlayer.allStarAppearances),
-      allStarClose: allStarDifference <= 5 && allStarDifference !== 0,
-      allStarHint: getArrow(guessedPlayer.allStarAppearances, currentPlayer.allStarAppearances),
-      nameCorrect: guessedPlayer.name.toLowerCase() === currentPlayer.name.toLowerCase(),
-      overallCorrect: guessedPlayer.name.toLowerCase() === currentPlayer.name.toLowerCase(),
-    };
-
-    // Pass feedback for each guess into the GuessGrid component
-    setGuesses([...guesses, feedback]);
-
-    feedback.keys = ['name', 'position', 'number', 'height', 'debut', 'allStarAppearances'];
-    feedback.keys.forEach((_, index) => {
-      setTimeout(() => {
-        setFlipped((prev) => [...prev, guesses.length * 6 + index]);
-      }, index * FLIP_DELAY);
-    });
-
-    const totalFlipTime = feedback.keys.length * FLIP_DELAY + FLIP_DURATION;
-
-    if (feedback.overallCorrect) {
-      setInputDisabled(true);
-      setTimeout(() => {
-        setShowSuccessModal(true);
-        updateStatsOnWin(guesses.length + 1);
-      }, totalFlipTime);
-    }
-
-    if (guesses.length === MAX_GUESSES - 1 && !feedback.overallCorrect) {
-      setTimeout(() => {
+  const handleGuess = (guessedName) => {
+    if (guesses.length >= MAX_GUESSES) {
+      if (guesses.length === MAX_GUESSES) {
         setShowFailureModal(true);
-        updateStatsOnLoss();
-      }, totalFlipTime);
+      }
+      return;
     }
-  } else {
-    alert('Player not found. Try again!');
-  }
 
-  setGuess('');
-};
+    const guessedPlayer = players.find(
+      (player) => player.name.toLowerCase() === guessedName.toLowerCase()
+    );
 
+    if (guessedPlayer) {
+      const numberDifference = Math.abs(Number(guessedPlayer.number) - Number(currentPlayer.number));
+      const debutDifference = Math.abs(Number(guessedPlayer.debut) - Number(currentPlayer.debut));
+      const guessedHeightInches = convertHeightToInches(guessedPlayer.height);
+      const targetHeightInches = convertHeightToInches(currentPlayer.height);
+      const heightDifference = Math.abs(guessedHeightInches - targetHeightInches);
+      const allStarDifference = Math.abs(Number(guessedPlayer.allStarAppearances) - Number(currentPlayer.allStarAppearances));
+
+      // Split positions of both guessed and current player
+      const guessedPositions = guessedPlayer.position.split(/[\/, ]+/); // Split guessed player's positions into an array
+      const targetPositions = currentPlayer.position.split(/[\/, ]+/);   // Split target player's positions into an array
+
+      // Check if the positions match exactly
+      const positionCorrect = guessedPositions.length === targetPositions.length &&
+                            guessedPositions.every(pos => targetPositions.includes(pos));
+
+      // Check for partial match when the positions partially match
+      const positionPartial = !positionCorrect && guessedPositions.some(pos => targetPositions.includes(pos));
+
+      const feedback = {
+        name: guessedPlayer.name,
+        position: guessedPlayer.position,
+        number: guessedPlayer.number,
+        height: guessedPlayer.height,
+        debut: guessedPlayer.debut,
+        allStarAppearances: guessedPlayer.allStarAppearances,
+        // Check for correct or partial position match
+        positionCorrect: positionCorrect,
+        positionPartial: positionPartial, // Yellow for partial match
+        numberCorrect: guessedPlayer.number === currentPlayer.number,
+        numberClose: numberDifference <= 5 && numberDifference !== 0,
+        numberHint: getArrow(guessedPlayer.number, currentPlayer.number),
+        heightCorrect: guessedPlayer.height === currentPlayer.height,
+        heightClose: heightDifference <= 5 && heightDifference !== 0,
+        heightHint: getArrow(guessedHeightInches, targetHeightInches),
+        debutCorrect: guessedPlayer.debut === currentPlayer.debut,
+        debutClose: debutDifference <= 5 && debutDifference !== 0,
+        debutHint: getArrow(guessedPlayer.debut, currentPlayer.debut),
+        // Fixing the ASG appearances logic
+        allStarCorrect: Number(guessedPlayer.allStarAppearances) === Number(currentPlayer.allStarAppearances),
+        allStarClose: allStarDifference <= 5 && allStarDifference !== 0,
+        allStarHint: getArrow(Number(guessedPlayer.allStarAppearances), Number(currentPlayer.allStarAppearances)),
+        nameCorrect: guessedPlayer.name.toLowerCase() === currentPlayer.name.toLowerCase(),
+        overallCorrect: guessedPlayer.name.toLowerCase() === currentPlayer.name.toLowerCase(),
+      };
+
+      setGuesses([...guesses, feedback]);
+
+      feedback.keys = ['name', 'position', 'number', 'height', 'debut', 'allStarAppearances'];
+      feedback.keys.forEach((_, index) => {
+        setTimeout(() => {
+          setFlipped((prev) => [...prev, guesses.length * 6 + index]);
+        }, index * FLIP_DELAY);
+      });
+
+      const totalFlipTime = feedback.keys.length * FLIP_DELAY + FLIP_DURATION;
+
+      if (feedback.overallCorrect) {
+        setInputDisabled(true);
+        setTimeout(() => {
+          setShowSuccessModal(true);
+          updateStatsOnWin(guesses.length + 1);
+        }, totalFlipTime);
+      }
+
+      if (guesses.length === MAX_GUESSES - 1 && !feedback.overallCorrect) {
+        setTimeout(() => {
+          setShowFailureModal(true);
+          updateStatsOnLoss();
+        }, totalFlipTime);
+      }
+    } else {
+      alert('Player not found. Try again!');
+    }
+
+    setGuess('');
+  };
 
   const updateStatsOnWin = (guessesTaken) => {
     const updatedStats = {
@@ -205,6 +208,9 @@ const handleGuess = (guessedName) => {
         if (guess[`${key}Correct`]) {
           return '🟩';
         }
+        if (key === 'position' && guess.positionPartial) {
+          return '🟨';
+        }
         if (key === 'number' && guess.numberClose) {
           return '🟨';
         }
@@ -214,12 +220,8 @@ const handleGuess = (guessedName) => {
         if (key === 'height' && guess.heightClose) {
           return '🟨';
         }
-        // Ensure the 'allStarClose' condition comes before 'allStarCorrect'
         if (key === 'allStarAppearances' && guess.allStarClose) {
           return '🟨';
-        }
-        if (key === 'allStarAppearances' && guess.allStarCorrect) {
-          return '🟩';
         }
         return '⬛';
       }).join('');
@@ -233,7 +235,6 @@ const handleGuess = (guessedName) => {
       <h1 className={isSmallScreen ? 'hidden-title' : ''}>SCALDLE</h1>
       <JerseysAnimation />
 
-      {/* Use the new PlayerGuessInput component */}
       <PlayerGuessInput
         guess={guess}
         setGuess={setGuess}
@@ -243,7 +244,6 @@ const handleGuess = (guessedName) => {
         guesses={guesses}
       />
 
-      {/* Pass the guesses feedback to GuessGrid */}
       <GuessGrid
         guesses={guesses}
         flipped={flipped}
