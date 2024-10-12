@@ -13,6 +13,8 @@ const GuessGrid = ({ guesses, flipped, isSmallScreen }) => {
           return 'C';
         case 'Center/Forward':
           return 'C/F';
+        case 'Forward/Center':
+          return 'F/C';
         case 'Guard/Forward':
           return 'F/G';
         default:
