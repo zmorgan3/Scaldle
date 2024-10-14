@@ -5,6 +5,19 @@
     }
   }
 
+  @media (width: 344px) {
+    .hidden-title {
+      display: block;
+      font-size: 20px;
+      white-space: normal;
+      overflow: visible;
+      text-align: center;
+      margin: 10px auto; /* Adjust margin */
+      padding: 100px 0; /* Adjust padding if necessary */
+      height: auto;
+    }
+  }
+
   @media (width: 375px) {
     .hidden-title {
       display: block;

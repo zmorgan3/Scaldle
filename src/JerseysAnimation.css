@@ -24,6 +24,19 @@
     }
   }
 
+  @media only screen and (width: 344px) {
+    .jerseys-container {
+      max-width: 100%; /* Full width */
+      height: 50%; /* Allow height to adjust based on aspect ratio */
+    }
+  
+    .jersey {
+      width: 150px; /* Resize jersey to fit better on smaller screens */
+      height: auto; /* Maintain aspect ratio */
+      padding-top: 0px;
+    }
+  }
+
   @media only screen and (width: 360px) {
     .jerseys-container {
       max-width: 100%; /* Full width */
