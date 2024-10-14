@@ -3,22 +3,20 @@ import './GuessGrid.css';
 
 const GuessGrid = ({ guesses, flipped, isSmallScreen }) => {
   const getPosition = (position) => {
-    if (isSmallScreen) {
+    if (screenWidth < 913) {
       switch (position) {
-        case 'Point Guard':
-          return 'PG';
-        case 'Shooting Guard':
-          return 'SG';
-        case 'Small Forward':
-          return 'SF';
-        case 'Power Forward':
-          return 'PF';
-        case 'Center':
-          return 'C';
         case 'Guard':
           return 'G';
         case 'Forward':
           return 'F';
+        case 'Center':
+          return 'C';
+        case 'Center/Forward':
+          return 'C/F';
+        case 'Forward/Center':
+          return 'F/C';
+        case 'Guard/Forward':
+          return 'F/G';
         default:
           return position;
       }
@@ -47,6 +45,17 @@ const GuessGrid = ({ guesses, flipped, isSmallScreen }) => {
       return 'incorrect'; // Red
     }
 
+    // Handle position key for partial matches
+    if (key === 'position') {
+      if (feedback.positionCorrect) {
+        return 'correct'; // Green for fully correct
+      }
+      if (feedback.positionPartial) {
+        return 'yellow'; // Yellow for partial match
+      }
+      return 'incorrect'; // Red for no match
+    }
+
     // Handle other keys dynamically
     if (feedback[`${key}Correct`]) {
       return 'correct'; // Green for correct guess
@@ -58,6 +67,8 @@ const GuessGrid = ({ guesses, flipped, isSmallScreen }) => {
 
     return 'incorrect'; // Red for incorrect guess
   };
+
+  const screenWidth = window.innerWidth;
 
   return (
     <div className="grid-container">

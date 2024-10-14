@@ -27,7 +27,7 @@ const PlayerGuessInput = ({ guess, setGuess, handleGuess, inputDisabled, MAX_GUE
 
   return (
     <div className="input-container">
-      <p>Guess the player: </p>
+      <p>Guess the Celtic: </p>
       {!inputDisabled && (
         <>
           <input
