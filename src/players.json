@@ -18,8 +18,17 @@
     "allStar": true
   },
   {
+    "name": "Guess",
+    "position": "Guard/Forward",
+    "number": 17,
+    "height": "6'5\"",
+    "debut": 1967,
+    "allStarAppearances": 13,
+    "allStar": true
+  },
+  {
     "name": "John Havlicek",
-    "position": "Guard/Fwrd",
+    "position": "Guard/Forward",
     "number": 17,
     "height": "6'5\"",
     "debut": 1962,
@@ -36,13 +45,20 @@
   },
   {
     "name": "Kevin Garnett",
-    "position": "Fwrd/Center",
+    "position": "Center/Forward",
     "number": 5,
     "height": "6'11\"",
     "debut": 2007,
     "allStarAppearances": 15
   },
-  
+  {
+    "name": "Guess 1958",
+    "position": "Center/Forward",
+    "number": 5,
+    "height": "6'11\"",
+    "debut": 1955,
+    "allStarAppearances": 15
+  },
   {
     "name": "Bob Cousy",
     "position": "Guard",
@@ -96,7 +112,7 @@
   },
   {
     "name": "Al Horford",
-    "position": "Center/Fwrd",
+    "position": "Center/Forward",
     "number": 42,
     "height": "6'9\"",
     "debut": 2016,
@@ -105,7 +121,7 @@
   },
   {
     "name": "Dave Cowens",
-    "position": "Center/Fwrd",
+    "position": "Center/Forward",
     "number": 18,
     "height": "6'9\"",
     "debut": 1970,
@@ -177,7 +193,7 @@
   },
   {
     "name": "Gerald Green",
-    "position": "Guard/Fwrd",
+    "position": "Guard/Forward",
     "number": 8,
     "height": "6'8\"",
     "debut": 2005,
@@ -186,7 +202,7 @@
   },
   {
     "name": "Evan Turner",
-    "position": "Guard/Fwrd",
+    "position": "Guard/Forward",
     "number": 11,
     "height": "6'7\"",
     "debut": 2010,
@@ -203,8 +219,17 @@
     "allStar": false
   },
   {
+    "name": "Test Positions",
+    "position": "Forward/Center",
+    "number": 11,
+    "height": "6'10\"",
+    "debut": 2020,
+    "allStarAppearances": 0,
+    "allStar": false
+  },
+  {
     "name": "Daniel Theis",
-    "position": "Center/Fwrd",
+    "position": "Center/Forward",
     "number": 27,
     "height": "6'8\"",
     "debut": 2018,
