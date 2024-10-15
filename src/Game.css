@@ -6,20 +6,6 @@
     }
   }
   */
-/*
-  @media (width: 344px) {
-    .hidden-title {
-      display: block;
-      font-size: 20px;
-      white-space: normal;
-      overflow: visible;
-      text-align: center;
-      margin: 10px auto; 
-      padding: 100px 0; 
-      height: auto;
-    }
-  }
-  */
 
   @media (max-width: 375px) {
     .hidden-title {
@@ -34,7 +20,7 @@
     }
   }
 
-  @media (width: 540px) {
+  @media (max-width: 540px) {
     .hidden-title {
       display: block;
       font-size: 20px;
