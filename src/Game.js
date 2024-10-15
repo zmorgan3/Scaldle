@@ -10,6 +10,8 @@ import ToastNotification from './ToastNotification';
 import StatsModal from './StatsModal';
 import PlayerGuessInput from './PlayerGuessInput';
 import { convertHeightToInches, getArrow } from './gameUtils';
+import CopyResultsBar from './CopyResultsBar';
+
 
 const MAX_GUESSES = 8;
 const FLIP_DURATION = 800;
@@ -201,7 +203,7 @@ const targetPositions = currentPlayer.position.split(/[/, ]+/);   // Split targe
   };
 
   const generateResultsString = () => {
-    let results = `Daily SCALDLE:\n`;
+    let results = `Daily RUSSELL:\n`;
     guesses.forEach((guess) => {
       const rowString = guess.keys.map((key, index) => {
         if (guess[`${key}Correct`]) {
@@ -234,17 +236,24 @@ const targetPositions = currentPlayer.position.split(/[/, ]+/);   // Split targe
 
   return (
     <div className="app">
-      <h1 className={isSmallScreen ? 'hidden-title' : ''}>SCALDLE</h1>
-      <JerseysAnimation />
+      <h1 className={isSmallScreen ? 'hidden-title' : ''}>RUSSELL</h1>
+      <JerseysAnimation className="jersey-animation"/>
 
-      <PlayerGuessInput
-        guess={guess}
-        setGuess={setGuess}
-        handleGuess={handleGuess}
-        inputDisabled={inputDisabled}
-        MAX_GUESSES={MAX_GUESSES}
-        guesses={guesses}
-      />
+      {
+  !inputDisabled ? (
+    <PlayerGuessInput
+      guess={guess}
+      setGuess={setGuess}
+      handleGuess={handleGuess}
+      inputDisabled={inputDisabled}
+      MAX_GUESSES={MAX_GUESSES}
+      guesses={guesses}
+    />
+  ) : (
+    <CopyResultsBar handleCopyResults={handleCopyResults} />
+  )
+}
+
 
       <GuessGrid
         guesses={guesses}

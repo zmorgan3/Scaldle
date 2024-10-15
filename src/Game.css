@@ -1,11 +1,13 @@
 /* Hide the title when screen width is less than 768 pixels */
+/*
 @media (max-width: 375px) {
     .hidden-title {
-      display: none; /* Hide the title */
+      display: none; 
     }
   }
+  */
 
-  @media (width: 344px) {
+  @media (max-width: 375px) {
     .hidden-title {
       display: block;
       font-size: 20px;
@@ -18,20 +20,7 @@
     }
   }
 
-  @media (width: 375px) {
-    .hidden-title {
-      display: block;
-      font-size: 20px;
-      white-space: normal;
-      overflow: visible;
-      text-align: center;
-      margin: 10px auto; /* Adjust margin */
-      padding: 100px 0; /* Adjust padding if necessary */
-      height: auto;
-    }
-  }
-
-  @media (width: 540px) {
+  @media (max-width: 540px) {
     .hidden-title {
       display: block;
       font-size: 20px;
@@ -43,10 +32,15 @@
       height: auto;
     }
   }
-  
-  
-  /* Add this to your Game.css file */
 
+  .jersey-animation {
+    margin-top: 20px;
+    max-width: 100%;
+    height: auto;
+    object-fit: contain;
+  }
+  
+  
 /* Font size for guess row cells on smaller screens */
 @media only screen and (max-width: 767px) {
     .guess-item {
@@ -78,26 +72,7 @@
     position: relative; /* To position suggestions absolutely */
     margin-bottom: 20px; /* Spacing between input and guesses */
   }
-  
-  /*
-  .suggestions {
-    list-style-type: none;
-    padding: 0;
-    margin: 0; 
-    width: 100%; 
-    max-width: 300px;
-    border: 1px solid #ddd;
-    border-radius: 5px;
-    max-height: 160px;
-    overflow-y: auto;
-    background-color: white; 
-    box-sizing: border-box;
-    z-index: 10; 
-    position: absolute; 
-    top: 100%; 
-    left: 0; 
-  }*/
-  
+
   /* Responsive suggestions list for small screens */
   @media only screen and (max-width: 767px) {
     .suggestions {
@@ -147,5 +122,17 @@
   .copy-results-button:hover {
     background-color: #005f24; /* Darker shade on hover */
     transform: scale(1.05); /* Slightly enlarge the button on hover */
+  }
+  
+  .app {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    min-height: 100vh; /* Full screen height */
+    width: 100vw;      /* Full screen width */
+    box-sizing: border-box;
+    overflow: hidden;  /* Prevent content overflow */
   }
   
