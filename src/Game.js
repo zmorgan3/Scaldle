@@ -235,7 +235,7 @@ const targetPositions = currentPlayer.position.split(/[/, ]+/);   // Split targe
   return (
     <div className="app">
       <h1 className={isSmallScreen ? 'hidden-title' : ''}>RUSSELL</h1>
-      <JerseysAnimation />
+      <JerseysAnimation className="jersey-animation"/>
 
       <PlayerGuessInput
         guess={guess}
