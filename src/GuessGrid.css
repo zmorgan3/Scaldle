@@ -80,7 +80,7 @@ correct {
 
 @media only screen and (max-width: 767px) {
   .grid-container {
-    min-width: 130%; 
+    min-width: 100%; 
   }
 
   .guess-header,
