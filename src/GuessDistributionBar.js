@@ -1,9 +1,11 @@
 import React from 'react';
 import './GuessDistributionBar.css';
 
-const GuessDistributionBar = ({ guessCount, totalGuesses, count }) => {
+const GuessDistributionBar = ({ guessCount, totalGuesses, count, minNonZeroBarWidth }) => {
   const barWidth = totalGuesses > 0 ? (guessCount / totalGuesses) * 100 : 0;
-  const adjustedWidth = guessCount === 0 ? 10 : barWidth; // Slightly fill in for zero guesses
+
+  // If the guess count is zero, ensure its width doesn't exceed the minimum non-zero bar width
+  const adjustedWidth = guessCount === 0 && minNonZeroBarWidth ? minNonZeroBarWidth : barWidth;
 
   return (
     <div className="guess-bar-container">
