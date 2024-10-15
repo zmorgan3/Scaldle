@@ -9,7 +9,7 @@ body, .app {
   font-family: 'NBACeltics', sans-serif;
   margin: 0;
   padding: 0;
-  height: 100vh; /* Full viewport height */
+  min-height: 100vh; /* Full viewport height */
   background-color: #007A33; /* Celtics green background */
 }
 
@@ -20,14 +20,15 @@ html, body {
 }
 
 /* Container for the entire app */
+/*
 .app {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  min-height: 150vh; /* Ensure the app covers the full viewport height */
-  padding: 20px; /* Added padding to prevent content from being cut off */
-}
+  padding: 20px;
+}*/
+
 
 /* Ensure the grid container is centered and stays centered */
 .grid-container {
@@ -197,6 +198,7 @@ button:hover {
 .fade-in {
   opacity: 0;
   animation: fadeIn 2s forwards;
+  
 }
 
 @keyframes fadeIn {
