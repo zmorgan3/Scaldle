@@ -3,7 +3,7 @@ import './JerseysAnimation.css'; // We'll handle styling here
 
 const JerseysAnimation = () => {
   const numberOfJerseys = 1; // Adjust how many jerseys you want to show
-  const jerseys = Array(numberOfJerseys).fill('scalabrine.png'); // Use the same image
+  const jerseys = Array(numberOfJerseys).fill('russell.png'); // Use the same image
 
   const [animate, setAnimate] = useState(false);
 
