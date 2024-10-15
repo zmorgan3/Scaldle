@@ -10,6 +10,8 @@ import ToastNotification from './ToastNotification';
 import StatsModal from './StatsModal';
 import PlayerGuessInput from './PlayerGuessInput';
 import { convertHeightToInches, getArrow } from './gameUtils';
+import CopyResultsBar from './CopyResultsBar';
+
 
 const MAX_GUESSES = 8;
 const FLIP_DURATION = 800;
@@ -237,14 +239,21 @@ const targetPositions = currentPlayer.position.split(/[/, ]+/);   // Split targe
       <h1 className={isSmallScreen ? 'hidden-title' : ''}>RUSSELL</h1>
       <JerseysAnimation className="jersey-animation"/>
 
-      <PlayerGuessInput
-        guess={guess}
-        setGuess={setGuess}
-        handleGuess={handleGuess}
-        inputDisabled={inputDisabled}
-        MAX_GUESSES={MAX_GUESSES}
-        guesses={guesses}
-      />
+      {
+  !inputDisabled ? (
+    <PlayerGuessInput
+      guess={guess}
+      setGuess={setGuess}
+      handleGuess={handleGuess}
+      inputDisabled={inputDisabled}
+      MAX_GUESSES={MAX_GUESSES}
+      guesses={guesses}
+    />
+  ) : (
+    <CopyResultsBar handleCopyResults={handleCopyResults} />
+  )
+}
+
 
       <GuessGrid
         guesses={guesses}
