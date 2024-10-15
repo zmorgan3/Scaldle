@@ -93,10 +93,9 @@ const Game = () => {
       const heightDifference = Math.abs(guessedHeightInches - targetHeightInches);
       const allStarDifference = Math.abs(Number(guessedPlayer.allStarAppearances) - Number(currentPlayer.allStarAppearances));
 
-      // Split positions of both guessed and current player
-      const guessedPositions = guessedPlayer.position.split(/[\/, ]+/); // Split guessed player's positions into an array
-      const targetPositions = currentPlayer.position.split(/[\/, ]+/);   // Split target player's positions into an array
-
+      // Corrected version:
+const guessedPositions = guessedPlayer.position.split(/[/, ]+/); // Split guessed player's positions into an array
+const targetPositions = currentPlayer.position.split(/[/, ]+/);   // Split target player's positions into an array
       // Check if the positions match exactly
       const positionCorrect = guessedPositions.length === targetPositions.length &&
                             guessedPositions.every(pos => targetPositions.includes(pos));
