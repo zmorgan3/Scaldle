@@ -201,7 +201,7 @@ const targetPositions = currentPlayer.position.split(/[/, ]+/);   // Split targe
   };
 
   const generateResultsString = () => {
-    let results = `Daily SCALDLE:\n`;
+    let results = `Daily RUSSELL:\n`;
     guesses.forEach((guess) => {
       const rowString = guess.keys.map((key, index) => {
         if (guess[`${key}Correct`]) {
@@ -234,7 +234,7 @@ const targetPositions = currentPlayer.position.split(/[/, ]+/);   // Split targe
 
   return (
     <div className="app">
-      <h1 className={isSmallScreen ? 'hidden-title' : ''}>SCALDLE</h1>
+      <h1 className={isSmallScreen ? 'hidden-title' : ''}>RUSSELL</h1>
       <JerseysAnimation />
 
       <PlayerGuessInput
