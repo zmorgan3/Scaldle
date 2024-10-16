@@ -114,7 +114,7 @@ const Game = () => {
           userId: localStorage.getItem('userId'),
           guess: guessedName,
         }),
-      });
+      });      
 
       if (!response.ok) {
         throw new Error(`Server error: ${response.status}`);
