@@ -12,7 +12,6 @@ import PlayerGuessInput from './PlayerGuessInput';
 import { convertHeightToInches, getArrow } from './gameUtils';
 import CopyResultsBar from './CopyResultsBar';
 
-
 const MAX_GUESSES = 8;
 const FLIP_DURATION = 800;
 const FLIP_DELAY = 400;
@@ -54,8 +53,9 @@ const Game = () => {
     const lastPlayedDate = localStorage.getItem('lastPlayedDate');
   
     if (lastPlayedDate !== today) {
+      console.log('Fetching Player of the Day...');
       try {
-        const response = await fetch('https://celtics-trivia-backend1-6c0095e46832.herokuapp.com/daily-player');
+        const response = await fetch('http://localhost:5001/daily-player');
         if (response.ok) {
           const player = await response.json();
           setCurrentPlayer(player);
@@ -90,7 +90,7 @@ const Game = () => {
     const userId = localStorage.getItem('userId') || generateUserId(); // Generate or fetch a unique user ID
   
     try {
-      const response = await fetch('https://celtics-trivia-backend1-6c0095e46832.herokuapp.com/submit-guess', {
+      const response = await fetch('http://localhost:5001/submit-guess', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -100,7 +100,17 @@ const Game = () => {
   
       if (response.ok) {
         const userGuessData = await response.json();
-        setGuesses(userGuessData.guesses);
+        if (userGuessData && Array.isArray(userGuessData.guesses)) {
+          // Ensure each guess has a `keys` array
+          const updatedGuesses = userGuessData.guesses.map((guess) => ({
+            ...guess,
+            keys: guess.keys || ['name', 'position', 'number', 'height', 'debut', 'allStarAppearances'],
+          }));
+
+          setGuesses(updatedGuesses);
+        } else {
+          console.error('Invalid response structure from backend.');
+        }
   
         // Handle success modal if player is guessed correctly
         if (userGuessData.isCompleted && guessedName.toLowerCase() === currentPlayer.name.toLowerCase()) {

@@ -2,8 +2,13 @@ import React from 'react';
 import './GuessGrid.css';
 
 const GuessGrid = ({ guesses, flipped, isSmallScreen }) => {
+  if (!Array.isArray(guesses)) {
+    console.error("Guesses is not defined or not an array:", guesses);
+    return null; // Return null or a fallback if guesses is not an array
+  }
+
   const getPosition = (position) => {
-    if (screenWidth < 913) {
+    if (window.innerWidth < 913) {
       switch (position) {
         case 'Guard':
           return 'G';
@@ -25,50 +30,36 @@ const GuessGrid = ({ guesses, flipped, isSmallScreen }) => {
   };
 
   const getBackgroundColor = (key, feedback) => {
-    console.log(`Key: ${key}, feedback:`, feedback);
-
-    // Explicitly check for allStarAppearances
     if (key === 'allStarAppearances') {
-      console.log('Checking allStarAppearances...');
-      
       if (feedback.allStarCorrect) {
-        console.log('All-Star appearances are correct (green)');
-        return 'correct'; // Green
+        return 'correct';
       }
-
       if (feedback.allStarClose) {
-        console.log('All-Star appearances are close (yellow)');
-        return 'yellow'; // Yellow
+        return 'yellow';
       }
-
-      console.log('All-Star appearances are incorrect (red)');
-      return 'incorrect'; // Red
+      return 'incorrect';
     }
 
-    // Handle position key for partial matches
     if (key === 'position') {
       if (feedback.positionCorrect) {
-        return 'correct'; // Green for fully correct
+        return 'correct';
       }
       if (feedback.positionPartial) {
-        return 'yellow'; // Yellow for partial match
+        return 'yellow';
       }
-      return 'incorrect'; // Red for no match
+      return 'incorrect';
     }
 
-    // Handle other keys dynamically
     if (feedback[`${key}Correct`]) {
-      return 'correct'; // Green for correct guess
+      return 'correct';
     }
 
     if (feedback[`${key}Close`]) {
-      return 'yellow'; // Yellow for close guess
+      return 'yellow';
     }
 
-    return 'incorrect'; // Red for incorrect guess
+    return 'incorrect';
   };
-
-  const screenWidth = window.innerWidth;
 
   return (
     <div className="grid-container">
@@ -92,9 +83,6 @@ const GuessGrid = ({ guesses, flipped, isSmallScreen }) => {
             {rowIndex < guesses.length ? (
               guesses[rowIndex].keys.map((key, index) => {
                 const backgroundColorClass = getBackgroundColor(key, guesses[rowIndex]);
-
-                console.log(`Assigning color class: ${backgroundColorClass} for key: ${key}`);
-
                 return (
                   <div
                     key={index}
