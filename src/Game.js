@@ -52,7 +52,7 @@ const Game = () => {
     const today = new Date().toISOString().split('T')[0];
     const lastPlayedDate = localStorage.getItem('lastPlayedDate');
   
-    if (lastPlayedDate !== today) {
+    if (lastPlayedDate == today) { //CHANGE THIS
       console.log('Fetching Player of the Day...');
       try {
         const response = await fetch('http://localhost:5001/daily-player');
@@ -106,8 +106,17 @@ const Game = () => {
             ...guess,
             keys: guess.keys || ['name', 'position', 'number', 'height', 'debut', 'allStarAppearances'],
           }));
-
+  
           setGuesses(updatedGuesses);
+  
+          // Update flipped state for animations
+          const newFlipped = [];
+          updatedGuesses.forEach((_, rowIndex) => {
+            updatedGuesses[rowIndex].keys.forEach((_, index) => {
+              newFlipped.push(rowIndex * 6 + index);
+            });
+          });
+          setFlipped(newFlipped);
         } else {
           console.error('Invalid response structure from backend.');
         }
@@ -131,6 +140,7 @@ const Game = () => {
       console.error('Error submitting guess:', error);
     }
   };
+  
   
   const generateUserId = () => {
     const userId = `user-${Date.now()}-${Math.floor(Math.random() * 1000)}`;
