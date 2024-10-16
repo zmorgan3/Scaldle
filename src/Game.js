@@ -81,6 +81,7 @@ const Game = () => {
     const userId = localStorage.getItem('userId') || generateUserId(); // Generate or fetch a unique user ID
   
     try {
+      // Submit guess to the backend
       const response = await fetch('http://localhost:5001/submit-guess', {
         method: 'POST',
         headers: {
@@ -91,59 +92,92 @@ const Game = () => {
   
       if (response.ok) {
         const userGuessData = await response.json();
-        if (userGuessData && Array.isArray(userGuessData.guesses)) {
-          // Ensure each guess has a `keys` array
-          const updatedGuesses = userGuessData.guesses.map((guess) => {
-            if (!guess || !guess.name) {
-              console.error(`Invalid guess data:`, guess);
-              return null; // Skip invalid guess data
-            }
+        
+        const guessedPlayer = players.find(
+          (player) => player.name.toLowerCase() === guessedName.toLowerCase()
+        );
+    
+        if (guessedPlayer) {
+          // Calculate differences to provide feedback
+          const numberDifference = Math.abs(Number(guessedPlayer.number) - Number(currentPlayer.number));
+          const debutDifference = Math.abs(Number(guessedPlayer.debut) - Number(currentPlayer.debut));
+          const guessedHeightInches = convertHeightToInches(guessedPlayer.height);
+          const targetHeightInches = convertHeightToInches(currentPlayer.height);
+          const heightDifference = Math.abs(guessedHeightInches - targetHeightInches);
+          const allStarDifference = Math.abs(Number(guessedPlayer.allStarAppearances) - Number(currentPlayer.allStarAppearances));
   
-            // Search for the player in the players.json array
-            const player = players.find((p) => p.name.toLowerCase() === guess.name.toLowerCase());
+          const guessedPositions = guessedPlayer.position.split(/[/, ]+/);
+          const targetPositions = currentPlayer.position.split(/[/, ]+/);
+          const positionCorrect = guessedPositions.length === targetPositions.length &&
+                                guessedPositions.every(pos => targetPositions.includes(pos));
+          const positionPartial = !positionCorrect && guessedPositions.some(pos => targetPositions.includes(pos));
   
-            if (!player) {
-              console.error(`Player not found for guess: ${guess.name}`);
-              return null; // Returning null if no matching player found
-            }
+          const feedback = {
+            name: guessedPlayer.name,
+            position: guessedPlayer.position,
+            number: guessedPlayer.number,
+            height: guessedPlayer.height,
+            debut: guessedPlayer.debut,
+            allStarAppearances: guessedPlayer.allStarAppearances,
+            positionCorrect: positionCorrect,
+            positionPartial: positionPartial,
+            numberCorrect: guessedPlayer.number === currentPlayer.number,
+            numberClose: numberDifference <= 5 && numberDifference !== 0,
+            numberHint: getArrow(guessedPlayer.number, currentPlayer.number),
+            heightCorrect: guessedPlayer.height === currentPlayer.height,
+            heightClose: heightDifference <= 5 && heightDifference !== 0,
+            heightHint: getArrow(guessedHeightInches, targetHeightInches),
+            debutCorrect: guessedPlayer.debut === currentPlayer.debut,
+            debutClose: debutDifference <= 5 && debutDifference !== 0,
+            debutHint: getArrow(guessedPlayer.debut, currentPlayer.debut),
+            allStarCorrect: Number(guessedPlayer.allStarAppearances) === Number(currentPlayer.allStarAppearances),
+            allStarClose: allStarDifference <= 5 && allStarDifference !== 0,
+            allStarHint: getArrow(Number(guessedPlayer.allStarAppearances), Number(currentPlayer.allStarAppearances)),
+            nameCorrect: guessedPlayer.name.toLowerCase() === currentPlayer.name.toLowerCase(),
+            overallCorrect: guessedPlayer.name.toLowerCase() === currentPlayer.name.toLowerCase(),
+          };
   
-            // Return player data with all expected keys
-            return {
-              name: player.name,
-              position: player.position,
-              number: player.number,
-              height: player.height,
-              debut: player.debut,
-              allStarAppearances: player.allStarAppearances,
-              keys: ['name', 'position', 'number', 'height', 'debut', 'allStarAppearances'],
-            };
-          }).filter((guess) => guess !== null); // Filter out any null guesses in case of unmatched players
+          setGuesses([...guesses, feedback]);
   
-          setGuesses(updatedGuesses);
-          handleFlipAnimation(updatedGuesses.length - 1);
+          // Trigger flip animation for the new guess
+          feedback.keys = ['name', 'position', 'number', 'height', 'debut', 'allStarAppearances'];
+          feedback.keys.forEach((_, index) => {
+            setTimeout(() => {
+              setFlipped((prev) => [...prev, guesses.length * 6 + index]);
+            }, index * FLIP_DELAY);
+          });
+  
+          const totalFlipTime = feedback.keys.length * FLIP_DELAY + FLIP_DURATION;
+  
+          if (feedback.overallCorrect) {
+            setInputDisabled(true);
+            setTimeout(() => {
+              setShowSuccessModal(true);
+              updateStatsOnWin(guesses.length + 1);
+            }, totalFlipTime);
+          }
+  
+          if (guesses.length === MAX_GUESSES - 1 && !feedback.overallCorrect) {
+            setTimeout(() => {
+              setShowFailureModal(true);
+              updateStatsOnLoss();
+            }, totalFlipTime);
+          }
+  
         } else {
-          console.error('Invalid response structure from backend.');
+          alert('Player not found. Try again!');
         }
   
-        // Handle success modal if player is guessed correctly
-        if (userGuessData.isCompleted && guessedName && guessedName.toLowerCase() === currentPlayer.name.toLowerCase()) {
-          setShowSuccessModal(true);
-          setInputDisabled(true);
-          updateStatsOnWin(userGuessData.guesses.length);
-        }
-  
-        // Handle failure modal if max attempts reached
-        if (userGuessData.isCompleted && guessedName && guessedName.toLowerCase() !== currentPlayer.name.toLowerCase()) {
-          setShowFailureModal(true);
-          setInputDisabled(true);
-        }
       } else {
         console.error('Error submitting guess:', await response.json());
       }
     } catch (error) {
       console.error('Error submitting guess:', error);
     }
+  
+    setGuess('');  // Reset input after submitting
   };
+  
   
   
   const handleFlipAnimation = (rowIndex) => {
