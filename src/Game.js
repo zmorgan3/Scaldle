@@ -39,29 +39,40 @@ const Game = () => {
       setIsSmallScreen(window.innerWidth < 768);
     };
     window.addEventListener('resize', handleResize);
-
-    loadPlayerOfTheDay();
+  
+    loadPlayerOfTheDay(); // Fetch player of the day
     loadStats();
-
+  
     return () => {
       window.removeEventListener('resize', handleResize);
     };
   }, []);
+  
 
-  const loadPlayerOfTheDay = () => {
-    const lastPlayedDate = localStorage.getItem('lastPlayedDate');
+  const loadPlayerOfTheDay = async () => {
     const today = new Date().toISOString().split('T')[0];
-
+    const lastPlayedDate = localStorage.getItem('lastPlayedDate');
+  
     if (lastPlayedDate !== today) {
-      const newPlayer = players[Math.floor(Math.random() * players.length)];
-      setCurrentPlayer(newPlayer);
-      localStorage.setItem('currentPlayer', JSON.stringify(newPlayer));
-      localStorage.setItem('lastPlayedDate', today);
+      try {
+        const response = await fetch('https://celtics-trivia-backend1-6c0095e46832.herokuapp.com/daily-player');
+        if (response.ok) {
+          const player = await response.json();
+          setCurrentPlayer(player);
+          localStorage.setItem('currentPlayer', JSON.stringify(player));
+          localStorage.setItem('lastPlayedDate', today);
+        } else {
+          console.error('Failed to fetch player of the day');
+        }
+      } catch (error) {
+        console.error('Error fetching player of the day:', error);
+      }
     } else {
       const savedPlayer = JSON.parse(localStorage.getItem('currentPlayer'));
       setCurrentPlayer(savedPlayer);
     }
   };
+  
 
   const loadStats = () => {
     const savedStats = JSON.parse(localStorage.getItem('gameStats'));
@@ -75,94 +86,48 @@ const Game = () => {
     localStorage.setItem('gameStats', JSON.stringify(updatedStats));
   };
 
-  const handleGuess = (guessedName) => {
-    if (guesses.length >= MAX_GUESSES) {
-      if (guesses.length === MAX_GUESSES) {
-        setShowFailureModal(true);
-      }
-      return;
-    }
-
-    const guessedPlayer = players.find(
-      (player) => player.name.toLowerCase() === guessedName.toLowerCase()
-    );
-
-    if (guessedPlayer) {
-      const numberDifference = Math.abs(Number(guessedPlayer.number) - Number(currentPlayer.number));
-      const debutDifference = Math.abs(Number(guessedPlayer.debut) - Number(currentPlayer.debut));
-      const guessedHeightInches = convertHeightToInches(guessedPlayer.height);
-      const targetHeightInches = convertHeightToInches(currentPlayer.height);
-      const heightDifference = Math.abs(guessedHeightInches - targetHeightInches);
-      const allStarDifference = Math.abs(Number(guessedPlayer.allStarAppearances) - Number(currentPlayer.allStarAppearances));
-
-      // Corrected version:
-const guessedPositions = guessedPlayer.position.split(/[/, ]+/); // Split guessed player's positions into an array
-const targetPositions = currentPlayer.position.split(/[/, ]+/);   // Split target player's positions into an array
-      // Check if the positions match exactly
-      const positionCorrect = guessedPositions.length === targetPositions.length &&
-                            guessedPositions.every(pos => targetPositions.includes(pos));
-
-      // Check for partial match when the positions partially match
-      const positionPartial = !positionCorrect && guessedPositions.some(pos => targetPositions.includes(pos));
-
-      const feedback = {
-        name: guessedPlayer.name,
-        position: guessedPlayer.position,
-        number: guessedPlayer.number,
-        height: guessedPlayer.height,
-        debut: guessedPlayer.debut,
-        allStarAppearances: guessedPlayer.allStarAppearances,
-        // Check for correct or partial position match
-        positionCorrect: positionCorrect,
-        positionPartial: positionPartial, // Yellow for partial match
-        numberCorrect: guessedPlayer.number === currentPlayer.number,
-        numberClose: numberDifference <= 5 && numberDifference !== 0,
-        numberHint: getArrow(guessedPlayer.number, currentPlayer.number),
-        heightCorrect: guessedPlayer.height === currentPlayer.height,
-        heightClose: heightDifference <= 5 && heightDifference !== 0,
-        heightHint: getArrow(guessedHeightInches, targetHeightInches),
-        debutCorrect: guessedPlayer.debut === currentPlayer.debut,
-        debutClose: debutDifference <= 5 && debutDifference !== 0,
-        debutHint: getArrow(guessedPlayer.debut, currentPlayer.debut),
-        // Fixing the ASG appearances logic
-        allStarCorrect: Number(guessedPlayer.allStarAppearances) === Number(currentPlayer.allStarAppearances),
-        allStarClose: allStarDifference <= 5 && allStarDifference !== 0,
-        allStarHint: getArrow(Number(guessedPlayer.allStarAppearances), Number(currentPlayer.allStarAppearances)),
-        nameCorrect: guessedPlayer.name.toLowerCase() === currentPlayer.name.toLowerCase(),
-        overallCorrect: guessedPlayer.name.toLowerCase() === currentPlayer.name.toLowerCase(),
-      };
-
-      setGuesses([...guesses, feedback]);
-
-      feedback.keys = ['name', 'position', 'number', 'height', 'debut', 'allStarAppearances'];
-      feedback.keys.forEach((_, index) => {
-        setTimeout(() => {
-          setFlipped((prev) => [...prev, guesses.length * 6 + index]);
-        }, index * FLIP_DELAY);
+  const handleGuess = async (guessedName) => {
+    const userId = localStorage.getItem('userId') || generateUserId(); // Generate or fetch a unique user ID
+  
+    try {
+      const response = await fetch('https://celtics-trivia-backend1-6c0095e46832.herokuapp.com/submit-guess', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ userId, guess: guessedName }),
       });
-
-      const totalFlipTime = feedback.keys.length * FLIP_DELAY + FLIP_DURATION;
-
-      if (feedback.overallCorrect) {
-        setInputDisabled(true);
-        setTimeout(() => {
+  
+      if (response.ok) {
+        const userGuessData = await response.json();
+        setGuesses(userGuessData.guesses);
+  
+        // Handle success modal if player is guessed correctly
+        if (userGuessData.isCompleted && guessedName.toLowerCase() === currentPlayer.name.toLowerCase()) {
           setShowSuccessModal(true);
-          updateStatsOnWin(guesses.length + 1);
-        }, totalFlipTime);
-      }
-
-      if (guesses.length === MAX_GUESSES - 1 && !feedback.overallCorrect) {
-        setTimeout(() => {
+          setInputDisabled(true);
+          updateStatsOnWin(userGuessData.guesses.length);
+        }
+  
+        // Handle failure modal if max attempts reached
+        if (userGuessData.isCompleted && guessedName.toLowerCase() !== currentPlayer.name.toLowerCase()) {
           setShowFailureModal(true);
-          updateStatsOnLoss();
-        }, totalFlipTime);
+          setInputDisabled(true);
+        }
+      } else {
+        console.error('Error submitting guess:', await response.json());
       }
-    } else {
-      alert('Player not found. Try again!');
+    } catch (error) {
+      console.error('Error submitting guess:', error);
     }
-
-    setGuess('');
   };
+  
+  const generateUserId = () => {
+    const userId = `user-${Date.now()}-${Math.floor(Math.random() * 1000)}`;
+    localStorage.setItem('userId', userId);
+    return userId;
+  };
+  
 
   const updateStatsOnWin = (guessesTaken) => {
     const updatedStats = {
