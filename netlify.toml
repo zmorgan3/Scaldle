@@ -1,0 +1,11 @@
+[build]
+  functions = "netlify/functions" # Path to your serverless functions folder
+  command = "npm run build"       # Adjust based on your frontend framework
+
+[[redirects]]
+from = "/api/*"
+to = "https://celtics-trivia-backend1-6c0095e46832.herokuapp.com/:splat"
+status = 200
+
+
+
