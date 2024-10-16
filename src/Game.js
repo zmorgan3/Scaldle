@@ -33,6 +33,30 @@ const Game = () => {
     guessDistribution: Array(MAX_GUESSES).fill(0),
   });
 
+  const checkGameState = async () => {
+    const userId = localStorage.getItem('userId') || generateUserId();
+    
+    try {
+      const response = await fetch(`https://celtics-trivia-backend1-6c0095e46832.herokuapp.com/game-state?userId=${userId}`);
+      if (response.ok) {
+        const gameState = await response.json();
+        if (gameState.isCompleted) {
+          setGuesses(gameState.guesses);
+          setInputDisabled(true); // Lock input if game is completed
+        }
+      }
+    } catch (error) {
+      console.error('Error fetching game state:', error);
+    }
+  };
+  
+  useEffect(() => {
+    checkGameState();
+    loadPlayerOfTheDay();
+    loadStats();
+  }, []);
+  
+
   useEffect(() => {
     const handleResize = () => {
       setIsSmallScreen(window.innerWidth < 768);
@@ -271,29 +295,28 @@ const Game = () => {
     <div className="app">
       <h1 className={isSmallScreen ? 'hidden-title' : ''}>RUSSELL</h1>
       <JerseysAnimation className="jersey-animation"/>
-
+  
       {
-  !inputDisabled ? (
-    <PlayerGuessInput
-      guess={guess}
-      setGuess={setGuess}
-      handleGuess={handleGuess}
-      inputDisabled={inputDisabled}
-      MAX_GUESSES={MAX_GUESSES}
-      guesses={guesses}
-    />
-  ) : (
-    <CopyResultsBar handleCopyResults={handleCopyResults} />
-  )
-}
-
-
+        !inputDisabled ? (
+          <PlayerGuessInput
+            guess={guess}
+            setGuess={setGuess}
+            handleGuess={handleGuess}
+            inputDisabled={inputDisabled}
+            MAX_GUESSES={MAX_GUESSES}
+            guesses={guesses}
+          />
+        ) : (
+          <CopyResultsBar handleCopyResults={handleCopyResults} />
+        )
+      }
+  
       <GuessGrid
         guesses={guesses}
         flipped={flipped}
         isSmallScreen={isSmallScreen}
       />
-
+  
       {showSuccessModal && (
         <SuccessModal
           currentPlayer={currentPlayer}
@@ -301,7 +324,7 @@ const Game = () => {
           handleCopyResults={handleCopyResults}
         />
       )}
-
+  
       {showFailureModal && (
         <FailureModal
           currentPlayer={currentPlayer}
@@ -309,18 +332,18 @@ const Game = () => {
           handleCopyResults={handleCopyResults}
         />
       )}
-
+  
       {showCopyMessage && (
         <ToastNotification message="Results Copied!" />
       )}
-
+  
       <button onClick={toggleStatsModal} className="stats-button">
         Stats
       </button>
-
+  
       {showStatsModal && <StatsModal stats={stats} onClose={toggleStatsModal} />}
     </div>
   );
-};
+};  
 
 export default Game;
