@@ -2,11 +2,6 @@ import React from 'react';
 import './GuessGrid.css';
 
 const GuessGrid = ({ guesses, flipped, isSmallScreen }) => {
-  if (!Array.isArray(guesses)) {
-    console.error("Guesses is not defined or not an array:", guesses);
-    guesses = []; // Initialize as empty array if it's not defined
-  }
-
   const getPosition = (position) => {
     if (screenWidth < 913) {
       switch (position) {
@@ -21,7 +16,7 @@ const GuessGrid = ({ guesses, flipped, isSmallScreen }) => {
         case 'Forward/Center':
           return 'F/C';
         case 'Guard/Forward':
-          return 'G/F';
+          return 'F/G';
         default:
           return position;
       }
@@ -30,19 +25,16 @@ const GuessGrid = ({ guesses, flipped, isSmallScreen }) => {
   };
 
   const getBackgroundColor = (key, feedback) => {
-    // Background color logic as you have it now
     if (key === 'allStarAppearances') {
       if (feedback.allStarCorrect) return 'correct';
       if (feedback.allStarClose) return 'yellow';
       return 'incorrect';
     }
-
     if (key === 'position') {
       if (feedback.positionCorrect) return 'correct';
       if (feedback.positionPartial) return 'yellow';
       return 'incorrect';
     }
-
     if (feedback[`${key}Correct`]) return 'correct';
     if (feedback[`${key}Close`]) return 'yellow';
     return 'incorrect';
@@ -80,12 +72,13 @@ const GuessGrid = ({ guesses, flipped, isSmallScreen }) => {
                   >
                     <div className="flip-front"></div>
                     <div className={`flip-back ${backgroundColorClass}`}>
+                      {/* Check for hint rendering */}
                       {key === 'name' ? guesses[rowIndex][key] : null}
                       {key === 'position' ? getPosition(guesses[rowIndex][key]) : null}
-                      {key === 'number' ? guesses[rowIndex][key] : null}
-                      {key === 'height' ? guesses[rowIndex][key] : null}
-                      {key === 'debut' ? guesses[rowIndex][key] : null}
-                      {key === 'allStarAppearances' ? guesses[rowIndex][key] : null}
+                      {key === 'number' ? `${guesses[rowIndex][key]} ${guesses[rowIndex].numberHint}` : null}
+                      {key === 'height' ? `${guesses[rowIndex][key]} ${guesses[rowIndex].heightHint}` : null}
+                      {key === 'debut' ? `${guesses[rowIndex][key]} ${guesses[rowIndex].debutHint}` : null}
+                      {key === 'allStarAppearances' ? `${guesses[rowIndex][key]} ${guesses[rowIndex].allStarHint}` : null}
                     </div>
                   </div>
                 );
@@ -106,5 +99,6 @@ const GuessGrid = ({ guesses, flipped, isSmallScreen }) => {
     </div>
   );
 };
+
 
 export default GuessGrid;
