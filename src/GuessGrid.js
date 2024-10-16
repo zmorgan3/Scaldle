@@ -2,8 +2,9 @@ import React from 'react';
 import './GuessGrid.css';
 
 const GuessGrid = ({ guesses, flipped, isSmallScreen }) => {
+  // Function to abbreviate positions for smaller screens
   const getPosition = (position) => {
-    if (screenWidth < 913) {
+    if (window.innerWidth < 913) {
       switch (position) {
         case 'Guard':
           return 'G';
@@ -24,28 +25,18 @@ const GuessGrid = ({ guesses, flipped, isSmallScreen }) => {
     return position;
   };
 
+  // Function to get background color based on the feedback from the backend
   const getBackgroundColor = (key, feedback) => {
-    console.log(`Key: ${key}, feedback:`, feedback);
-
-    // Explicitly check for allStarAppearances
     if (key === 'allStarAppearances') {
-      console.log('Checking allStarAppearances...');
-      
       if (feedback.allStarCorrect) {
-        console.log('All-Star appearances are correct (green)');
         return 'correct'; // Green
       }
-
       if (feedback.allStarClose) {
-        console.log('All-Star appearances are close (yellow)');
         return 'yellow'; // Yellow
       }
-
-      console.log('All-Star appearances are incorrect (red)');
       return 'incorrect'; // Red
     }
 
-    // Handle position key for partial matches
     if (key === 'position') {
       if (feedback.positionCorrect) {
         return 'correct'; // Green for fully correct
@@ -56,19 +47,14 @@ const GuessGrid = ({ guesses, flipped, isSmallScreen }) => {
       return 'incorrect'; // Red for no match
     }
 
-    // Handle other keys dynamically
     if (feedback[`${key}Correct`]) {
       return 'correct'; // Green for correct guess
     }
-
     if (feedback[`${key}Close`]) {
       return 'yellow'; // Yellow for close guess
     }
-
     return 'incorrect'; // Red for incorrect guess
   };
-
-  const screenWidth = window.innerWidth;
 
   return (
     <div className="grid-container">
@@ -90,10 +76,9 @@ const GuessGrid = ({ guesses, flipped, isSmallScreen }) => {
             style={{ gridTemplateColumns: '2fr 1fr 1fr 1fr 2fr 1fr' }}
           >
             {rowIndex < guesses.length ? (
-              guesses[rowIndex].keys.map((key, index) => {
+              // Use a fallback for the keys array if it's undefined or missing
+              (guesses[rowIndex].keys || ['name', 'position', 'number', 'height', 'debut', 'allStarAppearances']).map((key, index) => {
                 const backgroundColorClass = getBackgroundColor(key, guesses[rowIndex]);
-
-                console.log(`Assigning color class: ${backgroundColorClass} for key: ${key}`);
 
                 return (
                   <div
@@ -113,6 +98,7 @@ const GuessGrid = ({ guesses, flipped, isSmallScreen }) => {
                 );
               })
             ) : (
+              // Skeleton guess items for empty rows
               <>
                 <div className="guess-item skeleton-item"></div>
                 <div className="guess-item skeleton-item"></div>

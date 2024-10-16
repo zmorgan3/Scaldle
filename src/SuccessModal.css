@@ -1,0 +1,92 @@
+/* Modal overlay */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.7);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+  }
+  
+  /* Modal content */
+  .modal {
+    background-color: white;
+    padding: 20px;
+    border-radius: 10px;
+    text-align: center;
+    max-width: 600px; /* Set a maximum width for larger screens */
+    width: 80%; /* Width relative to smaller screens */
+    max-height: 80vh; /* Prevent modal from overflowing on smaller screens */
+    overflow-y: auto; /* Enable scrolling if content exceeds max-height */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  }
+  
+  /* Heading and content styles */
+  .modal h2 {
+    font-size: 2rem;
+    color: #007A33;
+  }
+  
+  .modal p {
+    font-size: 1.5rem;
+    color: #333;
+    margin: 10px 0;
+  }
+  
+  /* Style for player's name */
+  .modal p:nth-of-type(2) {
+    font-size: 3rem;
+    color: #007A33;
+  }
+  
+  /* Style for player's number */
+  .modal p:nth-of-type(3) {
+    font-size: 6rem;
+    color: #007A33;
+  }
+  
+  /* Button styles */
+  .modal button {
+    background-color: #007A33;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    cursor: pointer;
+    border-radius: 5px;
+    margin: 10px;
+    font-size: 1rem;
+  }
+  
+  .modal button:hover {
+    background-color: #00522C;
+  }
+  
+  /* Responsive adjustments for small screens */
+  @media (max-width: 600px) {
+    .modal h2 {
+      font-size: 1.5rem; /* Reduce heading size */
+    }
+  
+    .modal p:nth-of-type(2) {
+      font-size: 2.5rem; /* Reduce player's name size */
+    }
+  
+    .modal p:nth-of-type(3) {
+      font-size: 4rem; /* Reduce player's number size */
+    }
+  
+    .modal {
+      padding: 15px;
+      max-height: 90vh; /* Slightly larger for very small screens */
+    }
+  
+    .modal button {
+      font-size: 0.9rem; /* Reduce button font size */
+      padding: 8px 16px; /* Adjust padding for smaller screens */
+    }
+  }
+  
