@@ -51,7 +51,7 @@ const Game = () => {
   const loadPlayerOfTheDay = async () => {
     console.log('Fetching Player of the Day...');
     try {
-      const response = await fetch('http://localhost:5001/daily-player');
+      const response = await fetch('https://celtics-trivia-backend1-6c0095e46832.herokuapp.com/daily-player');
       if (response.ok) {
         const player = await response.json();
         setCurrentPlayer(player);
