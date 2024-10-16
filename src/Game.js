@@ -9,6 +9,7 @@ import ToastNotification from './ToastNotification';
 import StatsModal from './StatsModal';
 import PlayerGuessInput from './PlayerGuessInput';
 import CopyResultsBar from './CopyResultsBar';
+import { v4 as uuidv4 } from 'uuid';
 
 const MAX_GUESSES = 8;
 const FLIP_DURATION = 800;
@@ -39,11 +40,20 @@ const Game = () => {
 
     loadPlayerOfTheDay();
     loadStats();
+    initializeUserId();
 
     return () => {
       window.removeEventListener('resize', handleResize);
     };
   }, []);
+
+  const initializeUserId = () => {
+    let userId = localStorage.getItem('userId');
+    if (!userId) {
+      userId = uuidv4();
+      localStorage.setItem('userId', userId);
+    }
+  };
 
   const loadPlayerOfTheDay = async () => {
     const lastPlayedDate = localStorage.getItem('lastPlayedDate');
@@ -57,12 +67,18 @@ const Game = () => {
         setCurrentPlayer(newPlayer);
         localStorage.setItem('currentPlayer', JSON.stringify(newPlayer));
         localStorage.setItem('lastPlayedDate', today);
+        setInputDisabled(false); // Enable input for new day
+        setGuesses([]); // Reset guesses for the new day
       } catch (error) {
         console.error('Failed to fetch player of the day:', error);
       }
     } else {
       const savedPlayer = JSON.parse(localStorage.getItem('currentPlayer'));
       setCurrentPlayer(savedPlayer);
+      const playedToday = localStorage.getItem('playedToday');
+      if (playedToday === 'true') {
+        setInputDisabled(true);
+      }
     }
   };
 
@@ -85,43 +101,43 @@ const Game = () => {
       }
       return;
     }
-  
+
     try {
-      console.log('Submitting guess:', guessedName);  // Log guess being sent to the server
-  
+      console.log('Submitting guess:', guessedName); // Log guess being sent to the server
+
       const response = await fetch('http://localhost:3000/submit-guess', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          userId: 'unique-user-id', // Replace with an actual user identifier if needed
+          userId: localStorage.getItem('userId'),
           guess: guessedName,
         }),
       });
-  
+
       if (!response.ok) {
         throw new Error(`Server error: ${response.status}`);
       }
-  
+
       const result = await response.json();
-      console.log('Response received from server:', result);  // Log server response
-  
+      console.log('Response received from server:', result); // Log server response
+
       if (result.message === 'Correct!' || result.message === 'Incorrect!') {
         const feedback = result.feedback;
-        console.log('Feedback:', feedback);  // Log feedback received from the server
-  
-        setGuesses([...guesses, feedback]);  // Add feedback to the guesses array
-  
+        console.log('Feedback:', feedback); // Log feedback received from the server
+
+        setGuesses([...guesses, feedback]); // Add feedback to the guesses array
+
         // Flipping logic based on the new guess added
         feedback.keys.forEach((_, index) => {
           setTimeout(() => {
             setFlipped((prev) => [...prev, guesses.length * feedback.keys.length + index]);
           }, index * FLIP_DELAY);
         });
-  
+
         const totalFlipTime = feedback.keys.length * FLIP_DELAY + FLIP_DURATION;
-  
+
         // Handling win or loss condition
         if (result.message === 'Correct!') {
           setInputDisabled(true);
@@ -129,21 +145,21 @@ const Game = () => {
             setShowSuccessModal(true);
             updateStatsOnWin(guesses.length + 1);
           }, totalFlipTime);
+          localStorage.setItem('playedToday', 'true');
         } else if (guesses.length === MAX_GUESSES - 1) {
           setTimeout(() => {
             setShowFailureModal(true);
             updateStatsOnLoss();
           }, totalFlipTime);
+          localStorage.setItem('playedToday', 'true');
         }
       }
     } catch (error) {
-      console.error('Failed to submit guess:', error);  // Log any errors that occur during fetch
+      console.error('Failed to submit guess:', error); // Log any errors that occur during fetch
     }
-  
-    setGuess('');  // Clear the input field after each guess
-  };  
-  
-  
+
+    setGuess(''); // Clear the input field after each guess
+  };
 
   const updateStatsOnWin = (guessesTaken) => {
     const updatedStats = {
