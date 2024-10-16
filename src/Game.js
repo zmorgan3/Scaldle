@@ -49,27 +49,18 @@ const Game = () => {
   
 
   const loadPlayerOfTheDay = async () => {
-    const today = new Date().toISOString().split('T')[0];
-    const lastPlayedDate = localStorage.getItem('lastPlayedDate');
-  
-    if (lastPlayedDate == today) { //CHANGE THIS
-      console.log('Fetching Player of the Day...');
-      try {
-        const response = await fetch('http://localhost:5001/daily-player');
-        if (response.ok) {
-          const player = await response.json();
-          setCurrentPlayer(player);
-          localStorage.setItem('currentPlayer', JSON.stringify(player));
-          localStorage.setItem('lastPlayedDate', today);
-        } else {
-          console.error('Failed to fetch player of the day');
-        }
-      } catch (error) {
-        console.error('Error fetching player of the day:', error);
+    console.log('Fetching Player of the Day...');
+    try {
+      const response = await fetch('http://localhost:5001/daily-player');
+      if (response.ok) {
+        const player = await response.json();
+        setCurrentPlayer(player);
+        localStorage.setItem('currentPlayer', JSON.stringify(player));
+      } else {
+        console.error('Failed to fetch player of the day');
       }
-    } else {
-      const savedPlayer = JSON.parse(localStorage.getItem('currentPlayer'));
-      setCurrentPlayer(savedPlayer);
+    } catch (error) {
+      console.error('Error fetching player of the day:', error);
     }
   };
   
@@ -102,34 +93,47 @@ const Game = () => {
         const userGuessData = await response.json();
         if (userGuessData && Array.isArray(userGuessData.guesses)) {
           // Ensure each guess has a `keys` array
-          const updatedGuesses = userGuessData.guesses.map((guess) => ({
-            ...guess,
-            keys: guess.keys || ['name', 'position', 'number', 'height', 'debut', 'allStarAppearances'],
-          }));
+          const updatedGuesses = userGuessData.guesses.map((guess) => {
+            if (!guess || !guess.name) {
+              console.error(`Invalid guess data:`, guess);
+              return null; // Skip invalid guess data
+            }
+  
+            // Search for the player in the players.json array
+            const player = players.find((p) => p.name.toLowerCase() === guess.name.toLowerCase());
+  
+            if (!player) {
+              console.error(`Player not found for guess: ${guess.name}`);
+              return null; // Returning null if no matching player found
+            }
+  
+            // Return player data with all expected keys
+            return {
+              name: player.name,
+              position: player.position,
+              number: player.number,
+              height: player.height,
+              debut: player.debut,
+              allStarAppearances: player.allStarAppearances,
+              keys: ['name', 'position', 'number', 'height', 'debut', 'allStarAppearances'],
+            };
+          }).filter((guess) => guess !== null); // Filter out any null guesses in case of unmatched players
   
           setGuesses(updatedGuesses);
-  
-          // Update flipped state for animations
-          const newFlipped = [];
-          updatedGuesses.forEach((_, rowIndex) => {
-            updatedGuesses[rowIndex].keys.forEach((_, index) => {
-              newFlipped.push(rowIndex * 6 + index);
-            });
-          });
-          setFlipped(newFlipped);
+          handleFlipAnimation(updatedGuesses.length - 1);
         } else {
           console.error('Invalid response structure from backend.');
         }
   
         // Handle success modal if player is guessed correctly
-        if (userGuessData.isCompleted && guessedName.toLowerCase() === currentPlayer.name.toLowerCase()) {
+        if (userGuessData.isCompleted && guessedName && guessedName.toLowerCase() === currentPlayer.name.toLowerCase()) {
           setShowSuccessModal(true);
           setInputDisabled(true);
           updateStatsOnWin(userGuessData.guesses.length);
         }
   
         // Handle failure modal if max attempts reached
-        if (userGuessData.isCompleted && guessedName.toLowerCase() !== currentPlayer.name.toLowerCase()) {
+        if (userGuessData.isCompleted && guessedName && guessedName.toLowerCase() !== currentPlayer.name.toLowerCase()) {
           setShowFailureModal(true);
           setInputDisabled(true);
         }
@@ -141,6 +145,15 @@ const Game = () => {
     }
   };
   
+  
+  const handleFlipAnimation = (rowIndex) => {
+    const totalCells = 6;
+    for (let i = 0; i < totalCells; i++) {
+      setTimeout(() => {
+        setFlipped((prevFlipped) => [...prevFlipped, rowIndex * totalCells + i]);
+      }, FLIP_DELAY * i);
+    }
+  };
   
   const generateUserId = () => {
     const userId = `user-${Date.now()}-${Math.floor(Math.random() * 1000)}`;
@@ -170,7 +183,7 @@ const Game = () => {
   const handleCloseModal = () => {
     setShowSuccessModal(false);
     setShowFailureModal(false);
-    setInputDisabled(true);
+    setInputDisabled(false);
   };
 
   const handleCopyResults = () => {
@@ -188,7 +201,8 @@ const Game = () => {
   };
 
   const generateResultsString = () => {
-    let results = `Daily RUSSELL:\n`;
+    let results = `Daily RUSSELL:
+`;
     guesses.forEach((guess) => {
       const rowString = guess.keys.map((key, index) => {
         if (guess[`${key}Correct`]) {
