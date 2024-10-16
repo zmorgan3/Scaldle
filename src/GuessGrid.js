@@ -83,6 +83,8 @@ const GuessGrid = ({ guesses, flipped, isSmallScreen }) => {
             {rowIndex < guesses.length ? (
               guesses[rowIndex].keys.map((key, index) => {
                 const backgroundColorClass = getBackgroundColor(key, guesses[rowIndex]);
+                console.log(`Assigning color class: ${backgroundColorClass} for key: ${key}`);
+
                 return (
                   <div
                     key={index}
