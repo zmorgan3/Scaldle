@@ -1,0 +1,9 @@
+[build]
+  functions = "netlify/functions" # Path to your serverless functions folder
+  command = "npm run build"       # Adjust based on your frontend framework
+
+[[redirects]]
+  from = "/*"
+  to = "http://localhost:3000/:splat"
+  status = 200
+
