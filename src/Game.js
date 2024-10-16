@@ -62,7 +62,7 @@ const Game = () => {
     if (lastPlayedDate !== today) {
       // Fetch the player of the day from the backend
       try {
-        const response = await fetch('http://localhost:3000/daily-player');
+        const response = await fetch('https://celtics-trivia-backend1-6c0095e46832.herokuapp.com/submit-guess');
         const newPlayer = await response.json();
         setCurrentPlayer(newPlayer);
         localStorage.setItem('currentPlayer', JSON.stringify(newPlayer));
@@ -105,7 +105,7 @@ const Game = () => {
     try {
       console.log('Submitting guess:', guessedName); // Log guess being sent to the server
 
-      const response = await fetch('http://localhost:3000/submit-guess', {
+      const response = await fetch('https://celtics-trivia-backend1-6c0095e46832.herokuapp.com/submit-guess', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

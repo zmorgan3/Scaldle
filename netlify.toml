@@ -1,0 +1,11 @@
+[dev]
+  framework = "create-react-app"
+  command = "npm start"  # Adjust to the actual start command, use 'yarn start' if you use Yarn
+  port = 3001  # This is the port on which your React dev server runs
+  targetPort = 8888  # Default Netlify Dev port
+  publish = "build"  # Path where the production build is located, default for CRA is 'build'
+
+[[redirects]]
+  from = "/api/*"
+  to = "http://localhost:3000/:splat"
+  status = 200

@@ -8,7 +8,7 @@ const SuccessModal = ({ currentPlayer, handleCloseModal, handleCopyResults }) =>
   useEffect(() => {
     const fetchPlayerOfTheDay = async () => {
       try {
-        const response = await fetch('http://localhost:3000/daily-player');
+        const response = await fetch('https://celtics-trivia-backend1-6c0095e46832.herokuapp.com/submit-guess');
         const data = await response.json();
         setPlayerOfTheDay(data);
       } catch (error) {
