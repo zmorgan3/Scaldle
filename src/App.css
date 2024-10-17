@@ -152,7 +152,6 @@ button:hover {
 /* Front side (initial grey side) */
 .flip-front {
   background-color: #cccccc;
-  border-right: 1px solid black;
 }
 
 

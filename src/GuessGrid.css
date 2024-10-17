@@ -3,6 +3,24 @@
   color: white;
 }
 
+.guess-header,
+.guess-row {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr 1fr 2fr 1fr; /* Align columns for both header and rows */
+  grid-gap: 10px; /* Add some space between columns */
+  padding: 10px;
+  align-items: center;
+}
+
+.guess-header {
+  font-weight: bold;
+  background-color: #6AAA64; /* Light background color for header */
+  border-bottom: 2px solid #ccc;
+  display: grid;
+  width: 90%;
+}
+
+
 .incorrect {
   background-color: #aa9a9a; /* Red for incorrect guesses */
   color: white;
@@ -28,7 +46,7 @@ correct {
 .incorrect {
   background-color: #aea3a3;
   color: white;
-  border: 1px solid #c26060; 
+  border: 1px solid #918b8b; 
 }
 
 .winning-card {
@@ -48,7 +66,6 @@ correct {
 
 .guess-item {
   background-color: #cccccc;
-  border-right: 1px solid black;
   display: flex;
   justify-content: center;
   align-items: center;
