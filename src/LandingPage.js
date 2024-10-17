@@ -12,7 +12,7 @@ const LandingPage = () => {
 
   return (
     <div className="landing-page">
-      <h1 className="game-title">RUSSELL - V8</h1>
+      <h1 className="game-title">RUSSELL</h1>
       <img src={scalabrineImage} alt="Brian Scalabrine" className="scalabrine-image" />
       <p className="game-description">Can you guess today's Celtics player?</p>
       <button className="start-button" onClick={startGame}>Start Game</button> {/* Navigate to /game */}
