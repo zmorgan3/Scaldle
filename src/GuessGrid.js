@@ -25,47 +25,19 @@ const GuessGrid = ({ guesses, flipped, isSmallScreen }) => {
   };
 
   const getBackgroundColor = (key, feedback) => {
-    console.log(`Key: ${key}, feedback:`, feedback);
-
-    // Explicitly check for allStarAppearances
     if (key === 'allStarAppearances') {
-      console.log('Checking allStarAppearances...');
-      
-      if (feedback.allStarCorrect) {
-        console.log('All-Star appearances are correct (green)');
-        return 'correct'; // Green
-      }
-
-      if (feedback.allStarClose) {
-        console.log('All-Star appearances are close (yellow)');
-        return 'yellow'; // Yellow
-      }
-
-      console.log('All-Star appearances are incorrect (red)');
-      return 'incorrect'; // Red
+      if (feedback.allStarCorrect) return 'correct';
+      if (feedback.allStarClose) return 'yellow';
+      return 'incorrect';
     }
-
-    // Handle position key for partial matches
     if (key === 'position') {
-      if (feedback.positionCorrect) {
-        return 'correct'; // Green for fully correct
-      }
-      if (feedback.positionPartial) {
-        return 'yellow'; // Yellow for partial match
-      }
-      return 'incorrect'; // Red for no match
+      if (feedback.positionCorrect) return 'correct';
+      if (feedback.positionPartial) return 'yellow';
+      return 'incorrect';
     }
-
-    // Handle other keys dynamically
-    if (feedback[`${key}Correct`]) {
-      return 'correct'; // Green for correct guess
-    }
-
-    if (feedback[`${key}Close`]) {
-      return 'yellow'; // Yellow for close guess
-    }
-
-    return 'incorrect'; // Red for incorrect guess
+    if (feedback[`${key}Correct`]) return 'correct';
+    if (feedback[`${key}Close`]) return 'yellow';
+    return 'incorrect';
   };
 
   const screenWidth = window.innerWidth;
@@ -93,8 +65,6 @@ const GuessGrid = ({ guesses, flipped, isSmallScreen }) => {
               guesses[rowIndex].keys.map((key, index) => {
                 const backgroundColorClass = getBackgroundColor(key, guesses[rowIndex]);
 
-                console.log(`Assigning color class: ${backgroundColorClass} for key: ${key}`);
-
                 return (
                   <div
                     key={index}
@@ -102,6 +72,7 @@ const GuessGrid = ({ guesses, flipped, isSmallScreen }) => {
                   >
                     <div className="flip-front"></div>
                     <div className={`flip-back ${backgroundColorClass}`}>
+                      {/* Check for hint rendering */}
                       {key === 'name' ? guesses[rowIndex][key] : null}
                       {key === 'position' ? getPosition(guesses[rowIndex][key]) : null}
                       {key === 'number' ? `${guesses[rowIndex][key]} ${guesses[rowIndex].numberHint}` : null}
@@ -128,5 +99,6 @@ const GuessGrid = ({ guesses, flipped, isSmallScreen }) => {
     </div>
   );
 };
+
 
 export default GuessGrid;
