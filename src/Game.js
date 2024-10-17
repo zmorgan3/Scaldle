@@ -83,46 +83,64 @@ const Game = () => {
 
     const fetchGameState = async () => {
       const userId = localStorage.getItem('userId') || generateUserId();
+      
       try {
         const response = await fetch(`https://celtics-trivia-backend1-6c0095e46832.herokuapp.com/game-state?userId=${userId}`);
-        if (response.ok) {
-          const gameState = await response.json();
-          const storedPlayer = JSON.parse(localStorage.getItem('currentPlayer'));
-          if (!storedPlayer) return;
-
-          // Process the saved guesses from the game state
-          const processedGuesses = gameState.guesses.map((savedGuess) => {
-            const guessedPlayer = players.find(
-              (player) => player.name.toLowerCase() === savedGuess.toLowerCase()
-            );
-          
-            if (guessedPlayer) {
-              const feedback = generateFeedback(guessedPlayer, storedPlayer);
-              feedback.keys = ['name', 'position', 'number', 'height', 'debut', 'allStarAppearances']; // Ensure keys exist
-              return feedback;
-            }
-            return null;
-          }).filter(Boolean); // Filter out any null values
-          
-
-          setGuesses(processedGuesses); // Update guesses in the state
-          if (gameState.isCompleted) setInputDisabled(true);
-
-          // Trigger flipping animations for restored guesses
-          processedGuesses.forEach((_, guessIndex) => {
-            ['name', 'position', 'number', 'height', 'debut', 'allStarAppearances'].forEach((_, columnIndex) => {
-              setTimeout(() => {
-                setFlipped((prevFlipped) => [...prevFlipped, guessIndex * 6 + columnIndex]);
-              }, columnIndex * FLIP_DELAY);
-            });
-          });
-
-          setLoading(false); // Disable loading state after processing
+        
+        if (!response.ok) {
+          throw new Error('Failed to fetch game state');
         }
+    
+        const gameState = await response.json();
+    
+        const storedPlayer = JSON.parse(localStorage.getItem('currentPlayer'));
+    
+        // Ensure we have a current player, otherwise stop loading
+        if (!storedPlayer) {
+          console.error('No current player found in local storage.');
+          setLoading(false); // Stop the loading spinner
+          return;
+        }
+    
+        // If no guesses exist or it's the user's first game, set guesses to an empty array
+        const processedGuesses = (gameState.guesses && gameState.guesses.length > 0)
+          ? gameState.guesses.map((savedGuess) => {
+              const guessedPlayer = players.find(
+                (player) => player.name.toLowerCase() === savedGuess.toLowerCase()
+              );
+              if (guessedPlayer) {
+                const feedback = generateFeedback(guessedPlayer, storedPlayer);
+                feedback.keys = ['name', 'position', 'number', 'height', 'debut', 'allStarAppearances'];
+                return feedback;
+              }
+              return null;
+            }).filter(Boolean) // Filter out any null values
+          : []; // No guesses yet, initialize with an empty array
+    
+        setGuesses(processedGuesses); // Set the processed guesses
+    
+        // If the game is completed or max guesses reached, disable input
+        if (gameState.isCompleted || processedGuesses.length >= MAX_GUESSES) {
+          setInputDisabled(true);
+        }
+    
+        // Flip animation logic for restored guesses
+        processedGuesses.forEach((_, guessIndex) => {
+          ['name', 'position', 'number', 'height', 'debut', 'allStarAppearances'].forEach((_, columnIndex) => {
+            setTimeout(() => {
+              setFlipped((prevFlipped) => [...prevFlipped, guessIndex * 6 + columnIndex]);
+            }, columnIndex * FLIP_DELAY);
+          });
+        });
+    
       } catch (error) {
         console.error('Error fetching game state:', error);
+        setGuesses([]);  // Set guesses to an empty array in case of error
+      } finally {
+        setLoading(false);  // Ensure loading is stopped in all cases
       }
     };
+    
 
     fetchGameState();
     loadPlayerOfTheDay();

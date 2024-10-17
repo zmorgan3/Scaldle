@@ -44,9 +44,29 @@ const GuessGrid = ({ guesses = [], flipped, isSmallScreen }) => {  // Default `g
     return 'incorrect';
   };
 
-  return (
-    <div className="grid-container">
-      <h2>Guesses:</h2>
+return (
+  <div className="grid-container">
+    <h2>Guesses:</h2>
+
+    {/* Check if guesses are empty and render the skeleton */}
+    {guesses.length === 0 ? (
+      <div className="guess-grid">
+        {[...Array(8)].map((_, rowIndex) => (
+          <div
+            key={rowIndex}
+            className="guess-row skeleton"
+            style={{ gridTemplateColumns: '2fr 1fr 1fr 1fr 2fr 1fr' }}
+          >
+            <div className="guess-item skeleton-item"></div>
+            <div className="guess-item skeleton-item"></div>
+            <div className="guess-item skeleton-item"></div>
+            <div className="guess-item skeleton-item"></div>
+            <div className="guess-item skeleton-item"></div>
+            <div className="guess-item skeleton-item"></div>
+          </div>
+        ))}
+      </div>
+    ) : (
       <div className="guess-grid">
         <div className="guess-header">
           <div>Name</div>
@@ -57,16 +77,13 @@ const GuessGrid = ({ guesses = [], flipped, isSmallScreen }) => {  // Default `g
           <div>{isSmallScreen ? "ASG's" : 'All-Star Games'}</div>
         </div>
 
-        {/* Render all 8 rows, whether they contain guesses or skeletons */}
         {[...Array(8)].map((_, rowIndex) => (
           <div
             key={rowIndex}
-            className={`guess-row ${rowIndex < guesses.length ? '' : 'skeleton'}`} 
+            className={`guess-row ${rowIndex < guesses.length ? '' : 'skeleton'}`}
             style={{ gridTemplateColumns: '2fr 1fr 1fr 1fr 2fr 1fr' }}
           >
-            {/* Render the guessed player's details if we have a guess for this row */}
             {rowIndex < guesses.length ? (
-              // Ensure guess object and `keys` exist
               guesses[rowIndex] && guesses[rowIndex].keys ? (
                 guesses[rowIndex].keys.map((key, index) => {
                   const backgroundColorClass = getBackgroundColor(key, guesses[rowIndex]);
@@ -92,7 +109,6 @@ const GuessGrid = ({ guesses = [], flipped, isSmallScreen }) => {  // Default `g
                 <div>Error: Invalid guess data</div>
               )
             ) : (
-              // Render skeletons for empty rows
               <>
                 <div className="guess-item skeleton-item"></div>
                 <div className="guess-item skeleton-item"></div>
@@ -105,8 +121,10 @@ const GuessGrid = ({ guesses = [], flipped, isSmallScreen }) => {  // Default `g
           </div>
         ))}
       </div>
-    </div>
-  );
+    )}
+  </div>
+);
+
 };
 
 export default GuessGrid;
