@@ -292,7 +292,7 @@ const Game = () => {
 
   return (
     <div className="app">
-      <h1 className={isSmallScreen ? 'hidden-title' : ''}>RUSSELL V8</h1>
+      <h1 className={isSmallScreen ? 'hidden-title' : ''}>RUSSELL</h1>
       <JerseysAnimation className="jersey-animation" />
 
       {loading ? (
