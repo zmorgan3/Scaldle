@@ -33,6 +33,46 @@ const Game = () => {
     guessDistribution: Array(MAX_GUESSES).fill(0),
   });
 
+  const generateFeedback = (guessedPlayer, currentPlayer) => {
+    const numberDifference = Math.abs(Number(guessedPlayer.number) - Number(currentPlayer.number));
+    const debutDifference = Math.abs(Number(guessedPlayer.debut) - Number(currentPlayer.debut));
+    const guessedHeightInches = convertHeightToInches(guessedPlayer.height);
+    const targetHeightInches = convertHeightToInches(currentPlayer.height);
+    const heightDifference = Math.abs(guessedHeightInches - targetHeightInches);
+    const allStarDifference = Math.abs(Number(guessedPlayer.allStarAppearances) - Number(currentPlayer.allStarAppearances));
+
+    const guessedPositions = guessedPlayer.position.split(/[/, ]+/);
+    const targetPositions = currentPlayer.position.split(/[/, ]+/);
+    const positionCorrect = guessedPositions.length === targetPositions.length &&
+                          guessedPositions.every(pos => targetPositions.includes(pos));
+    const positionPartial = !positionCorrect && guessedPositions.some(pos => targetPositions.includes(pos));
+
+    return {
+      name: guessedPlayer.name,
+      position: guessedPlayer.position,
+      number: guessedPlayer.number,
+      height: guessedPlayer.height,
+      debut: guessedPlayer.debut,
+      allStarAppearances: guessedPlayer.allStarAppearances,
+      positionCorrect: positionCorrect,
+      positionPartial: positionPartial,
+      numberCorrect: guessedPlayer.number === currentPlayer.number,
+      numberClose: numberDifference <= 5 && numberDifference !== 0,
+      numberHint: getArrow(guessedPlayer.number, currentPlayer.number),
+      heightCorrect: guessedPlayer.height === currentPlayer.height,
+      heightClose: heightDifference <= 5 && heightDifference !== 0,
+      heightHint: getArrow(guessedHeightInches, targetHeightInches),
+      debutCorrect: guessedPlayer.debut === currentPlayer.debut,
+      debutClose: debutDifference <= 5 && debutDifference !== 0,
+      debutHint: getArrow(guessedPlayer.debut, currentPlayer.debut),
+      allStarCorrect: Number(guessedPlayer.allStarAppearances) === Number(currentPlayer.allStarAppearances),
+      allStarClose: allStarDifference <= 5 && allStarDifference !== 0,
+      allStarHint: getArrow(Number(guessedPlayer.allStarAppearances), Number(currentPlayer.allStarAppearances)),
+      nameCorrect: guessedPlayer.name.toLowerCase() === currentPlayer.name.toLowerCase(),
+      overallCorrect: guessedPlayer.name.toLowerCase() === currentPlayer.name.toLowerCase(),
+    };
+  };
+
   const checkGameState = async () => {
     const userId = localStorage.getItem('userId') || generateUserId();
     
@@ -41,7 +81,19 @@ const Game = () => {
       if (response.ok) {
         const gameState = await response.json();
         if (gameState.isCompleted) {
-          setGuesses(gameState.guesses);
+          // Process previously saved guesses
+          const processedGuesses = gameState.guesses.map((savedGuess) => {
+            const guessedPlayer = players.find(
+              (player) => player.name.toLowerCase() === savedGuess.toLowerCase()
+            );
+            if (!guessedPlayer) return null;
+
+            // Generate feedback for each guess as done when submitting a new guess
+            const feedback = generateFeedback(guessedPlayer, currentPlayer);
+            return feedback;
+          }).filter(Boolean);
+
+          setGuesses(processedGuesses);
           setInputDisabled(true); // Lock input if game is completed
         }
       }
@@ -50,11 +102,13 @@ const Game = () => {
     }
   };
   
-  useEffect(() => {
+  
+  /*useEffect(() => {
     checkGameState();
     loadPlayerOfTheDay();
     loadStats();
   }, []);
+  */
   
 
   useEffect(() => {
@@ -62,7 +116,7 @@ const Game = () => {
       setIsSmallScreen(window.innerWidth < 768);
     };
     window.addEventListener('resize', handleResize);
-  
+    checkGameState();
     loadPlayerOfTheDay(); // Fetch player of the day
     loadStats();
   
@@ -106,7 +160,7 @@ const Game = () => {
   
     try {
       // Submit guess to the backend
-      const response = await fetch('http://localhost:5001/submit-guess', {
+      const response = await fetch('https://celtics-trivia-backend1-6c0095e46832.herokuapp.com/submit-guess', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -241,7 +295,6 @@ const Game = () => {
   const handleCloseModal = () => {
     setShowSuccessModal(false);
     setShowFailureModal(false);
-    setInputDisabled(false);
   };
 
   const handleCopyResults = () => {
