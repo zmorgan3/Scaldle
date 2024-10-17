@@ -90,6 +90,11 @@ const Game = () => {
           const storedPlayer = JSON.parse(localStorage.getItem('currentPlayer'));
           if (!storedPlayer) return;
 
+          if (!storedPlayer) {
+            setLoading(false);  // Stop loading even if no player is found
+            return;
+          }
+
           // Process the saved guesses from the game state
           const processedGuesses = gameState.guesses.map((savedGuess) => {
             const guessedPlayer = players.find(
