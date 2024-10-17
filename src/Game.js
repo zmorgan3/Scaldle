@@ -216,9 +216,10 @@ const Game = () => {
           // Add the animation effect for the flipping tiles
           feedback.keys = ['name', 'position', 'number', 'height', 'debut', 'allStarAppearances'];
           feedback.keys.forEach((_, index) => {
+            const flipDelay = index === 0 ? 300 : index * FLIP_DELAY;  // Delay the first flip by 300m
             setTimeout(() => {
               setFlipped((prev) => [...prev, guesses.length * 6 + index]);
-            }, index * FLIP_DELAY);
+            }, flipDelay);
           });
   
           const totalFlipTime = feedback.keys.length * FLIP_DELAY + FLIP_DURATION;
