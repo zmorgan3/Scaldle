@@ -219,6 +219,15 @@
     "allStar": false
   },
   {
+    "name": "Test Positions",
+    "position": "Forward/Center",
+    "number": 11,
+    "height": "6'10\"",
+    "debut": 2020,
+    "allStarAppearances": 0,
+    "allStar": false
+  },
+  {
     "name": "Daniel Theis",
     "position": "Center/Forward",
     "number": 27,

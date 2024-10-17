@@ -3,7 +3,7 @@ import './GuessGrid.css';
 
 const GuessGrid = ({ guesses, flipped, isSmallScreen }) => {
   const getPosition = (position) => {
-    if (isSmallScreen) {
+    if (screenWidth < 913) {
       switch (position) {
         case 'Guard':
           return 'G';
@@ -13,6 +13,8 @@ const GuessGrid = ({ guesses, flipped, isSmallScreen }) => {
           return 'C';
         case 'Center/Forward':
           return 'C/F';
+        case 'Forward/Center':
+          return 'F/C';
         case 'Guard/Forward':
           return 'F/G';
         default:
@@ -65,6 +67,8 @@ const GuessGrid = ({ guesses, flipped, isSmallScreen }) => {
 
     return 'incorrect'; // Red for incorrect guess
   };
+
+  const screenWidth = window.innerWidth;
 
   return (
     <div className="grid-container">

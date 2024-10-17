@@ -9,7 +9,7 @@ body, .app {
   font-family: 'NBACeltics', sans-serif;
   margin: 0;
   padding: 0;
-  height: 100vh; /* Full viewport height */
+  min-height: 100vh; /* Full viewport height */
   background-color: #007A33; /* Celtics green background */
 }
 
@@ -20,14 +20,15 @@ html, body {
 }
 
 /* Container for the entire app */
+/*
 .app {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  min-height: 150vh; /* Ensure the app covers the full viewport height */
-  padding: 20px; /* Added padding to prevent content from being cut off */
-}
+  padding: 20px;
+}*/
+
 
 /* Ensure the grid container is centered and stays centered */
 .grid-container {
@@ -83,41 +84,6 @@ button:hover {
   background-color: #00522C;
 }
 
-/* Suggestions dropdown */
-.suggestions {
-  list-style-type: none;
-  padding: 0;
-  margin: 10px auto;
-  width: 100%;
-  max-width: 300px;
-  border: 1px solid #ddd;
-  border-radius: 5px;
-  max-height: 160px;
-  overflow-y: auto;
-  background-color: white; /* White background for suggestions */
-  box-sizing: border-box;
-}
-
-/* Responsive suggestions list for small screens */
-/* For screens less than 768px */
-@media only screen and (max-width: 767px) {
-  .suggestions {
-    width: 90%; /* Use a percentage width to fit the screen better */
-    max-width: none; /* Remove the max-width restriction */
-    margin: 0 auto; /* Center the suggestions */
-    position: absolute; /* Position absolutely for better visibility */
-    z-index: 1000; /* Ensure it appears above other elements */
-    border: 1px solid #ddd; /* Add a border to the suggestions for visibility */
-    border-radius: 5px; /* Optional: round the corners */
-    background-color: white; /* Background color to ensure text is visible */
-  }
-
-  .suggestions li {
-    padding: 10px; /* Adjust padding for list items */
-    font-size: 14px; /* Ensure text is readable */
-  }
-}
-
 .suggestions li {
   padding: 10px;
   cursor: pointer;
@@ -128,14 +94,6 @@ button:hover {
 
 .suggestions li:hover {
   background-color: #f0f0f0;
-}
-
-/* Grid for the guesses */
-.guess-grid {
-  display: grid;
-  gap: 10px;
-  margin-top: 20px;
-  width: 100%;
 }
 
 /* Define consistent column widths for the header and rows */
@@ -163,19 +121,6 @@ button:hover {
   align-items: center;
   height: 100%;
 }
-
-/* Individual guess items */
-.guess-item {
-  background-color: #cccccc;
-  border-right: 1px solid black;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100%;
-  width: 100%;
-  font-size: 18px;
-}
-
 /* Flip card container */
 .flip {
   position: relative;
@@ -210,44 +155,6 @@ button:hover {
   border-right: 1px solid black;
 }
 
-/* Back side (revealed colored side) */
-.flip-back {
-  transform: rotateX(180deg);
-}
-
-/* Correct guesses are shaded lighter green (Wordle-like) */
-.correct {
-  background-color: #6AAA64;
-  color: white;
-  border: 2px solid #007A33; /* Add the green Celtics border */
-}
-
-/* Incorrect guesses are shaded red */
-.incorrect {
-  background-color: #c26060;
-  color: white;
-  border: 2px solid #c26060; /* No border for incorrect guesses */
-}
-
-/* New style for yellow hints */
-.yellow {
-  background-color: #f1f18f; /* Light yellow for close guesses */
-  color: black; /* Change text color for better contrast */
-}
-
-/* Winning cards (Celtics banner style) */
-.winning-card {
-  background-color: white;
-  border: 2px solid #007A33; /* Celtics green trim */
-  color: #007A33; /* Celtics green text */
-  font-weight: bold;
-  transition: transform 0.6s ease-in-out;
-}
-
-/* Optional shadow for emphasis */
-.winning-card {
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-}
 
 /* Modal styles */
 .modal-overlay {
@@ -291,6 +198,7 @@ button:hover {
 .fade-in {
   opacity: 0;
   animation: fadeIn 2s forwards;
+  
 }
 
 @keyframes fadeIn {
@@ -304,7 +212,7 @@ button:hover {
 /* For small devices like iPhones (max-width: 767px) */
 @media only screen and (max-width: 767px) {
   .app {
-    padding: 10px;
+    padding: 30px;
   }
 
   h1 {
@@ -372,31 +280,4 @@ button:hover {
 
 .app p {
   font-size: 2rem;
-}
-
-/* For small devices (max-width: 767px) */
-@media only screen and (max-width: 767px) {
-  .guess-item {
-    font-size: 12px; /* Adjust font size for smaller screens */
-  }
-
-  .guess-header {
-    font-size: 14px; /* Optional: Adjust header font size for smaller screens */
-  }
-}
-
-/* For screens less than 768px */
-@media only screen and (max-width: 767px) {
-  .grid-container {
-    min-width: 130%; /* Minimal padding for smaller screens */
-  }
-
-  .guess-header,
-  .guess-row {
-    font-size: 12px; /* Smaller font size for mobile devices */
-  }
-
-  .guess-item {
-    font-size: 14px; /* Adjust the font size for guess items */
-  }
 }

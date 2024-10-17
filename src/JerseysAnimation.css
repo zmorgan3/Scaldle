@@ -20,7 +20,54 @@
   }
   @media only screen and (max-width: 375px) {
     .jerseys-container {
-      max-width: 0%; /* Minimal padding for smaller screens */
+      max-width: 00%; /* Minimal padding for smaller screens */
     }
   }
 
+  @media only screen and (max-width: 344px) {
+    .jerseys-container {
+      max-width: 100%; /* Full width */
+      height: 50%; /* Allow height to adjust based on aspect ratio */
+    }
+  
+    .jersey {
+      width: 150px; /* Resize jersey to fit better on smaller screens */
+      height: auto; /* Maintain aspect ratio */
+      padding-top: 0px;
+    }
+  }
+
+  @media only screen and (max-width: 375px) {
+    .jerseys-container {
+      max-width: 100%; /* Full width */
+      height: auto; /* Allow height to adjust based on aspect ratio */
+    }
+  
+    .jersey {
+      width: 150px; /* Resize jersey to fit better on smaller screens */
+      height: auto; /* Maintain aspect ratio */
+      padding-top: 0px;
+    }
+  }
+
+  @media only screen and (width: 540px) {
+    .jerseys-container {
+      max-width: 00%; 
+      height: auto; /* Allow height to adjust based on aspect ratio */
+    }
+  
+    .jersey {
+      width: 150px; /* Resize jersey to fit better on smaller screens */
+      height: auto; /* Maintain aspect ratio */
+      padding-top: 0px;
+    }
+  }
+
+  @media (max-width: 430px) {
+    h1 {
+      font-size: 1.5rem; /* Reduce font size */
+      margin-bottom: 10px; /* Add space below title */
+    }
+  }
+
+  

@@ -1,48 +1,49 @@
 .guess-bar-container {
-    margin-bottom: 10px;
-    display: flex;
-    align-items: center;
-  }
-  
-  .guess-label {
-    font-size: 14px;
-    margin-right: 10px;
-    flex-shrink: 0;
-    width: 80px;
-  }
-  
-  .guess-bar {
-    background-color: #ddd;
-    border-radius: 5px;
-    height: 20px;
-    width: 100%;
-    padding: 3px;
-    box-sizing: border-box;
-    position: relative;
-  }
-  
-  .filled-bar {
-    background-color: #007A33; /* Celtics green */
-    height: 100%;
-    border-radius: 5px;
-    display: flex;
-    justify-content: flex-end;
-    align-items: center;
-    padding-right: 10px;
-  }
-  
-  .filled-bar.zero-bar {
-    background-color: #ccc; /* Grey for zero guess bars */
-    width: 10%; /* Small width to fit "0x" */
-  }
-  
-  .guess-count {
-    font-size: 12px;
-    color: white;
-    font-weight: bold;
-  }
-  
-  .zero-bar .guess-count {
-    color: black; /* Black text color for zero guess bars */
-  }
-  
+  margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+}
+
+.guess-label {
+  font-size: 14px;
+  margin-right: 10px;
+  flex-shrink: 0;
+  width: 80px;
+}
+
+.guess-bar {
+  background-color: #ddd;
+  border-radius: 5px;
+  height: 20px;
+  width: 100%;
+  padding: 3px;
+  box-sizing: border-box;
+  position: relative;
+}
+
+.filled-bar {
+  background-color: #007A33; /* Celtics green */
+  height: 100%;
+  border-radius: 5px;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  padding-right: 10px;
+}
+
+.filled-bar.zero-bar {
+  background-color: #ccc; /* Grey for zero guess bars */
+  width: 10%; /* Ensure a minimum width for zero guess bars */
+}
+
+.guess-count {
+  font-size: 12px;
+  color: white;
+  font-weight: bold;
+}
+
+.zero-bar .guess-count {
+  color: black; /* Black text color for zero guess bars */
+}
+
+

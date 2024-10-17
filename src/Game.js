@@ -10,6 +10,8 @@ import ToastNotification from './ToastNotification';
 import StatsModal from './StatsModal';
 import PlayerGuessInput from './PlayerGuessInput';
 import { convertHeightToInches, getArrow } from './gameUtils';
+import CopyResultsBar from './CopyResultsBar';
+
 
 const MAX_GUESSES = 8;
 const FLIP_DURATION = 800;
@@ -93,10 +95,9 @@ const Game = () => {
       const heightDifference = Math.abs(guessedHeightInches - targetHeightInches);
       const allStarDifference = Math.abs(Number(guessedPlayer.allStarAppearances) - Number(currentPlayer.allStarAppearances));
 
-      // Split positions of both guessed and current player
-      const guessedPositions = guessedPlayer.position.split(/[\/, ]+/); // Split guessed player's positions into an array
-      const targetPositions = currentPlayer.position.split(/[\/, ]+/);   // Split target player's positions into an array
-
+      // Corrected version:
+const guessedPositions = guessedPlayer.position.split(/[/, ]+/); // Split guessed player's positions into an array
+const targetPositions = currentPlayer.position.split(/[/, ]+/);   // Split target player's positions into an array
       // Check if the positions match exactly
       const positionCorrect = guessedPositions.length === targetPositions.length &&
                             guessedPositions.every(pos => targetPositions.includes(pos));
@@ -202,10 +203,13 @@ const Game = () => {
   };
 
   const generateResultsString = () => {
-    let results = `Daily SCALDLE:\n`;
+    let results = `Daily RUSSELL:\n`;
     guesses.forEach((guess) => {
       const rowString = guess.keys.map((key, index) => {
         if (guess[`${key}Correct`]) {
+          return '🟩';
+        }
+        if (key === 'allStarAppearances' && guess.allStarCorrect) {
           return '🟩';
         }
         if (key === 'position' && guess.positionPartial) {
@@ -232,17 +236,24 @@ const Game = () => {
 
   return (
     <div className="app">
-      <h1 className={isSmallScreen ? 'hidden-title' : ''}>SCALDLE</h1>
-      <JerseysAnimation />
+      <h1 className={isSmallScreen ? 'hidden-title' : ''}>RUSSELL</h1>
+      <JerseysAnimation className="jersey-animation"/>
 
-      <PlayerGuessInput
-        guess={guess}
-        setGuess={setGuess}
-        handleGuess={handleGuess}
-        inputDisabled={inputDisabled}
-        MAX_GUESSES={MAX_GUESSES}
-        guesses={guesses}
-      />
+      {
+  !inputDisabled ? (
+    <PlayerGuessInput
+      guess={guess}
+      setGuess={setGuess}
+      handleGuess={handleGuess}
+      inputDisabled={inputDisabled}
+      MAX_GUESSES={MAX_GUESSES}
+      guesses={guesses}
+    />
+  ) : (
+    <CopyResultsBar handleCopyResults={handleCopyResults} />
+  )
+}
+
 
       <GuessGrid
         guesses={guesses}
