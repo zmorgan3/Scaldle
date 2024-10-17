@@ -73,60 +73,56 @@ const Game = () => {
     };
   };
 
-  const checkGameState = async () => {
-    const userId = localStorage.getItem('userId') || generateUserId();
-    
-    try {
-      const response = await fetch(`https://celtics-trivia-backend1-6c0095e46832.herokuapp.com/game-state?userId=${userId}`);
-      if (response.ok) {
-        const gameState = await response.json();
-        if (gameState.isCompleted) {
-          // Process previously saved guesses
-          const processedGuesses = gameState.guesses.map((savedGuess) => {
-            const guessedPlayer = players.find(
-              (player) => player.name.toLowerCase() === savedGuess.toLowerCase()
-            );
-            if (!guessedPlayer) return null;
-  
-            // Generate feedback for each guess as done when submitting a new guess
-            const feedback = generateFeedback(guessedPlayer, currentPlayer);
-            return feedback;
-          }).filter(Boolean);
-  
-          setGuesses(processedGuesses);
-          setInputDisabled(true); // Lock input if game is completed
-        }
-      } else {
-        console.error('Failed to fetch game state');
-      }
-    } catch (error) {
-      console.error('Error fetching game state:', error);
-    }
-  };
-  
-  
-  
-  /*useEffect(() => {
-    checkGameState();
-    loadPlayerOfTheDay();
-    loadStats();
-  }, []);
-  */
-  
-
   useEffect(() => {
     const handleResize = () => {
       setIsSmallScreen(window.innerWidth < 768);
     };
     window.addEventListener('resize', handleResize);
-    checkGameState();
+
+    const fetchGameState = async () => {
+      const userId = localStorage.getItem('userId') || generateUserId();
+
+      try {
+        const response = await fetch(`https://celtics-trivia-backend1-6c0095e46832.herokuapp.com/game-state?userId=${userId}`);
+        console.log(`Fetching game state for userId: ${userId}`);
+        if (response.ok) {
+          const gameState = await response.json();
+          if (gameState.isCompleted) {
+            const storedPlayer = JSON.parse(localStorage.getItem('currentPlayer'));
+            if (!storedPlayer) {
+              console.error('No current player found in local storage.');
+              return;
+            }
+
+            // Process previously saved guesses
+            const processedGuesses = gameState.guesses.map((savedGuess) => {
+              const guessedPlayer = players.find(
+                (player) => player.name.toLowerCase() === savedGuess.toLowerCase()
+              );
+              if (!guessedPlayer) return null;
+
+              // Generate feedback for each guess as done when submitting a new guess
+              const feedback = generateFeedback(guessedPlayer, storedPlayer);
+              return feedback;
+            }).filter(Boolean);
+
+            setGuesses(processedGuesses);
+            setInputDisabled(true); // Lock input if game is completed
+          }
+        }
+      } catch (error) {
+        console.error('Error fetching game state:', error);
+      }
+    };
+
+    fetchGameState(); // Fetch the game state
     loadPlayerOfTheDay(); // Fetch player of the day
-    loadStats();
-  
+    loadStats(); // Load stats
+
     return () => {
       window.removeEventListener('resize', handleResize);
     };
-  }, []);
+  }, []); // No dependencies, so it runs once when the component mounts
   
 
   const loadPlayerOfTheDay = async () => {
@@ -179,47 +175,10 @@ const Game = () => {
         );
     
         if (guessedPlayer) {
-          // Calculate differences to provide feedback
-          const numberDifference = Math.abs(Number(guessedPlayer.number) - Number(currentPlayer.number));
-          const debutDifference = Math.abs(Number(guessedPlayer.debut) - Number(currentPlayer.debut));
-          const guessedHeightInches = convertHeightToInches(guessedPlayer.height);
-          const targetHeightInches = convertHeightToInches(currentPlayer.height);
-          const heightDifference = Math.abs(guessedHeightInches - targetHeightInches);
-          const allStarDifference = Math.abs(Number(guessedPlayer.allStarAppearances) - Number(currentPlayer.allStarAppearances));
-  
-          const guessedPositions = guessedPlayer.position.split(/[/, ]+/);
-          const targetPositions = currentPlayer.position.split(/[/, ]+/);
-          const positionCorrect = guessedPositions.length === targetPositions.length &&
-                                guessedPositions.every(pos => targetPositions.includes(pos));
-          const positionPartial = !positionCorrect && guessedPositions.some(pos => targetPositions.includes(pos));
-  
-          const feedback = {
-            name: guessedPlayer.name,
-            position: guessedPlayer.position,
-            number: guessedPlayer.number,
-            height: guessedPlayer.height,
-            debut: guessedPlayer.debut,
-            allStarAppearances: guessedPlayer.allStarAppearances,
-            positionCorrect: positionCorrect,
-            positionPartial: positionPartial,
-            numberCorrect: guessedPlayer.number === currentPlayer.number,
-            numberClose: numberDifference <= 5 && numberDifference !== 0,
-            numberHint: getArrow(guessedPlayer.number, currentPlayer.number),
-            heightCorrect: guessedPlayer.height === currentPlayer.height,
-            heightClose: heightDifference <= 5 && heightDifference !== 0,
-            heightHint: getArrow(guessedHeightInches, targetHeightInches),
-            debutCorrect: guessedPlayer.debut === currentPlayer.debut,
-            debutClose: debutDifference <= 5 && debutDifference !== 0,
-            debutHint: getArrow(guessedPlayer.debut, currentPlayer.debut),
-            allStarCorrect: Number(guessedPlayer.allStarAppearances) === Number(currentPlayer.allStarAppearances),
-            allStarClose: allStarDifference <= 5 && allStarDifference !== 0,
-            allStarHint: getArrow(Number(guessedPlayer.allStarAppearances), Number(currentPlayer.allStarAppearances)),
-            nameCorrect: guessedPlayer.name.toLowerCase() === currentPlayer.name.toLowerCase(),
-            overallCorrect: guessedPlayer.name.toLowerCase() === currentPlayer.name.toLowerCase(),
-          };
-  
+          const feedback = generateFeedback(guessedPlayer, currentPlayer);
+
           setGuesses([...guesses, feedback]);
-  
+
           // Trigger flip animation for the new guess
           feedback.keys = ['name', 'position', 'number', 'height', 'debut', 'allStarAppearances'];
           feedback.keys.forEach((_, index) => {
@@ -259,8 +218,7 @@ const Game = () => {
     setGuess('');  // Reset input after submitting
   };
   
-  
-  
+
   const handleFlipAnimation = (rowIndex) => {
     const totalCells = 6;
     for (let i = 0; i < totalCells; i++) {
@@ -275,7 +233,6 @@ const Game = () => {
     localStorage.setItem('userId', userId);
     return userId;
   };
-  
 
   const updateStatsOnWin = (guessesTaken) => {
     const updatedStats = {
@@ -315,8 +272,7 @@ const Game = () => {
   };
 
   const generateResultsString = () => {
-    let results = `Daily RUSSELL:
-`;
+    let results = `Daily RUSSELL:\n`;
     guesses.forEach((guess) => {
       const rowString = guess.keys.map((key, index) => {
         if (guess[`${key}Correct`]) {
@@ -351,7 +307,7 @@ const Game = () => {
     <div className="app">
       <h1 className={isSmallScreen ? 'hidden-title' : ''}>RUSSELL</h1>
       <JerseysAnimation className="jersey-animation"/>
-  
+
       {
         !inputDisabled ? (
           <PlayerGuessInput
@@ -366,13 +322,13 @@ const Game = () => {
           <CopyResultsBar handleCopyResults={handleCopyResults} />
         )
       }
-  
+
       <GuessGrid
         guesses={guesses}
         flipped={flipped}
         isSmallScreen={isSmallScreen}
       />
-  
+
       {showSuccessModal && (
         <SuccessModal
           currentPlayer={currentPlayer}
@@ -380,7 +336,7 @@ const Game = () => {
           handleCopyResults={handleCopyResults}
         />
       )}
-  
+
       {showFailureModal && (
         <FailureModal
           currentPlayer={currentPlayer}
@@ -388,18 +344,18 @@ const Game = () => {
           handleCopyResults={handleCopyResults}
         />
       )}
-  
+
       {showCopyMessage && (
         <ToastNotification message="Results Copied!" />
       )}
-  
+
       <button onClick={toggleStatsModal} className="stats-button">
         Stats
       </button>
-  
+
       {showStatsModal && <StatsModal stats={stats} onClose={toggleStatsModal} />}
     </div>
   );
-};  
+};
 
 export default Game;
