@@ -1,9 +1,13 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import './GuessGrid.css';
 
-const GuessGrid = ({ guesses, flipped, isSmallScreen }) => {
+const GuessGrid = ({ guesses = [], flipped, isSmallScreen }) => {  // Default `guesses` to an empty array
+  useEffect(() => {
+    console.log('Guesses updated:', guesses); // Check if guesses update properly
+  }, [guesses]);
+
   const getPosition = (position) => {
-    if (screenWidth < 913) {
+    if (window.innerWidth < 913) {
       switch (position) {
         case 'Guard':
           return 'G';
@@ -16,7 +20,7 @@ const GuessGrid = ({ guesses, flipped, isSmallScreen }) => {
         case 'Forward/Center':
           return 'F/C';
         case 'Guard/Forward':
-          return 'F/G';
+          return 'G/F';
         default:
           return position;
       }
@@ -40,8 +44,6 @@ const GuessGrid = ({ guesses, flipped, isSmallScreen }) => {
     return 'incorrect';
   };
 
-  const screenWidth = window.innerWidth;
-
   return (
     <div className="grid-container">
       <h2>Guesses:</h2>
@@ -55,35 +57,42 @@ const GuessGrid = ({ guesses, flipped, isSmallScreen }) => {
           <div>{isSmallScreen ? "ASG's" : 'All-Star Games'}</div>
         </div>
 
+        {/* Render all 8 rows, whether they contain guesses or skeletons */}
         {[...Array(8)].map((_, rowIndex) => (
           <div
             key={rowIndex}
-            className={`guess-row ${rowIndex < guesses.length ? '' : 'skeleton'}`}
+            className={`guess-row ${rowIndex < guesses.length ? '' : 'skeleton'}`} 
             style={{ gridTemplateColumns: '2fr 1fr 1fr 1fr 2fr 1fr' }}
           >
+            {/* Render the guessed player's details if we have a guess for this row */}
             {rowIndex < guesses.length ? (
-              guesses[rowIndex].keys.map((key, index) => {
-                const backgroundColorClass = getBackgroundColor(key, guesses[rowIndex]);
+              // Ensure guess object and `keys` exist
+              guesses[rowIndex] && guesses[rowIndex].keys ? (
+                guesses[rowIndex].keys.map((key, index) => {
+                  const backgroundColorClass = getBackgroundColor(key, guesses[rowIndex]);
 
-                return (
-                  <div
-                    key={index}
-                    className={`guess-item flip ${flipped.includes(rowIndex * 6 + index) ? 'flip-active' : ''}`}
-                  >
-                    <div className="flip-front"></div>
-                    <div className={`flip-back ${backgroundColorClass}`}>
-                      {/* Check for hint rendering */}
-                      {key === 'name' ? guesses[rowIndex][key] : null}
-                      {key === 'position' ? getPosition(guesses[rowIndex][key]) : null}
-                      {key === 'number' ? `${guesses[rowIndex][key]} ${guesses[rowIndex].numberHint}` : null}
-                      {key === 'height' ? `${guesses[rowIndex][key]} ${guesses[rowIndex].heightHint}` : null}
-                      {key === 'debut' ? `${guesses[rowIndex][key]} ${guesses[rowIndex].debutHint}` : null}
-                      {key === 'allStarAppearances' ? `${guesses[rowIndex][key]} ${guesses[rowIndex].allStarHint}` : null}
+                  return (
+                    <div
+                      key={index}
+                      className={`guess-item flip ${flipped.includes(rowIndex * 6 + index) ? 'flip-active' : ''}`}
+                    >
+                      <div className="flip-front"></div>
+                      <div className={`flip-back ${backgroundColorClass}`}>
+                        {key === 'name' && guesses[rowIndex][key]}
+                        {key === 'position' && getPosition(guesses[rowIndex][key])}
+                        {key === 'number' && `${guesses[rowIndex][key]} ${guesses[rowIndex].numberHint}`}
+                        {key === 'height' && `${guesses[rowIndex][key]} ${guesses[rowIndex].heightHint}`}
+                        {key === 'debut' && `${guesses[rowIndex][key]} ${guesses[rowIndex].debutHint}`}
+                        {key === 'allStarAppearances' && `${guesses[rowIndex][key]} ${guesses[rowIndex].allStarHint}`}
+                      </div>
                     </div>
-                  </div>
-                );
-              })
+                  );
+                })
+              ) : (
+                <div>Error: Invalid guess data</div>
+              )
             ) : (
+              // Render skeletons for empty rows
               <>
                 <div className="guess-item skeleton-item"></div>
                 <div className="guess-item skeleton-item"></div>
@@ -99,6 +108,5 @@ const GuessGrid = ({ guesses, flipped, isSmallScreen }) => {
     </div>
   );
 };
-
 
 export default GuessGrid;
