@@ -129,7 +129,7 @@ const Game = () => {
   const loadPlayerOfTheDay = async () => {
     console.log('Fetching Player of the Day...');
     try {
-      const response = await fetch('https://celtics-trivia-backend1-6c0095e46832.herokuapp.com/daily-player');
+      const response = await fetch('http://localhost:5001/daily-player');
       if (response.ok) {
         const player = await response.json();
         setCurrentPlayer(player);
@@ -160,7 +160,7 @@ const Game = () => {
   
     try {
       // Submit guess to the backend
-      const response = await fetch('https://celtics-trivia-backend1-6c0095e46832.herokuapp.com/submit-guess', {
+      const response = await fetch('http://localhost:5001/submit-guess', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
