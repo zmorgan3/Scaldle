@@ -323,8 +323,13 @@ const Game = () => {
       }).join('');
       results += rowString + '\n';
     });
+    
+    // Add the URL to the end of the results string
+    results += `\nhttps://russell-celticstrivia.com/`;
+    
     return results;
   };
+  
 
   return (
     <div className="app">
