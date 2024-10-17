@@ -136,3 +136,54 @@
     overflow: hidden;  /* Prevent content overflow */
   }
   
+  /* Container for both buttons */
+.button-container {
+  display: flex;
+  justify-content: center;
+  gap: 20px; /* Space between buttons */
+  margin-top: 20px; /* Add some space at the top */
+}
+
+/* Stats and Support button styles */
+.stats-button,
+.support-button {
+  background-color: #4CAF50; /* Green background */
+  font-family: 'NBACeltics';
+  src: url('./fonts/NBACeltics.ttf') format('truetype');
+  color: white;
+  font-size: 18px; /* Increase font size */
+  padding: 12px 24px; /* Add padding for a larger button */
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  text-align: center;
+  text-decoration: none; /* Remove underline from hyperlink */
+  display: inline-block;
+  width: 150px; /* Ensure both buttons are the same width */
+  transition: background-color 0.3s ease; /* Smooth hover transition */
+}
+
+/* Change background color on hover */
+.stats-button:hover,
+.support-button:hover {
+  background-color: #45a049;
+}
+
+/* Responsive styles */
+@media (min-width: 768px) {
+  .stats-button,
+  .support-button {
+    width: 180px; /* Larger buttons for bigger screens */
+    font-size: 20px;
+    padding: 14px 28px;
+  }
+}
+
+@media (max-width: 767px) {
+  .stats-button,
+  .support-button {
+    width: 100%; /* Larger buttons for bigger screens */
+    font-size: 20px;
+    padding: 14px 28px;
+  }
+}

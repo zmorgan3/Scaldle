@@ -380,9 +380,14 @@ const Game = () => {
             <ToastNotification message="Results Copied!" />
           )}
 
-          <button onClick={toggleStatsModal} className="stats-button">
-            Stats
-          </button>
+<div className="button-container">
+  <button onClick={toggleStatsModal} className="stats-button">
+    Stats
+  </button>
+  <a href="https://buymeacoffee.com/bigmanbuildzzz" target="_blank" rel="noopener noreferrer" className="support-button">
+    Support Me
+  </a>
+</div>
 
           {showStatsModal && <StatsModal stats={stats} onClose={toggleStatsModal} />}
         </>
