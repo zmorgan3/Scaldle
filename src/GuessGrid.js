@@ -64,7 +64,7 @@ const GuessGrid = ({ guesses = [], flipped, isSmallScreen }) => {  // Default `g
             <div
               key={rowIndex}
               className="guess-row skeleton"
-              style={{ gridTemplateColumns: '2fr 1fr 1fr 1fr 2fr 1fr' }}
+              style={{ gridTemplateColumns: '2fr 1.5fr 1.5fr 1.5fr 2fr 1.5fr' }}
             >
               <div className="guess-item skeleton-item"></div>
               <div className="guess-item skeleton-item"></div>
@@ -79,7 +79,7 @@ const GuessGrid = ({ guesses = [], flipped, isSmallScreen }) => {  // Default `g
             <div
               key={rowIndex}
               className={`guess-row ${rowIndex < guesses.length ? '' : 'skeleton'}`}
-              style={{ gridTemplateColumns: '2fr 1fr 1fr 1fr 2fr 1fr' }}
+              style={{ gridTemplateColumns: '2fr 1.5fr 1.5fr 1.5fr 2fr 1.5fr' }}
             >
               {rowIndex < guesses.length ? (
                 guesses[rowIndex] && guesses[rowIndex].keys ? (

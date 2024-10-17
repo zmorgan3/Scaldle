@@ -100,7 +100,7 @@ button:hover {
 .guess-header,
 .guess-row {
   display: grid;
-  grid-template-columns: 2fr 1fr 1fr 1fr 2fr 1fr; /* Adjust the column width as needed */
+  grid-template-columns:  2fr 1.5fr 1.5fr 1.5fr 2fr 1.5fr; /* Adjust the column width as needed */
   align-items: center;
   justify-items: center;
   font-weight: bold;
