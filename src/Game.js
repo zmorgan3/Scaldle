@@ -32,7 +32,9 @@ const Game = () => {
     gamesPlayed: 0,
     guessDistribution: Array(MAX_GUESSES).fill(0),
   });
+  const [loading, setLoading] = useState(true); // Added loading state
 
+  // Generate feedback for each guess
   const generateFeedback = (guessedPlayer, currentPlayer) => {
     const numberDifference = Math.abs(Number(guessedPlayer.number) - Number(currentPlayer.number));
     const debutDifference = Math.abs(Number(guessedPlayer.debut) - Number(currentPlayer.debut));
@@ -44,7 +46,7 @@ const Game = () => {
     const guessedPositions = guessedPlayer.position.split(/[/, ]+/);
     const targetPositions = currentPlayer.position.split(/[/, ]+/);
     const positionCorrect = guessedPositions.length === targetPositions.length &&
-                          guessedPositions.every(pos => targetPositions.includes(pos));
+      guessedPositions.every(pos => targetPositions.includes(pos));
     const positionPartial = !positionCorrect && guessedPositions.some(pos => targetPositions.includes(pos));
 
     return {
@@ -80,66 +82,69 @@ const Game = () => {
     window.addEventListener('resize', handleResize);
 
     const fetchGameState = async () => {
-      const userId = localStorage.getItem('userId') || generateUserId();      try {
+      const userId = localStorage.getItem('userId') || generateUserId();
+      try {
         const response = await fetch(`https://celtics-trivia-backend1-6c0095e46832.herokuapp.com/game-state?userId=${userId}`);
-        console.log(`Fetching game state for userId: ${userId}`);
         if (response.ok) {
           const gameState = await response.json();
-          console.log(gameState);
-          if (gameState.isCompleted) {
-            const storedPlayer = JSON.parse(localStorage.getItem('currentPlayer'));
-            if (!storedPlayer) {
-              console.error('No current player found in local storage.');
-              return;
-            }
+          const storedPlayer = JSON.parse(localStorage.getItem('currentPlayer'));
+          if (!storedPlayer) return;
 
-            // Process previously saved guesses
-            const processedGuesses = gameState.guesses.map((savedGuess) => {
-              const guessedPlayer = players.find(
-                (player) => player.name.toLowerCase() === savedGuess.toLowerCase()
-              );
-              if (!guessedPlayer) return null;
-
-              // Generate feedback for each guess as done when submitting a new guess
+          // Process the saved guesses from the game state
+          const processedGuesses = gameState.guesses.map((savedGuess) => {
+            const guessedPlayer = players.find(
+              (player) => player.name.toLowerCase() === savedGuess.toLowerCase()
+            );
+          
+            if (guessedPlayer) {
               const feedback = generateFeedback(guessedPlayer, storedPlayer);
+              feedback.keys = ['name', 'position', 'number', 'height', 'debut', 'allStarAppearances']; // Ensure keys exist
               return feedback;
-            }).filter(Boolean);
+            }
+            return null;
+          }).filter(Boolean); // Filter out any null values
+          
 
-            setGuesses(processedGuesses);
-            setInputDisabled(true); // Lock input if game is completed
-          }
+          setGuesses(processedGuesses); // Update guesses in the state
+          if (gameState.isCompleted) setInputDisabled(true);
+
+          // Trigger flipping animations for restored guesses
+          processedGuesses.forEach((_, guessIndex) => {
+            ['name', 'position', 'number', 'height', 'debut', 'allStarAppearances'].forEach((_, columnIndex) => {
+              setTimeout(() => {
+                setFlipped((prevFlipped) => [...prevFlipped, guessIndex * 6 + columnIndex]);
+              }, columnIndex * FLIP_DELAY);
+            });
+          });
+
+          setLoading(false); // Disable loading state after processing
         }
       } catch (error) {
         console.error('Error fetching game state:', error);
       }
     };
 
-    fetchGameState(); // Fetch the game state
-    loadPlayerOfTheDay(); // Fetch player of the day
-    loadStats(); // Load stats
+    fetchGameState();
+    loadPlayerOfTheDay();
+    loadStats();
 
     return () => {
       window.removeEventListener('resize', handleResize);
     };
-  }, []); // No dependencies, so it runs once when the component mounts
-  
+  }, []);
 
   const loadPlayerOfTheDay = async () => {
-    console.log('Fetching Player of the Day...');
     try {
       const response = await fetch('https://celtics-trivia-backend1-6c0095e46832.herokuapp.com/daily-player');
       if (response.ok) {
         const player = await response.json();
         setCurrentPlayer(player);
         localStorage.setItem('currentPlayer', JSON.stringify(player));
-      } else {
-        console.error('Failed to fetch player of the day');
       }
     } catch (error) {
       console.error('Error fetching player of the day:', error);
     }
   };
-  
 
   const loadStats = () => {
     const savedStats = JSON.parse(localStorage.getItem('gameStats'));
@@ -154,10 +159,9 @@ const Game = () => {
   };
 
   const handleGuess = async (guessedName) => {
-    const userId = localStorage.getItem('userId') || generateUserId(); // Generate or fetch a unique user ID
-  
+    const userId = localStorage.getItem('userId') || generateUserId();
+
     try {
-      // Submit guess to the backend
       const response = await fetch('https://celtics-trivia-backend1-6c0095e46832.herokuapp.com/submit-guess', {
         method: 'POST',
         headers: {
@@ -165,29 +169,25 @@ const Game = () => {
         },
         body: JSON.stringify({ userId, guess: guessedName }),
       });
-  
+
       if (response.ok) {
-        const userGuessData = await response.json();
-        
         const guessedPlayer = players.find(
           (player) => player.name.toLowerCase() === guessedName.toLowerCase()
         );
-    
+
         if (guessedPlayer) {
           const feedback = generateFeedback(guessedPlayer, currentPlayer);
-
           setGuesses([...guesses, feedback]);
 
-          // Trigger flip animation for the new guess
           feedback.keys = ['name', 'position', 'number', 'height', 'debut', 'allStarAppearances'];
           feedback.keys.forEach((_, index) => {
             setTimeout(() => {
               setFlipped((prev) => [...prev, guesses.length * 6 + index]);
             }, index * FLIP_DELAY);
           });
-  
+
           const totalFlipTime = feedback.keys.length * FLIP_DELAY + FLIP_DURATION;
-  
+
           if (feedback.overallCorrect) {
             setInputDisabled(true);
             setTimeout(() => {
@@ -195,38 +195,26 @@ const Game = () => {
               updateStatsOnWin(guesses.length + 1);
             }, totalFlipTime);
           }
-  
+
           if (guesses.length === MAX_GUESSES - 1 && !feedback.overallCorrect) {
             setTimeout(() => {
               setShowFailureModal(true);
               updateStatsOnLoss();
             }, totalFlipTime);
           }
-  
         } else {
           alert('Player not found. Try again!');
         }
-  
       } else {
         console.error('Error submitting guess:', await response.json());
       }
     } catch (error) {
       console.error('Error submitting guess:', error);
     }
-  
-    setGuess('');  // Reset input after submitting
-  };
-  
 
-  const handleFlipAnimation = (rowIndex) => {
-    const totalCells = 6;
-    for (let i = 0; i < totalCells; i++) {
-      setTimeout(() => {
-        setFlipped((prevFlipped) => [...prevFlipped, rowIndex * totalCells + i]);
-      }, FLIP_DELAY * i);
-    }
+    setGuess(''); // Reset input after submitting
   };
-  
+
   const generateUserId = () => {
     const userId = `user-${Date.now()}-${Math.floor(Math.random() * 1000)}`;
     localStorage.setItem('userId', userId);
@@ -273,7 +261,7 @@ const Game = () => {
   const generateResultsString = () => {
     let results = `Daily RUSSELL:\n`;
     guesses.forEach((guess) => {
-      const rowString = guess.keys.map((key, index) => {
+      const rowString = guess.keys.map((key) => {
         if (guess[`${key}Correct`]) {
           return '🟩';
         }
@@ -305,54 +293,58 @@ const Game = () => {
   return (
     <div className="app">
       <h1 className={isSmallScreen ? 'hidden-title' : ''}>RUSSELL V8</h1>
-      <JerseysAnimation className="jersey-animation"/>
+      <JerseysAnimation className="jersey-animation" />
 
-      {
-        !inputDisabled ? (
-          <PlayerGuessInput
-            guess={guess}
-            setGuess={setGuess}
-            handleGuess={handleGuess}
-            inputDisabled={inputDisabled}
-            MAX_GUESSES={MAX_GUESSES}
+      {loading ? (
+        <div>Loading...</div> // Show loading while fetching data
+      ) : (
+        <>
+          {!inputDisabled ? (
+            <PlayerGuessInput
+              guess={guess}
+              setGuess={setGuess}
+              handleGuess={handleGuess}
+              inputDisabled={inputDisabled}
+              MAX_GUESSES={MAX_GUESSES}
+              guesses={guesses}
+            />
+          ) : (
+            <CopyResultsBar handleCopyResults={handleCopyResults} />
+          )}
+
+          <GuessGrid
             guesses={guesses}
+            flipped={flipped}
+            isSmallScreen={isSmallScreen}
           />
-        ) : (
-          <CopyResultsBar handleCopyResults={handleCopyResults} />
-        )
-      }
 
-      <GuessGrid
-        guesses={guesses}
-        flipped={flipped}
-        isSmallScreen={isSmallScreen}
-      />
+          {showSuccessModal && (
+            <SuccessModal
+              currentPlayer={currentPlayer}
+              handleCloseModal={handleCloseModal}
+              handleCopyResults={handleCopyResults}
+            />
+          )}
 
-      {showSuccessModal && (
-        <SuccessModal
-          currentPlayer={currentPlayer}
-          handleCloseModal={handleCloseModal}
-          handleCopyResults={handleCopyResults}
-        />
+          {showFailureModal && (
+            <FailureModal
+              currentPlayer={currentPlayer}
+              handleCloseModal={handleCloseModal}
+              handleCopyResults={handleCopyResults}
+            />
+          )}
+
+          {showCopyMessage && (
+            <ToastNotification message="Results Copied!" />
+          )}
+
+          <button onClick={toggleStatsModal} className="stats-button">
+            Stats
+          </button>
+
+          {showStatsModal && <StatsModal stats={stats} onClose={toggleStatsModal} />}
+        </>
       )}
-
-      {showFailureModal && (
-        <FailureModal
-          currentPlayer={currentPlayer}
-          handleCloseModal={handleCloseModal}
-          handleCopyResults={handleCopyResults}
-        />
-      )}
-
-      {showCopyMessage && (
-        <ToastNotification message="Results Copied!" />
-      )}
-
-      <button onClick={toggleStatsModal} className="stats-button">
-        Stats
-      </button>
-
-      {showStatsModal && <StatsModal stats={stats} onClose={toggleStatsModal} />}
     </div>
   );
 };
