@@ -88,5 +88,941 @@
     "debut": 2016,
     "allStarAppearances": 5,
     "allStar": true
-  }
-]
+  },
+    {
+      "name": "Bob Cousy",
+      "position": "Guard",
+      "number": 14,
+      "height": "6'1\"",
+      "debut": 1950,
+      "allStarAppearances": 13,
+      "allStar": true
+    },
+    {
+      "name": "Sam Jones",
+      "position": "Guard",
+      "number": 24,
+      "height": "6'4\"",
+      "debut": 1957,
+      "allStarAppearances": 5,
+      "allStar": true
+    },
+    {
+      "name": "Dave Cowens",
+      "position": "Center/Forward",
+      "number": 18,
+      "height": "6'9\"",
+      "debut": 1970,
+      "allStarAppearances": 7,
+      "allStar": true
+    },
+    {
+      "name": "Jo Jo White",
+      "position": "Guard",
+      "number": 10,
+      "height": "6'3\"",
+      "debut": 1969,
+      "allStarAppearances": 7,
+      "allStar": true
+    },
+    {
+      "name": "Dennis Johnson",
+      "position": "Guard",
+      "number": 3,
+      "height": "6'4\"",
+      "debut": 1983,
+      "allStarAppearances": 5,
+      "allStar": true
+    },
+    {
+      "name": "Reggie Lewis",
+      "position": "Guard/Forward",
+      "number": 35,
+      "height": "6'7\"",
+      "debut": 1987,
+      "allStarAppearances": 1,
+      "allStar": true
+    },
+    {
+      "name": "Ray Allen",
+      "position": "Guard",
+      "number": 20,
+      "height": "6'5\"",
+      "debut": 2007,
+      "allStarAppearances": 10,
+      "allStar": true
+    },
+    {
+      "name": "Isaiah Thomas",
+      "position": "Guard",
+      "number": 4,
+      "height": "5'9\"",
+      "debut": 2015,
+      "allStarAppearances": 2,
+      "allStar": true
+    },
+    {
+      "name": "Kevin McHale",
+      "position": "Forward",
+      "number": 32,
+      "height": "6'10\"",
+      "debut": 1980,
+      "allStarAppearances": 7,
+      "allStar": true
+    },
+    {
+      "name": "Cedric Maxwell",
+      "position": "Forward",
+      "number": 31,
+      "height": "6'8\"",
+      "debut": 1977,
+      "allStarAppearances": 0,
+      "allStar": false
+    },
+    {
+      "name": "K.C. Jones",
+      "position": "Guard",
+      "number": 25,
+      "height": "6'1\"",
+      "debut": 1958,
+      "allStarAppearances": 0,
+      "allStar": false
+    },
+    {
+      "name": "Danny Ainge",
+      "position": "Guard",
+      "number": 44,
+      "height": "6'4\"",
+      "debut": 1981,
+      "allStarAppearances": 1,
+      "allStar": true
+    },
+    {
+      "name": "Antoine Walker",
+      "position": "Forward",
+      "number": 8,
+      "height": "6'8\"",
+      "debut": 1996,
+      "allStarAppearances": 3,
+      "allStar": true
+    },
+    {
+      "name": "Marcus Smart",
+      "position": "Guard",
+      "number": 36,
+      "height": "6'4\"",
+      "debut": 2014,
+      "allStarAppearances": 0,
+      "allStar": false
+    },
+    {
+      "name": "Shaquille O'Neal",
+      "position": "Center",
+      "number": 36,
+      "height": "7'1\"",
+      "debut": 2010,
+      "allStarAppearances": 15,
+      "allStar": true
+    },
+    {
+      "name": "Glen Davis",
+      "position": "Forward",
+      "number": 11,
+      "height": "6'9\"",
+      "debut": 2007,
+      "allStarAppearances": 0,
+      "allStar": false
+    },
+    {
+      "name": "Brian Scalabrine",
+      "position": "Forward",
+      "number": 44,
+      "height": "6'9\"",
+      "debut": 2005,
+      "allStarAppearances": 0,
+      "allStar": false
+    },
+    {
+      "name": "Tony Allen",
+      "position": "Guard",
+      "number": 42,
+      "height": "6'4\"",
+      "debut": 2004,
+      "allStarAppearances": 0,
+      "allStar": false
+    },
+    {
+      "name": "Rick Fox",
+      "position": "Forward",
+      "number": 44,
+      "height": "6'7\"",
+      "debut": 1991,
+      "allStarAppearances": 0,
+      "allStar": false
+    },
+    {
+      "name": "Terry Rozier",
+      "position": "Guard",
+      "number": 12,
+      "height": "6'1\"",
+      "debut": 2015,
+      "allStarAppearances": 0,
+      "allStar": false
+    }, 
+      {
+        "name": "Kenny Anderson",
+        "position": "Guard",
+        "number": 7,
+        "height": "6'1\"",
+        "debut": 1996,
+        "allStarAppearances": 1,
+        "allStar": true
+      },
+      {
+        "name": "Vitaly Potapenko",
+        "position": "Center",
+        "number": 52,
+        "height": "6'10\"",
+        "debut": 1996,
+        "allStarAppearances": 0,
+        "allStar": false
+      },
+      {
+        "name": "Adrian Griffin",
+        "position": "Guard/Forward",
+        "number": 44,
+        "height": "6'5\"",
+        "debut": 1999,
+        "allStarAppearances": 0,
+        "allStar": false
+      },
+      {
+        "name": "Eric Williams",
+        "position": "Forward",
+        "number": 55,
+        "height": "6'8\"",
+        "debut": 1995,
+        "allStarAppearances": 0,
+        "allStar": false
+      },
+      {
+        "name": "Tony Battie",
+        "position": "Forward/Center",
+        "number": 4,
+        "height": "6'11\"",
+        "debut": 1997,
+        "allStarAppearances": 0,
+        "allStar": false
+      },
+      {
+        "name": "Danny Fortson",
+        "position": "Forward",
+        "number": 21,
+        "height": "6'7\"",
+        "debut": 1997,
+        "allStarAppearances": 0,
+        "allStar": false
+      },
+      {
+        "name": "Dana Barros",
+        "position": "Guard",
+        "number": 3,
+        "height": "5'11\"",
+        "debut": 1989,
+        "allStarAppearances": 1,
+        "allStar": true
+      },
+      {
+        "name": "Walter McCarty",
+        "position": "Forward",
+        "number": 0,
+        "height": "6'10\"",
+        "debut": 1996,
+        "allStarAppearances": 0,
+        "allStar": false
+      },
+      {
+        "name": "Andrew DeClercq",
+        "position": "Center",
+        "number": 52,
+        "height": "6'10\"",
+        "debut": 1995,
+        "allStarAppearances": 0,
+        "allStar": false
+      },
+      {
+        "name": "Calbert Cheaney",
+        "position": "Guard/Forward",
+        "number": 40,
+        "height": "6'7\"",
+        "debut": 1993,
+        "allStarAppearances": 0,
+        "allStar": false
+      },
+      {
+        "name": "Milt Palacio",
+        "position": "Guard",
+        "number": 10,
+        "height": "6'3\"",
+        "debut": 1999,
+        "allStarAppearances": 0,
+        "allStar": false
+      },
+      {
+        "name": "Randy Brown",
+        "position": "Guard",
+        "number": 0,
+        "height": "6'2\"",
+        "debut": 1991,
+        "allStarAppearances": 0,
+        "allStar": false
+      },
+      {
+        "name": "Jerome Moiso",
+        "position": "Forward/Center",
+        "number": 12,
+        "height": "6'10\"",
+        "debut": 2000,
+        "allStarAppearances": 0,
+        "allStar": false
+      },
+      {
+        "name": "Mark Blount",
+        "position": "Center",
+        "number": 30,
+        "height": "7'0\"",
+        "debut": 2000,
+        "allStarAppearances": 0,
+        "allStar": false
+      },
+      {
+        "name": "Rodney Rogers",
+        "position": "Forward",
+        "number": 54,
+        "height": "6'7\"",
+        "debut": 1993,
+        "allStarAppearances": 0,
+        "allStar": false
+      },
+      {
+        "name": "Tony Delk",
+        "position": "Guard",
+        "number": 28,
+        "height": "6'1\"",
+        "debut": 1996,
+        "allStarAppearances": 0,
+        "allStar": false
+      },
+      {
+        "name": "Joe Johnson",
+        "position": "Guard/Forward",
+        "number": 31,
+        "height": "6'7\"",
+        "debut": 2001,
+        "allStarAppearances": 7,
+        "allStar": true
+      },
+      {
+        "name": "Vin Baker",
+        "position": "Forward/Center",
+        "number": 42,
+        "height": "6'11\"",
+        "debut": 2002,
+        "allStarAppearances": 4,
+        "allStar": true
+      },
+      {
+        "name": "Shammond Williams",
+        "position": "Guard",
+        "number": 4,
+        "height": "6'1\"",
+        "debut": 1998,
+        "allStarAppearances": 0,
+        "allStar": false
+      },
+      {
+        "name": "Jiri Welsch",
+        "position": "Guard/Forward",
+        "number": 44,
+        "height": "6'7\"",
+        "debut": 2002,
+        "allStarAppearances": 0,
+        "allStar": false
+      },
+      {
+        "name": "Raef LaFrentz",
+        "position": "Forward/Center",
+        "number": 45,
+        "height": "6'11\"",
+        "debut": 1998,
+        "allStarAppearances": 0,
+        "allStar": false
+      },
+      {
+        "name": "Marcus Banks",
+        "position": "Guard",
+        "number": 11,
+        "height": "6'2\"",
+        "debut": 2003,
+        "allStarAppearances": 0,
+        "allStar": false
+      },
+      {
+        "name": "Chris Mihm",
+        "position": "Center",
+        "number": 4,
+        "height": "7'0\"",
+        "debut": 2000,
+        "allStarAppearances": 0,
+        "allStar": false
+      },
+      {
+        "name": "Gary Payton",
+        "position": "Guard",
+        "number": 20,
+        "height": "6'4\"",
+        "debut": 2004,
+        "allStarAppearances": 9,
+        "allStar": true
+      },
+      {
+        "name": "Delonte West",
+        "position": "Guard",
+        "number": 13,
+        "height": "6'4\"",
+        "debut": 2004,
+        "allStarAppearances": 0,
+        "allStar": false
+      },
+      {
+        "name": "Al Jefferson",
+        "position": "Forward/Center",
+        "number": 7,
+        "height": "6'10\"",
+        "debut": 2004,
+        "allStarAppearances": 0,
+        "allStar": false
+      },
+      {
+        "name": "Kendrick Perkins",
+        "position": "Center",
+        "number": 43,
+        "height": "6'10\"",
+        "debut": 2003,
+        "allStarAppearances": 0,
+        "allStar": false
+      },
+      {
+        "name": "Sebastian Telfair",
+        "position": "Guard",
+        "number": 30,
+        "height": "6'0\"",
+        "debut": 2004,
+        "allStarAppearances": 0,
+        "allStar": false
+      },
+      {
+        "name": "Leon Powe",
+        "position": "Forward",
+        "number": 0,
+        "height": "6'8\"",
+        "debut": 2006,
+        "allStarAppearances": 0,
+        "allStar": false
+      },
+      {
+        "name": "James Posey",
+        "position": "Forward",
+        "number": 41,
+        "height": "6'8\"",
+        "debut": 1999,
+        "allStarAppearances": 0,
+        "allStar": false
+      },
+      {
+        "name": "Eddie House",
+        "position": "Guard",
+        "number": 50,
+        "height": "6'1\"",
+        "debut": 2007,
+        "allStarAppearances": 0,
+        "allStar": false
+      },
+      {
+        "name": "P.J. Brown",
+        "position": "Forward/Center",
+        "number": 42,
+        "height": "6'11\"",
+        "debut": 2008,
+        "allStarAppearances": 0,
+        "allStar": false
+      },
+      {
+        "name": "Sam Cassell",
+        "position": "Guard",
+        "number": 28,
+        "height": "6'3\"",
+        "debut": 1993,
+        "allStarAppearances": 1,
+        "allStar": true
+      },
+      {
+        "name": "Stephon Marbury",
+        "position": "Guard",
+        "number": 8,
+        "height": "6'2\"",
+        "debut": 2009,
+        "allStarAppearances": 2,
+        "allStar": true
+      },
+      {
+        "name": "Mikki Moore",
+        "position": "Forward/Center",
+        "number": 7,
+        "height": "7'0\"",
+        "debut": 1998,
+        "allStarAppearances": 0,
+        "allStar": false
+      },
+      {
+        "name": "Rasheed Wallace",
+        "position": "Forward/Center",
+        "number": 30,
+        "height": "6'11\"",
+        "debut": 1995,
+        "allStarAppearances": 4,
+        "allStar": true
+      },
+      {
+        "name": "Nate Robinson",
+        "position": "Guard",
+        "number": 4,
+        "height": "5'9\"",
+        "debut": 2005,
+        "allStarAppearances": 0,
+        "allStar": false
+      },
+      {
+        "name": "Brandon Bass",
+        "position": "Forward",
+        "number": 30,
+        "height": "6'8\"",
+        "debut": 2011,
+        "allStarAppearances": 0,
+        "allStar": false
+      },
+      {
+        "name": "Greg Stiemsma",
+        "position": "Center",
+        "number": 54,
+        "height": "6'11\"",
+        "debut": 2011,
+        "allStarAppearances": 0,
+        "allStar": false
+      },
+      {
+        "name": "Marquis Daniels",
+        "position": "Guard/Forward",
+        "number": 4,
+        "height": "6'6\"",
+        "debut": 2009,
+        "allStarAppearances": 0,
+        "allStar": false
+      },
+      {
+        "name": "Keyon Dooling",
+        "position": "Guard",
+        "number": 51,
+        "height": "6'3\"",
+        "debut": 2011,
+        "allStarAppearances": 0,
+        "allStar": false
+      },
+      {
+        "name": "Mickael Pietrus",
+        "position": "Forward",
+        "number": 28,
+        "height": "6'6\"",
+        "debut": 2011,
+        "allStarAppearances": 0,
+        "allStar": false
+      },
+      {
+        "name": "Jason Terry",
+        "position": "Guard",
+        "number": 4,
+        "height": "6'2\"",
+        "debut": 2012,
+        "allStarAppearances": 0,
+        "allStar": false
+      },
+      {
+        "name": "Courtney Lee",
+        "position": "Guard",
+        "number": 11,
+        "height": "6'5\"",
+        "debut": 2012,
+        "allStarAppearances": 0,
+        "allStar": false
+      },
+      {
+        "name": "Jared Sullinger",
+        "position": "Forward",
+        "number": 7,
+        "height": "6'9\"",
+        "debut": 2012,
+        "allStarAppearances": 0,
+        "allStar": false
+      },
+      {
+        "name": "Jordan Crawford",
+        "position": "Guard",
+        "number": 27,
+        "height": "6'4\"",
+        "debut": 2013,
+        "allStarAppearances": 0,
+        "allStar": false
+      },
+      {
+        "name": "Kris Humphries",
+        "position": "Forward",
+        "number": 43,
+        "height": "6'9\"",
+        "debut": 2013,
+        "allStarAppearances": 0,
+        "allStar": false
+      },
+      {
+        "name": "Gerald Wallace",
+        "position": "Forward",
+        "number": 45,
+        "height": "6'7\"",
+        "debut": 2013,
+        "allStarAppearances": 1,
+        "allStar": true
+      },
+      {
+        "name": "Kelly Olynyk",
+        "position": "Forward/Center",
+        "number": 41,
+        "height": "7'0\"",
+        "debut": 2013,
+        "allStarAppearances": 0,
+        "allStar": false
+      },
+      {
+        "name": "Isaiah Thomas",
+        "position": "Guard",
+        "number": 4,
+        "height": "5'9\"",
+        "debut": 2015,
+        "allStarAppearances": 2,
+        "allStar": true
+      },
+      {
+        "name": "Marcus Smart",
+        "position": "Guard",
+        "number": 36,
+        "height": "6'4\"",
+        "debut": 2014,
+        "allStarAppearances": 0,
+        "allStar": false
+      },
+      {
+        "name": "Evan Turner",
+        "position": "Guard/Forward",
+        "number": 11,
+        "height": "6'7\"",
+        "debut": 2014,
+        "allStarAppearances": 0,
+        "allStar": false
+      },
+      {
+        "name": "Jae Crowder",
+        "position": "Forward",
+        "number": 99,
+        "height": "6'6\"",
+        "debut": 2014,
+        "allStarAppearances": 0,
+        "allStar": false
+      },
+      {
+        "name": "Tyler Zeller",
+        "position": "Center",
+        "number": 44,
+        "height": "7'0\"",
+        "debut": 2014,
+        "allStarAppearances": 0,
+        "allStar": false
+      },
+      {
+        "name": "Amir Johnson",
+        "position": "Forward/Center",
+        "number": 90,
+        "height": "6'9\"",
+        "debut": 2015,
+        "allStarAppearances": 0,
+        "allStar": false
+      },
+      {
+        "name": "Jonas Jerebko",
+        "position": "Forward",
+        "number": 8,
+        "height": "6'10\"",
+        "debut": 2015,
+        "allStarAppearances": 0,
+        "allStar": false
+      },
+      {
+        "name": "David Lee",
+        "position": "Forward",
+        "number": 42,
+        "height": "6'9\"",
+        "debut": 2015,
+        "allStarAppearances": 2,
+        "allStar": true
+      },
+      {
+        "name": "Gerald Green",
+        "position": "Guard/Forward",
+        "number": 30,
+        "height": "6'6\"",
+        "debut": 2016,
+        "allStarAppearances": 0,
+        "allStar": false
+      },
+      {
+        "name": "Kyrie Irving",
+        "position": "Guard",
+        "number": 11,
+        "height": "6'3\"",
+        "debut": 2017,
+        "allStarAppearances": 6,
+        "allStar": true
+      },
+      {
+        "name": "Marcus Morris",
+        "position": "Forward",
+        "number": 13,
+        "height": "6'8\"",
+        "debut": 2017,
+        "allStarAppearances": 0,
+        "allStar": false
+      },
+      {
+        "name": "Aron Baynes",
+        "position": "Center",
+        "number": 46,
+        "height": "6'10\"",
+        "debut": 2017,
+        "allStarAppearances": 0,
+        "allStar": false
+      },
+      {
+        "name": "Shane Larkin",
+        "position": "Guard",
+        "number": 8,
+        "height": "5'11\"",
+        "debut": 2017,
+        "allStarAppearances": 0,
+        "allStar": false
+      },
+      {
+        "name": "Daniel Theis",
+        "position": "Forward/Center",
+        "number": 27,
+        "height": "6'8\"",
+        "debut": 2017,
+        "allStarAppearances": 0,
+        "allStar": false
+      },
+      {
+        "name": "Gordon Hayward",
+        "position": "Forward",
+        "number": 20,
+        "height": "6'7\"",
+        "debut": 2017,
+        "allStarAppearances": 1,
+        "allStar": true
+      },
+      {
+        "name": "Brad Wanamaker",
+        "position": "Guard",
+        "number": 9,
+        "height": "6'3\"",
+        "debut": 2018,
+        "allStarAppearances": 0,
+        "allStar": false
+      },
+      {
+        "name": "Robert Williams",
+        "position": "Center",
+        "number": 44,
+        "height": "6'9\"",
+        "debut": 2018,
+        "allStarAppearances": 0,
+        "allStar": false
+      },
+      {
+        "name": "Kemba Walker",
+        "position": "Guard",
+        "number": 8,
+        "height": "6'0\"",
+        "debut": 2019,
+        "allStarAppearances": 4,
+        "allStar": true
+      },
+      {
+        "name": "Enes Kanter",
+        "position": "Center",
+        "number": 11,
+        "height": "6'10\"",
+        "debut": 2019,
+        "allStarAppearances": 0,
+        "allStar": false
+      },
+      {
+        "name": "Romeo Langford",
+        "position": "Guard",
+        "number": 45,
+        "height": "6'4\"",
+        "debut": 2019,
+        "allStarAppearances": 0,
+        "allStar": false
+      },
+      {
+        "name": "Grant Williams",
+        "position": "Forward",
+        "number": 12,
+        "height": "6'6\"",
+        "debut": 2019,
+        "allStarAppearances": 0,
+        "allStar": false
+      },
+      {
+        "name": "Tristan Thompson",
+        "position": "Center",
+        "number": 13,
+        "height": "6'9\"",
+        "debut": 2020,
+        "allStarAppearances": 0,
+        "allStar": false
+      },
+      {
+        "name": "Payton Pritchard",
+        "position": "Guard",
+        "number": 11,
+        "height": "6'1\"",
+        "debut": 2020,
+        "allStarAppearances": 0,
+        "allStar": false
+      },
+      {
+        "name": "Aaron Nesmith",
+        "position": "Forward",
+        "number": 24,
+        "height": "6'5\"",
+        "debut": 2020,
+        "allStarAppearances": 0,
+        "allStar": false
+      },
+      {
+        "name": "Derrick White",
+        "position": "Guard",
+        "number": 9,
+        "height": "6'4\"",
+        "debut": 2022,
+        "allStarAppearances": 0,
+        "allStar": false
+      },
+      {
+        "name": "Josh Richardson",
+        "position": "Guard/Forward",
+        "number": 8,
+        "height": "6'5\"",
+        "debut": 2021,
+        "allStarAppearances": 0,
+        "allStar": false
+      },
+      {
+        "name": "Sam Hauser",
+        "position": "Forward",
+        "number": 30,
+        "height": "6'7\"",
+        "debut": 2021,
+        "allStarAppearances": 0,
+        "allStar": false
+      },
+      {
+        "name": "Malcolm Brogdon",
+        "position": "Guard",
+        "number": 13,
+        "height": "6'5\"",
+        "debut": 2022,
+        "allStarAppearances": 0,
+        "allStar": false
+      },
+      {
+        "name": "Blake Griffin",
+        "position": "Forward",
+        "number": 91,
+        "height": "6'9\"",
+        "debut": 2022,
+        "allStarAppearances": 6,
+        "allStar": true
+      },
+      {
+        "name": "Luke Kornet",
+        "position": "Center",
+        "number": 40,
+        "height": "7'2\"",
+        "debut": 2021,
+        "allStarAppearances": 0,
+        "allStar": false
+      },
+      {
+        "name": "Justin Jackson",
+        "position": "Forward",
+        "number": 43,
+        "height": "6'8\"",
+        "debut": 2022,
+        "allStarAppearances": 0,
+        "allStar": false
+      },
+      {
+        "name": "Kristaps Porziņģis",
+        "position": "Forward/Center",
+        "number": 8,
+        "height": "7'3\"",
+        "debut": 2023,
+        "allStarAppearances": 1,
+        "allStar": true
+      },
+      {
+        "name": "Jrue Holiday",
+        "position": "Guard",
+        "number": 21,
+        "height": "6'3\"",
+        "debut": 2023,
+        "allStarAppearances": 2,
+        "allStar": true
+      },
+      {
+        "name": "Oshae Brissett",
+        "position": "Forward",
+        "number": 12,
+        "height": "6'7\"",
+        "debut": 2023,
+        "allStarAppearances": 0,
+        "allStar": false
+      },
+      {
+        "name": "Dalano Banton",
+        "position": "Guard",
+        "number": 45,
+        "height": "6'7\"",
+        "debut": 2023,
+        "allStarAppearances": 0,
+        "allStar": false
+      }
+    ]
