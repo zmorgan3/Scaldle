@@ -87,20 +87,23 @@ const Game = () => {
               (player) => player.name.toLowerCase() === savedGuess.toLowerCase()
             );
             if (!guessedPlayer) return null;
-
+  
             // Generate feedback for each guess as done when submitting a new guess
             const feedback = generateFeedback(guessedPlayer, currentPlayer);
             return feedback;
           }).filter(Boolean);
-
+  
           setGuesses(processedGuesses);
           setInputDisabled(true); // Lock input if game is completed
         }
+      } else {
+        console.error('Failed to fetch game state');
       }
     } catch (error) {
       console.error('Error fetching game state:', error);
     }
   };
+  
   
   
   /*useEffect(() => {
@@ -129,7 +132,7 @@ const Game = () => {
   const loadPlayerOfTheDay = async () => {
     console.log('Fetching Player of the Day...');
     try {
-      const response = await fetch('http://localhost:5001/daily-player');
+      const response = await fetch('https://celtics-trivia-backend1-6c0095e46832.herokuapp.com/daily-player');
       if (response.ok) {
         const player = await response.json();
         setCurrentPlayer(player);
@@ -160,7 +163,7 @@ const Game = () => {
   
     try {
       // Submit guess to the backend
-      const response = await fetch('http://localhost:5001/submit-guess', {
+      const response = await fetch('https://celtics-trivia-backend1-6c0095e46832.herokuapp.com/submit-guess', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
