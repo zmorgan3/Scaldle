@@ -61,29 +61,29 @@ const GuessGrid = ({ guesses, flipped, isSmallScreen }) => {
             className={`guess-row ${rowIndex < guesses.length ? '' : 'skeleton'}`}
             style={{ gridTemplateColumns: '2fr 1fr 1fr 1fr 2fr 1fr' }}
           >
-            {rowIndex < guesses.length ? (
-              guesses[rowIndex].keys.map((key, index) => {
-                const backgroundColorClass = getBackgroundColor(key, guesses[rowIndex]);
+            {rowIndex < guesses.length && guesses[rowIndex]?.keys ? (
+  guesses[rowIndex].keys.map((key, index) => {
+    const backgroundColorClass = getBackgroundColor(key, guesses[rowIndex]);
 
-                return (
-                  <div
-                    key={index}
-                    className={`guess-item flip ${flipped.includes(rowIndex * 6 + index) ? 'flip-active' : ''}`}
-                  >
-                    <div className="flip-front"></div>
-                    <div className={`flip-back ${backgroundColorClass}`}>
-                      {/* Check for hint rendering */}
-                      {key === 'name' ? guesses[rowIndex][key] : null}
-                      {key === 'position' ? getPosition(guesses[rowIndex][key]) : null}
-                      {key === 'number' ? `${guesses[rowIndex][key]} ${guesses[rowIndex].numberHint}` : null}
-                      {key === 'height' ? `${guesses[rowIndex][key]} ${guesses[rowIndex].heightHint}` : null}
-                      {key === 'debut' ? `${guesses[rowIndex][key]} ${guesses[rowIndex].debutHint}` : null}
-                      {key === 'allStarAppearances' ? `${guesses[rowIndex][key]} ${guesses[rowIndex].allStarHint}` : null}
-                    </div>
-                  </div>
-                );
-              })
-            ) : (
+    return (
+      <div
+        key={index}
+        className={`guess-item flip ${flipped.includes(rowIndex * 6 + index) ? 'flip-active' : ''}`}
+      >
+        <div className="flip-front"></div>
+        <div className={`flip-back ${backgroundColorClass}`}>
+          {/* Check for hint rendering */}
+          {key === 'name' ? guesses[rowIndex][key] : null}
+          {key === 'position' ? getPosition(guesses[rowIndex][key]) : null}
+          {key === 'number' ? `${guesses[rowIndex][key]} ${guesses[rowIndex].numberHint}` : null}
+          {key === 'height' ? `${guesses[rowIndex][key]} ${guesses[rowIndex].heightHint}` : null}
+          {key === 'debut' ? `${guesses[rowIndex][key]} ${guesses[rowIndex].debutHint}` : null}
+          {key === 'allStarAppearances' ? `${guesses[rowIndex][key]} ${guesses[rowIndex].allStarHint}` : null}
+        </div>
+      </div>
+    );
+  })
+) : (
               <>
                 <div className="guess-item skeleton-item"></div>
                 <div className="guess-item skeleton-item"></div>

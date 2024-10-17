@@ -80,13 +80,12 @@ const Game = () => {
     window.addEventListener('resize', handleResize);
 
     const fetchGameState = async () => {
-      const userId = localStorage.getItem('userId') || generateUserId();
-
-      try {
+      const userId = localStorage.getItem('userId') || generateUserId();      try {
         const response = await fetch(`https://celtics-trivia-backend1-6c0095e46832.herokuapp.com/game-state?userId=${userId}`);
         console.log(`Fetching game state for userId: ${userId}`);
         if (response.ok) {
           const gameState = await response.json();
+          console.log(gameState);
           if (gameState.isCompleted) {
             const storedPlayer = JSON.parse(localStorage.getItem('currentPlayer'));
             if (!storedPlayer) {
@@ -305,7 +304,7 @@ const Game = () => {
 
   return (
     <div className="app">
-      <h1 className={isSmallScreen ? 'hidden-title' : ''}>RUSSELL</h1>
+      <h1 className={isSmallScreen ? 'hidden-title' : ''}>RUSSELL V8</h1>
       <JerseysAnimation className="jersey-animation"/>
 
       {
