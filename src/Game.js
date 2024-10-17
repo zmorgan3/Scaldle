@@ -83,6 +83,7 @@ const Game = () => {
 
     const fetchGameState = async () => {
       const userId = localStorage.getItem('userId') || generateUserId();
+      
       try {
         const response = await fetch(`https://celtics-trivia-backend1-6c0095e46832.herokuapp.com/game-state?userId=${userId}`);
         
@@ -101,20 +102,22 @@ const Game = () => {
           return;
         }
     
-        // If no guesses yet, set guesses to an empty array
-        const processedGuesses = (gameState.guesses || []).map((savedGuess) => {
-          const guessedPlayer = players.find(
-            (player) => player.name.toLowerCase() === savedGuess.toLowerCase()
-          );
-          if (guessedPlayer) {
-            const feedback = generateFeedback(guessedPlayer, storedPlayer);
-            feedback.keys = ['name', 'position', 'number', 'height', 'debut', 'allStarAppearances'];
-            return feedback;
-          }
-          return null;
-        }).filter(Boolean); // Filter out any null values
+        // If no guesses exist or it's the user's first game, set guesses to an empty array
+        const processedGuesses = (gameState.guesses && gameState.guesses.length > 0)
+          ? gameState.guesses.map((savedGuess) => {
+              const guessedPlayer = players.find(
+                (player) => player.name.toLowerCase() === savedGuess.toLowerCase()
+              );
+              if (guessedPlayer) {
+                const feedback = generateFeedback(guessedPlayer, storedPlayer);
+                feedback.keys = ['name', 'position', 'number', 'height', 'debut', 'allStarAppearances'];
+                return feedback;
+              }
+              return null;
+            }).filter(Boolean) // Filter out any null values
+          : []; // No guesses yet, initialize with an empty array
     
-        setGuesses(processedGuesses); // Set processed guesses or an empty array if none
+        setGuesses(processedGuesses); // Set the processed guesses
     
         // If the game is completed or max guesses reached, disable input
         if (gameState.isCompleted || processedGuesses.length >= MAX_GUESSES) {
@@ -132,12 +135,10 @@ const Game = () => {
     
       } catch (error) {
         console.error('Error fetching game state:', error);
-        
-        // Set guesses to an empty array if there's an error or no data
-        setGuesses([]);
+        setGuesses([]);  // Set guesses to an empty array in case of error
+      } finally {
+        setLoading(false);  // Ensure loading is stopped in all cases
       }
-    
-      setLoading(false);  // Stop the loading spinner
     };
     
 
@@ -309,7 +310,7 @@ const Game = () => {
 
   return (
     <div className="app">
-      <h1 className={isSmallScreen ? 'hidden-title' : ''}>RUSSELL V8.2</h1>
+      <h1 className={isSmallScreen ? 'hidden-title' : ''}>RUSSELL</h1>
       <JerseysAnimation className="jersey-animation" />
 
       {loading ? (
