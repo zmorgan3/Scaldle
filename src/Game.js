@@ -178,8 +178,9 @@ const Game = () => {
 
   const handleGuess = async (guessedName) => {
     const userId = localStorage.getItem('userId') || generateUserId();
-
+  
     try {
+      // Submit guess to the backend
       const response = await fetch('https://celtics-trivia-backend1-6c0095e46832.herokuapp.com/submit-guess', {
         method: 'POST',
         headers: {
@@ -187,25 +188,41 @@ const Game = () => {
         },
         body: JSON.stringify({ userId, guess: guessedName }),
       });
-
+  
       if (response.ok) {
         const guessedPlayer = players.find(
           (player) => player.name.toLowerCase() === guessedName.toLowerCase()
         );
-
+  
         if (guessedPlayer) {
           const feedback = generateFeedback(guessedPlayer, currentPlayer);
-          setGuesses([...guesses, feedback]);
-
+  
+          // Update guesses state and backend
+          const updatedGuesses = [...guesses, feedback];
+          setGuesses(updatedGuesses);
+  
+          // Send updated guesses array to the backend
+          await fetch(`https://celtics-trivia-backend1-6c0095e46832.herokuapp.com/update-game-state`, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+              userId,
+              guesses: updatedGuesses.map(g => g.name),  // Send only the names of guessed players
+            }),
+          });
+  
+          // Add the animation effect for the flipping tiles
           feedback.keys = ['name', 'position', 'number', 'height', 'debut', 'allStarAppearances'];
           feedback.keys.forEach((_, index) => {
             setTimeout(() => {
               setFlipped((prev) => [...prev, guesses.length * 6 + index]);
             }, index * FLIP_DELAY);
           });
-
+  
           const totalFlipTime = feedback.keys.length * FLIP_DELAY + FLIP_DURATION;
-
+  
           if (feedback.overallCorrect) {
             setInputDisabled(true);
             setTimeout(() => {
@@ -213,7 +230,7 @@ const Game = () => {
               updateStatsOnWin(guesses.length + 1);
             }, totalFlipTime);
           }
-
+  
           if (guesses.length === MAX_GUESSES - 1 && !feedback.overallCorrect) {
             setTimeout(() => {
               setShowFailureModal(true);
@@ -229,9 +246,10 @@ const Game = () => {
     } catch (error) {
       console.error('Error submitting guess:', error);
     }
-
-    setGuess(''); // Reset input after submitting
+  
+    setGuess('');  // Reset input after submitting
   };
+  
 
   const generateUserId = () => {
     const userId = `user-${Date.now()}-${Math.floor(Math.random() * 1000)}`;
